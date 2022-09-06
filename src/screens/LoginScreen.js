@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, {useEffect, useState} from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, TextInput, TouchableOpacity, View} from "react-native";
+import { KeyboardAvoidingView, StyleSheet, Text, Image, TextInput, TouchableOpacity, View} from "react-native";
 import { auth } from "../../firebase";
 
 const LoginScreen = () => {
@@ -8,6 +8,7 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigation = useNavigation()
+    const anErrorOccurs = false
 
     useEffect(() => {
          const unsubscribe = auth.onAuthStateChanged(user => {
@@ -25,7 +26,7 @@ const LoginScreen = () => {
             const user = userCredentials.user;
             console.log("Registered with: ", user.email);
         })
-        .catch(error => alert(error.message))
+        .catch(error => {anErrorOccurs = true})
     }
 
     const handleLogin = () => {
@@ -43,15 +44,23 @@ const LoginScreen = () => {
             style={styles.container} 
             behavior="padding"
         >
+            <Text style= {styles.headerText}> Iniciar Sesión</Text>
+            <View style= {styles.whiteBox}>
+            <Image
+                style={styles.logo}
+                source={require( '../../assets/img/logoPurple.png')}
+            />
             <View style = {styles.inputContainer}>
+                <Text style = {styles.text} >Correo</Text>
                 <TextInput 
-                    placeholder="Email" 
+                    placeholder="Ingresar correo" 
                     value={email} 
                     onChangeText={text => setEmail(text)} 
                     style = {styles.input}
                 />
+                <Text style = {styles.text}>Contraseña</Text>
                 <TextInput 
-                    placeholder="Password" 
+                    placeholder="Ingresar contraseña" 
                     value={password} 
                     onChangeText={text => setPassword(text)} 
                     style = {styles.input}
@@ -59,20 +68,24 @@ const LoginScreen = () => {
                 />
             </View>
 
-            <View style={styles.buttonContainer}>
-                <TouchableOpacity
-                    onPress={handleLogin}
-                    style = {styles.button}
-                >
-                    <Text style = {styles.buttonText}>Login</Text>
-                </TouchableOpacity>
-                <TouchableOpacity
-                    onPress={handleSignUp}
-                    style={[styles.button, styles.buttonOutline]}
-                >
-                    <Text style = {styles.buttonOutlineText}>Register</Text>
-                </TouchableOpacity>
+            
+            <TouchableOpacity
+                onPress={handleLogin}
+                style = {styles.button}
+            >
+                <Text style = {styles.buttonText}>Iniciar Sesión</Text>
+            </TouchableOpacity>
+           
+
+            <View style={styles.registerText}>
+                    <Text>No tienes cuenta? </Text>
+                    <Text style={{color: 'blue'}}
+                        onPress={() => navigation.replace("Register")}>
+                     Registrate
+                    </Text>
             </View>
+            </View>
+
         </KeyboardAvoidingView>
     )
 }
@@ -81,29 +94,64 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     container: {
+        flex:1,
+        backgroundColor: '#28194C',
+    },
+    headerText:{
+        fontWeight: 'bold',
+        fontSize: 30,
+        marginTop: 60,
+        marginBottom: 10,
+        color: 'white',
+        paddingVertical: 10,
+        paddingHorizontal: 10
+        
+    },
+    whiteBox:{
+        backgroundColor:'white',
+        width:'100%',
         flex: 1,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        borderTopLeftRadius: '30px',
+        borderTopRightRadius: '30px',
+
     },
     inputContainer: {
         width: '80%'
     },
     input: {
-        backgroundColor: 'white',
-        paddingHorizontal: 15,
+        backgroundColor: '#EBEBEB',
+        paddingHorizontal: 10,
         paddingVertical: 10,
         borderRadius: 10,
-        marginTop: 5,
+        marginTop: 10,
+        height: 40
     },
-    buttonContainer: {
-        width: '60%',
+    registerText: {
+        flex: 1,
+        flexDirection: 'row',
+        padding: 10
+        
+    },
+    text: {
+        fontWeight: 'bold',
+        fontSize: 15,
+        marginTop: 10,
+        
+    },
+    logo: {
+        width: 250,
+        height: 250,
+        marginTop: 20
+    },
+
+    button: {
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 40,
-    },
-    button: {
-        backgroundColor:'blueviolet',
-        width: '100%',
+        backgroundColor:'#D4B2EF',
+        width: '80%',
         padding: 15,
         borderRadius: 10,
         alignItems: 'center'
@@ -113,15 +161,4 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16
     },
-    buttonOutline: {
-        backgroundColor: 'white',
-        marginTop: 10,
-        borderColor: 'blueviolet',
-        borderWidth: 2
-    },
-    buttonOutlineText: {
-        color: 'blueviolet',
-        fontWeight: '700',
-        fontSize: 16
-    }
 })
