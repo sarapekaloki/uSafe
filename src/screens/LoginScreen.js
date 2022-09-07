@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, {useEffect, useState} from "react";
-import { KeyboardAvoidingView, StyleSheet, Text, Image, TextInput, TouchableOpacity, View} from "react-native";
+import { KeyboardAvoidingView, StyleSheet, Text, Image, TextInput, TouchableOpacity, View, ScrollView} from "react-native";
 import { auth } from "../../firebase";
 
 const LoginScreen = () => {
@@ -40,53 +40,58 @@ const LoginScreen = () => {
     }
 
     return(
-        <KeyboardAvoidingView 
-            style={styles.container} 
-            behavior="padding"
-        >
-            <Text style= {styles.headerText}> Iniciar Sesión</Text>
-            <View style= {styles.whiteBox}>
-            <Image
-                style={styles.logo}
-                source={require( '../../assets/img/logoPurple.png')}
-            />
-            <View style = {styles.inputContainer}>
-                <Text style = {styles.text} >Correo</Text>
-                <TextInput 
-                    placeholder="Ingresar correo" 
-                    value={email} 
-                    onChangeText={text => setEmail(text)} 
-                    style = {styles.input}
-                />
-                <Text style = {styles.text}>Contraseña</Text>
-                <TextInput 
-                    placeholder="Ingresar contraseña" 
-                    value={password} 
-                    onChangeText={text => setPassword(text)} 
-                    style = {styles.input}
-                    secureTextEntry
-                />
-            </View>
 
-            
-            <TouchableOpacity
-                onPress={handleLogin}
-                style = {styles.button}
+            <KeyboardAvoidingView 
+                style={styles.container} 
+                behavior="padding"
             >
-                <Text style = {styles.buttonText}>Iniciar Sesión</Text>
-            </TouchableOpacity>
-           
+                <Text style= {styles.headerText}> Iniciar Sesión</Text>
+                <ScrollView style = {styles.scrollView} >
+                <View style= {styles.whiteBox}>
+            
+                <Image
+                    style={styles.logo}
+                    source={require( '../../assets/img/logoPurple.png')}
+                />
+                <View style = {styles.inputContainer}>
+                    <Text style = {styles.text} >Correo</Text>
+                    <TextInput 
+                        placeholder="Ingresar correo" 
+                        value={email} 
+                        onChangeText={text => setEmail(text)} 
+                        style = {styles.input}
+                    />
+                    <Text style = {styles.text}>Contraseña</Text>
+                    <TextInput 
+                        placeholder="Ingresar contraseña" 
+                        value={password} 
+                        onChangeText={text => setPassword(text)} 
+                        style = {styles.input}
+                        secureTextEntry
+                    />
+                </View>
 
-            <View style={styles.registerText}>
-                    <Text>No tienes cuenta? </Text>
-                    <Text style={{color: 'blue'}}
-                        onPress={() => navigation.replace("Register")}>
-                     Registrate
-                    </Text>
-            </View>
-            </View>
+                
+                <TouchableOpacity
+                    onPress={handleLogin}
+                    style = {styles.button}
+                >
+                    <Text style = {styles.buttonText}>Iniciar Sesión</Text>
+                </TouchableOpacity>
+            
 
-        </KeyboardAvoidingView>
+                <View style={styles.registerText}>
+                        <Text>No tienes cuenta? </Text>
+                        <Text style={{color: 'blue'}}
+                            onPress={() => navigation.replace("Register")}>
+                        Registrate
+                        </Text>
+                </View>
+                </View>
+            </ScrollView>
+
+            </KeyboardAvoidingView>
+       
     )
 }
 
@@ -96,6 +101,7 @@ const styles = StyleSheet.create({
     container: {
         flex:1,
         backgroundColor: '#28194C',
+        height: '100%',
     },
     headerText:{
         fontWeight: 'bold',
@@ -107,14 +113,18 @@ const styles = StyleSheet.create({
         paddingHorizontal: 10
         
     },
-    whiteBox:{
+    scrollView: {
         backgroundColor:'white',
         width:'100%',
+        borderTopLeftRadius: '30px',
+        borderTopRightRadius: '30px',
+    },
+    whiteBox:{
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        borderTopLeftRadius: '30px',
-        borderTopRightRadius: '30px',
+        
+       
 
     },
     inputContainer: {
