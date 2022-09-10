@@ -54,19 +54,19 @@ const LoginScreen = () => {
 
     return(
 
-            <KeyboardAvoidingView
+            <KeyboardAvoidingView enabled={false}
                 style={styles.container}
                 behavior="padding"
             >
                 <Text style= {styles.headerText}> Iniciar Sesión</Text>
                 <ScrollView style = {styles.scrollView} >
-                <View style= {styles.whiteBox}>
+                <KeyboardAvoidingView enabled={false} style= {styles.whiteBox}>
 
                 <Image
                     style={styles.logo}
                     source={require( '../../assets/img/logoPurple.png')}
                 />
-                <View style = {styles.inputContainer}>
+                <KeyboardAvoidingView enabled={false} style = {styles.inputContainer}>
                     <Text style = {styles.text} >Correo</Text>
                     <TextInput
                         placeholder="Ingresar correo"
@@ -75,7 +75,7 @@ const LoginScreen = () => {
                         style = {styles.input}
                     />
                     <Text style = {styles.text}>Contraseña</Text>
-                    <View style={styles.passwordContainer}>
+                    <KeyboardAvoidingView enabled={false} style={styles.passwordContainer}>
                         <TextInput
                             placeholder="Ingresar contraseña"
                             value={password}
@@ -86,8 +86,8 @@ const LoginScreen = () => {
                         <Pressable onPress={handlePasswordVisibility} style={{left:5}}>
                             <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                         </Pressable>
-                    </View>
-                </View>
+                    </KeyboardAvoidingView>
+                </KeyboardAvoidingView>
 
 
                 <TouchableOpacity
@@ -98,14 +98,14 @@ const LoginScreen = () => {
                 </TouchableOpacity>
 
 
-                <View style={styles.registerText}>
+                <KeyboardAvoidingView enabled={false} style={styles.registerText}>
                         <Text>No tienes cuenta? </Text>
                         <Text style={{color: 'blue'}}
                             onPress={() => navigation.replace("Register")}>
                         Regístrate
                         </Text>
-                </View>
-                </View>
+                </KeyboardAvoidingView>
+                </KeyboardAvoidingView>
             </ScrollView>
 
             </KeyboardAvoidingView>
@@ -175,8 +175,8 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor:'white',
         width:'100%',
-        borderTopLeftRadius: '30px',
-        borderTopRightRadius: '30px',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
     },
     text: {
         fontWeight: 'bold',

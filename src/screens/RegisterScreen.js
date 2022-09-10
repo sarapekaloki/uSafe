@@ -8,13 +8,18 @@ import {
     TextInput,
     TouchableOpacity,
     View,
-    ScrollView
+    ScrollView, Keyboard
 } from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import { MaterialCommunityIcons} from "@expo/vector-icons";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
+import { auth } from "../../firebase";
+import firestore from '@react-native-firebase/firestore';
+import {getFirestore, setDoc, doc, addDoc, collection} from 'firebase/firestore';
+import {Base64} from "js-base64";
 
 const RegisterScreen = () => {
+
     const {passwordVisibility, rightIcon, handlePasswordVisibility} =
         useTogglePasswordVisibility();
 
@@ -24,19 +29,57 @@ const RegisterScreen = () => {
     const navigation = useNavigation()
     const anErrorOccurs = false
 
+    useEffect(() => {
+        const unsubscribe = auth.onAuthStateChanged(user => {
+            if (user) {
+                navigation.replace("Login")
+            }
+        })
+        return unsubscribe
+    }, [])
+
+    const handleSignUp = () => {
+        if (username.length >3) {
+            auth
+                .createUserWithEmailAndPassword(email, password)
+                .then(userCredentials => {
+                    const user = userCredentials.user;
+                    console.log("Registered with: ", user.email);
+                    addData();
+                })
+                .catch(error => alert(error.message))
+        }
+        else {alert("Usuario debe tener al menos 4 caracteres")}
+    }
+
+    const addData = async () => {
+        const firestore = getFirestore();
+        await addDoc(collection(firestore, "users"), {
+            coordinates: {longitude:0,latitude:0},
+            email:email,
+            password:Base64.encode(password)
+        });
+        await addDoc(collection(firestore, "profiles"), {
+            email:email,
+            helpResponses: 0,
+            profilePicture: "",
+            username:username
+        });
+    }
+
     return(
-        <KeyboardAvoidingView
+        <KeyboardAvoidingView enabled={false}
             style={styles.container}
             behavior="padding"
         >
             <Text style= {styles.headerText}>Crea una cuenta</Text>
             <ScrollView style = {styles.scrollView} >
-                <View style= {styles.whiteBox}>
+                <KeyboardAvoidingView enabled={false} style= {styles.whiteBox}>
                     <Image
                         style={styles.logo}
                         source={require( '../../assets/img/logoPurple.png')}
                     />
-                    <View style = {styles.inputContainer}>
+                    <KeyboardAvoidingView enabled={false} style = {styles.inputContainer}>
                         <Text style = {styles.text} >Nombre de usuario</Text>
                         <TextInput
                             placeholder="Ingresar nombre de usuario"
@@ -52,7 +95,7 @@ const RegisterScreen = () => {
                             style = {styles.input}
                         />
                         <Text style = {styles.text}>Contraseña</Text>
-                        <View style={styles.passwordContainer}>
+                        <KeyboardAvoidingView enabled={false} style={styles.passwordContainer}>
                             <TextInput
                                 placeholder="Ingresar contraseña"
                                 value={password}
@@ -63,31 +106,32 @@ const RegisterScreen = () => {
                             <Pressable onPress={handlePasswordVisibility} style={{left:5}}>
                                 <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                             </Pressable>
-                        </View>
+                        </KeyboardAvoidingView>
 
-                    </View>
+                    </KeyboardAvoidingView>
 
 
                     <TouchableOpacity
-                        // onPress={handleLogin}
                         style = {styles.button}
+                        onPress={handleSignUp}
                     >
                         <Text style = {styles.buttonText}>Registrar cuenta</Text>
                     </TouchableOpacity>
 
 
-                    <View style={styles.registerText}>
+                    <KeyboardAvoidingView enabled={false} style={styles.registerText}>
                         <Text>Ya tienes cuenta? </Text>
                         <Text style={{color: 'blue'}}
                               onPress={() => navigation.replace("Login")}>
                             Inicia sesión
                         </Text>
-                    </View>
-                </View>
+                    </KeyboardAvoidingView>
+                </KeyboardAvoidingView>
             </ScrollView>
 
 
         </KeyboardAvoidingView>
+
     )
 }
 
@@ -151,8 +195,8 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor:'white',
         width:'100%',
-        borderTopLeftRadius: '30px',
-        borderTopRightRadius: '30px',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
     },
     text: {
         fontWeight: 'bold',
@@ -166,7 +210,7 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
-        borderTopLeftRadius: '30px',
-        borderTopRightRadius: '30px',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
     },
 })
