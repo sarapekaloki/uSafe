@@ -20,8 +20,9 @@ const LoginScreen = () => {
         useTogglePasswordVisibility();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
+    const [anErrorOccurs, setError] = useState(false)
+
     const navigation = useNavigation()
-    const anErrorOccurs = false
 
     useEffect(() => {
          const unsubscribe = auth.onAuthStateChanged(user => {
@@ -32,24 +33,18 @@ const LoginScreen = () => {
         return unsubscribe
     }, [])
 
-    const handleSignUp = () => {
-        auth
-        .createUserWithEmailAndPassword(email, password)
-        .then(userCredentials => {
-            const user = userCredentials.user;
-            console.log("Registered with: ", user.email);
-        })
-        .catch(error => {anErrorOccurs = true})
-    }
-
     const handleLogin = () => {
         auth
         .signInWithEmailAndPassword(email, password)
         .then(userCredentials => {
-            const user = userCredentials.user;
-            console.log("Logged in with: ", user.email);
+            setError(false);
+            userCredentials.user;
         })
-        .catch(error => alert(error.message))
+        .catch(error => {
+            if (error.code === 'auth/invalid-email' || 'auth/wrong-password') {
+                setError(true);
+              }
+           })
     }
 
     return(
@@ -89,15 +84,13 @@ const LoginScreen = () => {
                     </View>
                 </View>
 
-
                 <TouchableOpacity
                     onPress={handleLogin}
                     style = {styles.button}
                 >
                     <Text style = {styles.buttonText}>Iniciar Sesión</Text>
                 </TouchableOpacity>
-
-
+                <Text style =  {anErrorOccurs? styles.errorText: {display: 'none'}}> Contraseña o correo incorrectos. </Text>
                 <View style={styles.registerText}>
                         <Text>No tienes cuenta? </Text>
                         <Text style={{color: 'blue'}}
@@ -107,9 +100,7 @@ const LoginScreen = () => {
                 </View>
                 </View>
             </ScrollView>
-
             </KeyboardAvoidingView>
-
     )
 }
 
@@ -134,6 +125,10 @@ const styles = StyleSheet.create({
         flex:1,
         backgroundColor: '#28194C',
         height: '100%',
+    },
+    errorText: {
+        paddingTop: 10,
+        color: 'red',
     },
     headerText:{
         fontWeight: 'bold',
