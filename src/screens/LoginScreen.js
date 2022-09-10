@@ -7,9 +7,9 @@ import {
     Image,
     TextInput,
     TouchableOpacity,
-    View,
     ScrollView,
-    Pressable
+    Pressable,
+    View
 } from "react-native";
 import { auth } from "../../firebase";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
@@ -49,7 +49,7 @@ const LoginScreen = () => {
 
     return(
 
-            <KeyboardAvoidingView
+            <KeyboardAvoidingView 
                 style={styles.container}
                 behavior="padding"
             >
@@ -61,7 +61,7 @@ const LoginScreen = () => {
                     style={styles.logo}
                     source={require( '../../assets/img/logoPurple.png')}
                 />
-                <View style = {styles.inputContainer}>
+                <View  style = {styles.inputContainer}>
                     <Text style = {styles.text} >Correo</Text>
                     <TextInput
                         placeholder="Ingresar correo"
@@ -69,28 +69,31 @@ const LoginScreen = () => {
                         onChangeText={text => setEmail(text)}
                         style = {styles.input}
                     />
-                    <Text style = {styles.text}>Contraseña</Text>
-                    <View style={styles.passwordContainer}>
-                        <TextInput
-                            placeholder="Ingresar contraseña"
-                            value={password}
-                            onChangeText={text => setPassword(text)}
-                            style = {styles.input}
-                            secureTextEntry={passwordVisibility}
-                        />
-                        <Pressable onPress={handlePasswordVisibility} style={{left:5}}>
-                            <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
-                        </Pressable>
-                    </View>
-                </View>
+                 </View>
 
+                <View style={styles.inputContainer}>
+                    <Text style = {styles.text}>Contraseña</Text>
+                    <TextInput
+                        placeholder="Ingresar contraseña"
+                        value={password}
+                        onChangeText={text => setPassword(text)}
+                        style = {styles.input}
+                        secureTextEntry={passwordVisibility}
+                    />
+                    <Pressable onPress={handlePasswordVisibility} style={{left:300, top: -10}}>
+                        <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
+                    </Pressable>
+                </View>
+               
                 <TouchableOpacity
                     onPress={handleLogin}
                     style = {styles.button}
                 >
                     <Text style = {styles.buttonText}>Iniciar Sesión</Text>
                 </TouchableOpacity>
+
                 <Text style =  {anErrorOccurs? styles.errorText: {display: 'none'}}> Contraseña o correo incorrectos. </Text>
+
                 <View style={styles.registerText}>
                         <Text>No tienes cuenta? </Text>
                         <Text style={{color: 'blue'}}
@@ -100,7 +103,7 @@ const LoginScreen = () => {
                 </View>
                 </View>
             </ScrollView>
-            </KeyboardAvoidingView>
+        </KeyboardAvoidingView>
     )
 }
 
@@ -170,8 +173,8 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor:'white',
         width:'100%',
-        borderTopLeftRadius: '30px',
-        borderTopRightRadius: '30px',
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
     },
     text: {
         fontWeight: 'bold',
