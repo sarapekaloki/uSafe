@@ -29,6 +29,7 @@ const RegisterScreen = () => {
     const [usernameErrorOccurs, usernamesetError] = useState(false)
     const [emptyEmailErrorOccurs, emptyEmailsetError] = useState(false)
     const [invalidEmailErrorOccurs, invalidEmailsetError] = useState(false)
+    const [repeatedEmailErrorOccurs, repeatedEmailsetError] = useState(false)
     const [emptyPasswordErrorOccurs, emptyPasswordsetError] = useState(false)
     const [lenPasswordErrorOccurs, lenPasswordsetError] = useState(false)
     const [lowerPasswordErrorOccurs, lowerPasswordsetError] = useState(false)
@@ -37,35 +38,8 @@ const RegisterScreen = () => {
     const [lowerPasswordFixOccurs, lowerPasswordsetFix] = useState(false)
     const [numberPasswordFixOccurs, numberPasswordsetFix] = useState(false)
 
-    const validatePassword = () =>{
-        let regEx = /\d/;
-        if (password.length < 8){
-            lenPasswordsetError(true);
-        }
-        else
-        {
-            lenPasswordsetError(false);
-            lenPasswordsetFix(true);
-        }
-        if (password.toUpperCase() == password || password.toLowerCase() == password){
-            lowerPasswordsetError(true)
-        }
-        else
-        {
-            lowerPasswordsetError(false);
-            lowerPasswordsetFix(true);
-        }
-        if (regEx.test(password)===false){
-            numberPasswordsetError(true)
-        }
-        else
-        {
-            numberPasswordsetError(false);
-            numberPasswordsetFix(true);
-        }
-    }
-
     const handleSignUp = () => {
+        let numberReg = /\d/;
         let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
         let passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
         invalidEmailsetError(false);
@@ -73,6 +47,7 @@ const RegisterScreen = () => {
         lenPasswordsetFix(false);
         lowerPasswordsetFix(false);
         numberPasswordsetFix(false);
+        repeatedEmailsetError(false);
         if (username.length == 0){
             usernamesetError(true)
         }
@@ -88,12 +63,45 @@ const RegisterScreen = () => {
         }
         else{
             emptyPasswordsetError(false);
-            validatePassword();
+            if (password.length < 8){
+                lenPasswordsetError(true);
+            }
+            else
+            {
+                lenPasswordsetError(false);
+                lenPasswordsetFix(true);
+            }
+            if (password.toUpperCase() == password || password.toLowerCase() == password){
+                lowerPasswordsetError(true)
+            }
+            else
+            {
+                lowerPasswordsetError(false);
+                lowerPasswordsetFix(true);
+            }
+            if (numberReg.test(password)===false){
+                numberPasswordsetError(true)
+            }
+            else
+            {
+                numberPasswordsetError(false);
+                numberPasswordsetFix(true);
+            }
         }
         if (username.length>0 && emailReg.test(email) === true && passwordReg.test(password) ===true)
         {
-            addData();
-            navigation.replace("Login");
+            auth
+                .createUserWithEmailAndPassword(email, password)
+                .then(userCredentials => {
+                    const user = userCredentials.user;
+                    addData();
+                    navigation.replace("Login");
+                })
+                .catch(error =>{
+                    if (error.code === 'auth/email-already-in-use' ) {
+                        repeatedEmailsetError(true);
+                    }
+                })
         }
     }
 
@@ -142,6 +150,7 @@ const RegisterScreen = () => {
                         />
                         <Text style =  {emptyEmailErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
                         <Text style =  {invalidEmailErrorOccurs? styles.errorText: {display: 'none'}}> Por favor ingresa un correo válido </Text>
+                        <Text style =  {repeatedEmailErrorOccurs? styles.errorText: {display: 'none'}}> Ya existe una cuenta con este correo </Text>
                         <Text style = {styles.text}>Contraseña</Text>
                         <View  style={styles.passwordContainer}>
                             <TextInput
@@ -156,12 +165,12 @@ const RegisterScreen = () => {
                             </Pressable>
                         </View>
                         <Text style =  {emptyPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
-                        <Text style =  {lenPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Longitud de mínimo 8 caracteres </Text>
-                        <Text style =  {lenPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}> Longitud de mínimo 8 caracteres </Text>
-                        <Text style =  {lowerPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Contener mínimo una mayúscula y una minúscula </Text>
-                        <Text style =  {lowerPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}> Contener mínimo una mayúscula y una minúscula </Text>
-                        <Text style =  {numberPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Contener por lo menos un número </Text>
-                        <Text style =  {numberPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}> Contener por lo menos un número </Text>
+                        <Text style =  {lenPasswordErrorOccurs? styles.errorText: {display: 'none'}}>1. Longitud de mínimo 8 caracteres </Text>
+                        <Text style =  {lenPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>1. Longitud de mínimo 8 caracteres </Text>
+                        <Text style =  {lowerPasswordErrorOccurs? styles.errorText: {display: 'none'}}>2. Contener mínimo una mayúscula y una minúscula </Text>
+                        <Text style =  {lowerPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>2. Contener mínimo una mayúscula y una minúscula </Text>
+                        <Text style =  {numberPasswordErrorOccurs? styles.errorText: {display: 'none'}}>3. Contener por lo menos un número </Text>
+                        <Text style =  {numberPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>3. Contener por lo menos un número </Text>
 
 
 
