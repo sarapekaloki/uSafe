@@ -26,28 +26,75 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigation = useNavigation()
+    const [usernameErrorOccurs, usernamesetError] = useState(false)
+    const [emptyEmailErrorOccurs, emptyEmailsetError] = useState(false)
+    const [invalidEmailErrorOccurs, invalidEmailsetError] = useState(false)
+    const [emptyPasswordErrorOccurs, emptyPasswordsetError] = useState(false)
+    const [lenPasswordErrorOccurs, lenPasswordsetError] = useState(false)
+    const [lowerPasswordErrorOccurs, lowerPasswordsetError] = useState(false)
+    const [numberPasswordErrorOccurs, numberPasswordsetError] = useState(false)
+    const [lenPasswordFixOccurs, lenPasswordsetFix] = useState(false)
+    const [lowerPasswordFixOccurs, lowerPasswordsetFix] = useState(false)
+    const [numberPasswordFixOccurs, numberPasswordsetFix] = useState(false)
 
-    useEffect(() => {
-        const unsubscribe = auth.onAuthStateChanged(user => {
-            if (user) {
-                navigation.replace("Login")
-            }
-        })
-        return unsubscribe
-    }, [])
+    const validatePassword = () =>{
+        let regEx = /\d/;
+        if (password.length < 8){
+            lenPasswordsetError(true);
+        }
+        else
+        {
+            lenPasswordsetError(false);
+            lenPasswordsetFix(true);
+        }
+        if (password.toUpperCase() == password || password.toLowerCase() == password){
+            lowerPasswordsetError(true)
+        }
+        else
+        {
+            lowerPasswordsetError(false);
+            lowerPasswordsetFix(true);
+        }
+        if (regEx.test(password)===false){
+            numberPasswordsetError(true)
+        }
+        else
+        {
+            numberPasswordsetError(false);
+            numberPasswordsetFix(true);
+        }
+    }
 
     const handleSignUp = () => {
-        if (username.length >3) {
-            auth
-                .createUserWithEmailAndPassword(email, password)
-                .then(userCredentials => {
-                    const user = userCredentials.user;
-                    console.log("Registered with: ", user.email);
-                    addData();
-                })
-                .catch(error => alert(error.message))
+        let emailReg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+        let passwordReg = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$/;
+        invalidEmailsetError(false);
+        emptyEmailsetError(false);
+        lenPasswordsetFix(false);
+        lowerPasswordsetFix(false);
+        numberPasswordsetFix(false);
+        if (username.length == 0){
+            usernamesetError(true)
         }
-        else {alert("Usuario debe tener al menos 4 caracteres")}
+        else {usernamesetError(false);}
+        if (email.length == 0){
+            emptyEmailsetError(true);
+        }
+        else if (emailReg.test(email) === false){
+            invalidEmailsetError(true);
+        }
+        if (password.length == 0){
+            emptyPasswordsetError(true);
+        }
+        else{
+            emptyPasswordsetError(false);
+            validatePassword();
+        }
+        if (username.length>0 && emailReg.test(email) === true && passwordReg.test(password) ===true)
+        {
+            addData();
+            navigation.replace("Login");
+        }
     }
 
     const addData = async () => {
@@ -85,6 +132,7 @@ const RegisterScreen = () => {
                             onChangeText={text => setUsername(text)}
                             style = {styles.input}
                         />
+                        <Text style =  {usernameErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
                         <Text style = {styles.text} >Correo</Text>
                         <TextInput
                             placeholder="Ingresar correo"
@@ -92,6 +140,8 @@ const RegisterScreen = () => {
                             onChangeText={text => setEmail(text)}
                             style = {styles.input}
                         />
+                        <Text style =  {emptyEmailErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
+                        <Text style =  {invalidEmailErrorOccurs? styles.errorText: {display: 'none'}}> Por favor ingresa un correo válido </Text>
                         <Text style = {styles.text}>Contraseña</Text>
                         <View  style={styles.passwordContainer}>
                             <TextInput
@@ -105,6 +155,15 @@ const RegisterScreen = () => {
                                 <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                             </Pressable>
                         </View>
+                        <Text style =  {emptyPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
+                        <Text style =  {lenPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Longitud de mínimo 8 caracteres </Text>
+                        <Text style =  {lenPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}> Longitud de mínimo 8 caracteres </Text>
+                        <Text style =  {lowerPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Contener mínimo una mayúscula y una minúscula </Text>
+                        <Text style =  {lowerPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}> Contener mínimo una mayúscula y una minúscula </Text>
+                        <Text style =  {numberPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Contener por lo menos un número </Text>
+                        <Text style =  {numberPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}> Contener por lo menos un número </Text>
+
+
 
                     </View>
 
@@ -121,7 +180,7 @@ const RegisterScreen = () => {
                         <Text>Ya tienes cuenta? </Text>
                         <Text style={{color: 'blue'}}
                               onPress={() => navigation.replace("Login")}>
-                            Inicia sesión
+                            Iniciar sesión
                         </Text>
                     </View>
                 </View>
@@ -189,6 +248,14 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         padding: 10
 
+    },
+    errorText: {
+        paddingTop: 5,
+        color: 'red',
+    },
+    fixErrorText: {
+        paddingTop: 5,
+        color: '#70C053',
     },
     scrollView: {
         backgroundColor:'white',
