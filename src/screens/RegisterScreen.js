@@ -94,6 +94,7 @@ const RegisterScreen = () => {
                 .createUserWithEmailAndPassword(email, password)
                 .then(userCredentials => {
                     const user = userCredentials.user;
+                    user.sendEmailVerification();
                     addData();
                     navigation.replace("Login");
                 })
@@ -107,6 +108,7 @@ const RegisterScreen = () => {
 
     const addData = async () => {
         const firestore = getFirestore();
+
         await addDoc(collection(firestore, "users"), {
             coordinates: {longitude:0,latitude:0},
             email:email,
