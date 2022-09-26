@@ -112,10 +112,11 @@ const RegisterScreen = () => {
             email:email,
             password:Base64.encode(password)
         });
+        
         await addDoc(collection(firestore, "profiles"), {
             email:email,
             helpResponses: 0,
-            profilePicture: "",
+            profilePicture: "initialProfilePicture.jpeg",
             username:username
         });
     }
