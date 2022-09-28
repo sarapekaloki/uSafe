@@ -22,6 +22,7 @@ Dependiendo del cambio, le sumaremos un número al campo correspondiente [major|
 </br>
 
 ## Versión del código:
+|1.1.0| Pantalla de login.
 * |1.0.0| La estructura del proyecto fue creada. 
 
 

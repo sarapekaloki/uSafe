@@ -1,0 +1,5 @@
+
+Ejavascript:S1128")Remove this unused import of 'useEffect'.(ó•äœ
+ojavascript:S3776)"TRefactor this function to reduce its Cognitive Complexity from 21 to the 15 allowed.(‰Ÿ3
+Qjavascript:S1481`"5Remove the declaration of the unused 'user' variable.(áÍ’¥
+Njavascript:S1854`"2Remove this useless assignment to variable "user".(áÍ’¥
