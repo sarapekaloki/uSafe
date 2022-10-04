@@ -6,6 +6,11 @@ import HomeScreen from './src/screens/HomeScreen';
 import LoginScreen from './src/screens/LoginScreen';
 import HomePage from './src/screens/HomePage'
 import RegisterScreen from './src/screens/RegisterScreen';
+import SettingsScreen from './src/screens/navigation/SettingsScreen'
+import ProfileScreen from './src/screens/navigation/ProfileScreen'
+import MapScreen from './src/screens/navigation/MapScreen'
+import AlertScreen from './src/screens/navigation/AlertScreen'
+import MainContainer from './src/screens/navigation/MainContainer'
 
 
 const Stack = createNativeStackNavigator();
@@ -17,8 +22,7 @@ export default function App() {
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
-        <Stack.Screen name="Home" component={HomeScreen} />
-
+        <Stack.Screen options={{ headerShown: false }} name="Home" component={HomeScreen} />
       </Stack.Navigator>
     </NavigationContainer>
   );
