@@ -4,8 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import HomePage from './src/screens/HomePage'
 import RegisterScreen from './src/screens/RegisterScreen';
+import SettingsScreen from './src/screens/navigation/SettingsScreen'
+import ProfileScreen from './src/screens/navigation/ProfileScreen'
+import MapScreen from './src/screens/navigation/MapScreen'
+import AlertScreen from './src/screens/navigation/AlertScreen'
+import MainContainer from './src/screens/navigation/MainContainer'
 import OwnProfileScreen from './src/screens/OwnProfile';
 import Settings from './src/screens/Settings';
+
 
 
 const Stack = createNativeStackNavigator();
@@ -16,10 +22,10 @@ export default function App(){
       <Stack.Navigator>
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+        <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} /> 
         <Stack.Screen options={{ headerShown: true }} name="Perfil" component={OwnProfileScreen} />
         <Stack.Screen options={{ headerShown: true }} name="Configuración" component={Settings} />
-
       </Stack.Navigator>
     </NavigationContainer>
   );

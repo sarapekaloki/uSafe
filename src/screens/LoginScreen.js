@@ -49,7 +49,7 @@ const LoginScreen = () => {
 
     return(
 
-            <KeyboardAvoidingView 
+            <KeyboardAvoidingView
                 style={styles.container}
                 behavior="padding"
             >
@@ -84,7 +84,7 @@ const LoginScreen = () => {
                         <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                     </Pressable>
                 </View>
-               
+
                 <TouchableOpacity
                     onPress={handleLogin}
                     style = {styles.button}
