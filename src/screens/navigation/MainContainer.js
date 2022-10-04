@@ -57,7 +57,6 @@ export default function MainContainer(){
             >
 
                 <Tab.Screen options={{ headerShown: false }} name={alertName} component={AlertScreen}/>
-
                 <Tab.Screen options={{ headerShown: false }} name={settingsName} component={SettingsScreen}/>
                 <Tab.Screen options={{ headerShown: false }} name={profileName} component={ProfileScreen}/>
                 <Tab.Screen options={{ headerShown: false }} name={mapName} component={MapScreen}/>

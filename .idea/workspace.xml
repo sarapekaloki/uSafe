@@ -2,36 +2,8 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a304ac1-be4e-4c5b-a32f-c5b4e2853092" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/.idea/.gitignore" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/modules.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/8/e/8ec9a00bfd09b3190ac6b22251dbb1aa95a0579d" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/sonarlint/issuestore/index.pb" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/uSafe.iml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/alert.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/alert_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/map.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/map_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/profile.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/profile_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/settings.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/icons/settings_dark.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/img/logoPurple.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/useTogglePasswordVisibility.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/RegisterScreen.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/navigation/ProfileScreen.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/screens/navigation/SettingsScreen.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/README.md" beforeDir="false" afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomeScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/LoginScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/LoginScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,8 +29,8 @@
               <option name="branches">
                 <list>
                   <RecentBranch>
-                    <option name="branchName" value="map" />
-                    <option name="lastUsedInstant" value="1663984325" />
+                    <option name="branchName" value="navbar" />
+                    <option name="lastUsedInstant" value="1664334481" />
                   </RecentBranch>
                   <RecentBranch>
                     <option name="branchName" value="iniciarSesion" />
@@ -119,7 +91,8 @@
       <workItem from="1663639819458" duration="498000" />
       <workItem from="1663734539353" duration="432000" />
       <workItem from="1663984737882" duration="9158000" />
-      <workItem from="1664334067062" duration="293000" />
+      <workItem from="1664334067062" duration="1138000" />
+      <workItem from="1664845799484" duration="1325000" />
     </task>
     <servers />
   </component>
