@@ -9,6 +9,7 @@ import ProfileScreen from './src/screens/navigation/ProfileScreen'
 import MapScreen from './src/screens/navigation/MapScreen'
 import AlertScreen from './src/screens/navigation/AlertScreen'
 import MainContainer from './src/screens/navigation/MainContainer'
+import HomeScreen from "./src/screens/HomeScreen";
 import OwnProfileScreen from './src/screens/OwnProfile';
 import Settings from './src/screens/Settings';
 
@@ -23,14 +24,13 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} /> 
+        <Stack.Screen options={{ headerShown: false }} name="Home Screen" component={HomeScreen} />
         <Stack.Screen options={{ headerShown: true }} name="Perfil" component={OwnProfileScreen} />
         <Stack.Screen options={{ headerShown: true }} name="Configuración" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

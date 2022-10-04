@@ -7,6 +7,7 @@ import SettingsScreen from "./SettingsScreen";
 import MapScreen from "./MapScreen";
 import ProfileScreen from "./ProfileScreen";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
+import Ionicons from "react-native-vector-icons/Ionicons"
 
 const alertName = 'Alert';
 const settingsName = 'Settings';
@@ -24,36 +25,24 @@ export default function MainContainer(){
             screenOptions={({route}) => ({
                 tabBarIcon: ({focused,color,size}) => {
                     let iconName;
-                    let icon;
-                    let dark_icon;
-                    let rn = route.name
+                    let rn = route.name;
 
                     if(rn === mapName){
-                        icon = !focused ? require('../../../assets/icons/map.png') :
-                            require('../../../assets/icons/map_dark.png')
+                        iconName = focused ? "globe-outline" : "globe"
                     } else if (rn === profileName){
-                        icon = !focused ? require('../../../assets/icons/profile.png') :
-                            require('../../../assets/icons/profile_dark.png')
+                        iconName = focused ? "person-circle-outline" : "person-circle"
                     } else if (rn === settingsName){
-                        icon = !focused ? require('../../../assets/icons/settings.png') :
-                            require('../../../assets/icons/settings_dark.png')
+                        iconName = focused ? "settings-outline" : "settings"
                     } else if (rn === alertName){
-                        icon = !focused ? require('../../../assets/icons/alert.png') :
-                            require('../../../assets/icons/alert_dark.png')
+                        iconName = focused ? "warning-outline" : "warning"
                     }
-
-                    return <Image source={icon}/>
+                    return <Ionicons name={iconName} size={40} color={color}/>
                 },
-                tabBarStyle: [
-                    {
-                        "padding":50,
-                        "paddingBottom": 50,
-                        "height":70
-                    }
-                ]
-
-            }
-            )}
+                tabBarActiveTintColor: '#28194C',
+                tabBarInactiveTintColor: '#D4B2EF',
+                tabBarShowLabel: false,
+                tabBarStyle: {height:70},
+            })}
             >
 
                 <Tab.Screen options={{ headerShown: false }} name={alertName} component={AlertScreen}/>
