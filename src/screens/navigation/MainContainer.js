@@ -41,7 +41,7 @@ export default function MainContainer(){
                 tabBarActiveTintColor: '#28194C',
                 tabBarInactiveTintColor: '#D4B2EF',
                 tabBarShowLabel: false,
-                tabBarStyle: {height:70},
+                tabBarStyle: {height:"10%"},
             })}
             >
 
