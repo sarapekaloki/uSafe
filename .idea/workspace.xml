@@ -2,8 +2,15 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a304ac1-be4e-4c5b-a32f-c5b4e2853092" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/assets/img/buttonPressed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/img/buttonUnpressed.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -49,6 +56,9 @@
       </RecentBranches>
     </option>
   </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
   <component name="ProjectId" id="2ENEMit4kWDPu49lu2oUbqNwo6R" />
   <component name="ProjectLevelVcsManager">
     <ConfirmationsSetting value="2" id="Add" />
@@ -57,20 +67,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">
-    <property name="ASKED_ADD_EXTERNAL_FILES" value="true" />
-    <property name="RunOnceActivity.OpenProjectViewOnStart" value="true" />
-    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
-    <property name="WebServerToolWindowFactoryState" value="false" />
-    <property name="last_opened_file_path" value="$PROJECT_DIR$/assets/icons" />
-    <property name="nodejs_package_manager_path" value="yarn" />
-    <property name="vue.rearranger.settings.migration" value="true" />
-  </component>
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/elqui/Documents/GitHub/uSafe/assets/img&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;two.files.diff.last.used.file&quot;: &quot;C:/Users/elqui/Documents/GitHub/uSafe/src/screens/navigation/MainContainer.js&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  }
+}</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\elqui\Documents\GitHub\uSafe\assets\img" />
       <recent name="C:\Users\hugui\WebstormProjects\uSafe\assets\icons" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\elqui\Documents\GitHub\uSafe\assets\img" />
       <recent name="C:\Users\hugui\WebstormProjects\uSafe\assets\icons" />
       <recent name="C:\Users\hugui\WebstormProjects\uSafe\assets\alert_dark" />
       <recent name="C:\Users\hugui\WebstormProjects\uSafe\assets\map_dark" />
@@ -93,6 +107,11 @@
       <workItem from="1663984737882" duration="9158000" />
       <workItem from="1664334067062" duration="1138000" />
       <workItem from="1664845799484" duration="1325000" />
+      <workItem from="1665257510261" duration="8629000" />
+      <workItem from="1665344123469" duration="5527000" />
+      <workItem from="1665383186826" duration="4664000" />
+      <workItem from="1665442551298" duration="5475000" />
+      <workItem from="1665612370276" duration="10058000" />
     </task>
     <servers />
   </component>
@@ -109,7 +128,6 @@
         </entry>
       </map>
     </option>
-    <option name="oldMeFiltersMigrated" value="true" />
   </component>
   <component name="VcsManagerConfiguration">
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
