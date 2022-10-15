@@ -80,7 +80,7 @@ const LoginScreen = () => {
                         style = {styles.input}
                         secureTextEntry={passwordVisibility}
                     />
-                    <Pressable onPress={handlePasswordVisibility} style={{left:300, top: -10}}>
+                    <Pressable onPress={handlePasswordVisibility} style={{left:335,top:-30}}>
                         <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                     </Pressable>
                 </View>
@@ -118,6 +118,7 @@ const styles = StyleSheet.create({
         width: '80%',
         padding: 15,
         borderRadius: 10,
+        elevation:10
     },
     buttonText: {
         color: 'white',
@@ -151,14 +152,15 @@ const styles = StyleSheet.create({
         marginTop: 10,
         height: 40,
         width:'100%',
+        elevation:10
     },
     inputContainer: {
-        width: '80%'
+        width: '80%',
     },
     logo: {
         width: 250,
         height: 250,
-        marginTop: 20
+        marginTop: 20,
     },
     passwordContainer:{
         flexDirection: 'row',

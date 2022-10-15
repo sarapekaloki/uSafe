@@ -3,6 +3,8 @@ import React from "react";
 import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { auth } from "../../firebase";
 import MainContainer from "./navigation/MainContainer";
+import OwnProfile from "./OwnProfile";
+import MapScreen from "./navigation/MapScreen";
 import ModalInjection from "react-native/Libraries/Modal/ModalInjection";
 
 const HomeScreen = () => {
@@ -18,7 +20,7 @@ const HomeScreen = () => {
     // }
 
     return(
-        <MainContainer/>
+        <OwnProfile/>
         // <View style={styles.container}>
         //
         //     <Text>Email: {auth.currentUser?.email}</Text>

@@ -215,6 +215,7 @@ const styles = StyleSheet.create({
         width: '80%',
         padding: 15,
         borderRadius: 10,
+        elevation:10
     },
     buttonText: {
         color: 'white',
@@ -241,10 +242,11 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         marginTop: 10,
         height: 40,
-        width:"100%"
+        width:"100%",
+        elevation:10
     },
     inputContainer: {
-        width: '80%'
+        width: '80%',
     },
     logo: {
         width: 250,

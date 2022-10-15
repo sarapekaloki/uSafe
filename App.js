@@ -12,11 +12,12 @@ import MainContainer from './src/screens/navigation/MainContainer'
 import HomeScreen from "./src/screens/HomeScreen";
 import OwnProfileScreen from './src/screens/OwnProfile';
 import Settings from './src/screens/Settings';
+import {useState} from "react";
 
 
 
 const Stack = createNativeStackNavigator();
-
+global.alerta = false;
 export default function App(){
   return (
     <NavigationContainer>
@@ -26,7 +27,7 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Home Screen" component={HomeScreen} />
         <Stack.Screen options={{ headerShown: true }} name="Perfil" component={OwnProfileScreen} />
-        <Stack.Screen options={{ headerShown: true }} name="Configuración" component={Settings} />
+        <Stack.Screen options={{ headerShown: true}} name="Configuración" component={Settings} />
       </Stack.Navigator>
     </NavigationContainer>
   );

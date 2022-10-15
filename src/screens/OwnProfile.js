@@ -14,6 +14,15 @@ const OwnProfile = () => {
     const [helpResponses, setHelpResponses] = useState('')
     const [profilePicture, setProfilePicture] = useState('')
     const [profilePictureURL, setProfilePictureURL] = useState('')
+    var profileIcon = alerta
+        ? require ('../../assets/icons/invProfileDark.png')
+        : require ('../../assets/icons/profileDark.png');
+    var settingsIcon = alerta
+        ? require ('../../assets/icons/invSettings.png')
+        : require ('../../assets/icons/settings.png');
+    var mapIcon = alerta
+        ? require ('../../assets/icons/invMap.png')
+        : require ('../../assets/icons/map.png');
 
     const handleSignOut = () => {
         auth
@@ -45,7 +54,16 @@ const OwnProfile = () => {
         // console.log(profilePictureURL)
     }
 
-
+    const getColor = () =>{
+        let color;
+        if (alerta === false){
+            color="#fff";
+        }
+        else if (alerta === true){
+            color="#28194C";
+        }
+        return color;
+    }
 
     return(
        <View style= {styles.container}>
@@ -84,10 +102,25 @@ const OwnProfile = () => {
             >
                 <Text style={styles.buttonText}> dame username </Text>
             </TouchableOpacity> */}
+           <View style= {[styles.navBar,{backgroundColor:getColor()}]} >
+               <TouchableOpacity onPress={()=> navigation.replace("Alert")}>
+                    <Image style={styles.alertIcon} source={require('../../assets/icons/alert.png')}></Image>
+               </TouchableOpacity>
+               <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Configuración")}>
+                   <Image style={styles.navBarSettingsIcon} source={settingsIcon}></Image>
+               </TouchableOpacity>
+               <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Perfil")}>
+                   <Image style={styles.profileIcon} source={profileIcon}></Image>
+               </TouchableOpacity>
+               <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Map")}>
+                   <Image style={styles.mapIcon} source={mapIcon}></Image>
+               </TouchableOpacity>
+           </View>
        </View>
+
+
     )
 }
-
 export default OwnProfile
 
 const styles = StyleSheet.create({
@@ -105,6 +138,7 @@ const styles = StyleSheet.create({
         width: '90%',
         padding: 15,
         borderRadius: 10,
+        elevation:10
     },
     buttonText: {
         color: 'white',
@@ -118,7 +152,8 @@ const styles = StyleSheet.create({
         marginTop: -300,
         borderRadius: 15,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        elevation:10
     },
     userNameText:{
         fontSize: 20,
@@ -143,7 +178,8 @@ const styles = StyleSheet.create({
         borderRadius: 15,
         marginTop: 15,
         justifyContent: 'center',
-        alignItems: 'center'
+        alignItems: 'center',
+        elevation:10
     },
     helpResponsesText:{
         fontSize: 15,
@@ -158,7 +194,65 @@ const styles = StyleSheet.create({
     settingsIcon:{
         width:30,
         height:30,
+    },
+
+    navBar:{
+        width:"100%",
+        height:"12%",
+        borderTopLeftRadius: 30,
+        borderTopRightRadius: 30,
+        position:"absolute",
+        bottom:0,
+        flexDirection:"row",
+        alignItems: 'center',
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: .6,
+        justifyContent:"space-around",
+    },
+
+    mapIcon:{
+        height:30,
+        width:30,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: .2,
+    },
+
+    profileIcon:{
+        height:65,
+        width:65,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: .1,
+    },
+
+    navBarSettingsIcon:{
+        height:25,
+        width:25,
+        marginLeft:-15,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: .2,
+    },
+
+    alertIcon:{
+        width:200,
+        height:"100%",
+        marginTop:"5%",
+        marginLeft:-10,
+        shadowColor: 'black',
+        shadowOffset: { width: 0, height: 2 },
+        shadowOpacity: .2,
+        padding:.1,
 
     },
+
+    navBarButtons:{
+        height:"100%",
+        justifyContent:"space-evenly",
+        alignItems:"center",
+        width:"15%",
+    }
 
 })
