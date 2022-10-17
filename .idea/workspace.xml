@@ -2,15 +2,9 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="1a304ac1-be4e-4c5b-a32f-c5b4e2853092" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/assets/img/buttonPressed.png" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/assets/img/buttonUnpressed.png" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/assets/img/buttonPressed2.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -112,6 +106,10 @@
       <workItem from="1665383186826" duration="4664000" />
       <workItem from="1665442551298" duration="5475000" />
       <workItem from="1665612370276" duration="10058000" />
+      <workItem from="1665698583832" duration="2802000" />
+      <workItem from="1665705948059" duration="1655000" />
+      <workItem from="1665714221901" duration="659000" />
+      <workItem from="1665888570423" duration="1000" />
     </task>
     <servers />
   </component>

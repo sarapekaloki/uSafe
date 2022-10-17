@@ -4,20 +4,18 @@ import {useRef, useState} from "react";
 import { SafeAreaView, View, TouchableOpacity, Text, StyleSheet, Image } from "react-native";
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import image1 from '../../../assets/img/buttonUnpressed.png'
-import image2 from '../../../assets/img/buttonPressed.png'
+import image2 from '../../../assets/img/buttonPressed2.png'
 
 const AlertScreen = () => {
     const [image, set_image ] = useState(image1)
 
-    // let alertModeActive = false
-    // const a = require('../../../assets/img/buttonUnpressed.png')
-    // const b = require('../../../assets/img/buttonPressed.png')
     const bottomSheet = useRef();
     function changeAlert(){
-        // alertModeActive = !alertModeActive
-        // set_image(alertModeActive ? image2 : image1)
+        // setting user in alert mode logic
+
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-        set_image(image === image1 ? image2 : image1)
+        set_image(image === image1 ? image2 : image1);
+
     }
 
     return (
@@ -26,7 +24,7 @@ const AlertScreen = () => {
                 <View>
                     <TouchableOpacity
                         style={styles.button2}
-                        onPress={() => changeAlert()}
+                        onPressIn={() => changeAlert()}
                         >
                         <Image source={image} style={styles.buttonImage}/>
                     </TouchableOpacity>
@@ -69,8 +67,8 @@ const styles = StyleSheet.create({
         marginLeft:'31%'
     },
     buttonImage:{
-        width:200,
-        height:200
+        width:'154%',
+        height:'460%'
     },
     text: {
         color: "white",
