@@ -3,7 +3,6 @@
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -42,7 +41,7 @@
       <updated>1663982973224</updated>
       <workItem from="1663982974913" duration="613000" />
       <workItem from="1665185910915" duration="294000" />
-      <workItem from="1666057315330" duration="1759000" />
+      <workItem from="1666057315330" duration="2317000" />
     </task>
     <servers />
   </component>
