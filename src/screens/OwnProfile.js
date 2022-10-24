@@ -75,9 +75,7 @@ const OwnProfile = () => {
     const [image, set_image ] = useState(image1)
     const bottomSheet = useRef();
     function changeAlert(){
-        // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-        console.log("Alert mode")
-        console.log(auth.currentUser)
+        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         set_image(image === image1 ? image2 : image1);}
 
     return(
@@ -128,7 +126,7 @@ const OwnProfile = () => {
                 <Text style={styles.buttonText}> dame username </Text>
             </TouchableOpacity> */}
            <View style= {[styles.navBar,{backgroundColor:getColor()}]} >
-               <TouchableOpacity onPress={() => changeAlert()}>
+               <TouchableOpacity onPress={() => bottomSheet.current.show()}>
                     <Image style={styles.alertIcon} source={require('../../assets/icons/alert.png')}></Image>
                </TouchableOpacity>
                <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Configuración")}>
