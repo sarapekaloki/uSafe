@@ -1,11 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { auth } from "../../firebase";
 import {getFirestore, collection, getDocs} from 'firebase/firestore';
 // import {storage} from '@react-native-firebase/storage';
 
+//Alert button imports
+import * as Haptics from 'expo-haptics';
+import BottomSheet from "react-native-gesture-bottom-sheet";
+import image1 from '../../assets/img/buttonUnpressed.png'
+import image2 from '../../assets/img/buttonPressed2.png'
+
 const OwnProfile = () => {
+
     const navigation = useNavigation()
     const currentEmail = auth.currentUser.email
     const firestore = getFirestore()
@@ -65,8 +72,26 @@ const OwnProfile = () => {
         return color;
     }
 
+    const [image, set_image ] = useState(image1)
+    const bottomSheet = useRef();
+    function changeAlert(){
+        // Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+        console.log("Alert mode")
+        console.log(auth.currentUser)
+        set_image(image === image1 ? image2 : image1);}
+
     return(
        <View style= {styles.container}>
+            <BottomSheet hasDraggableIcon ref={bottomSheet} height={600} sheetBackgroundColor={"#D4B2EF"}>
+                <View>
+                    <TouchableOpacity
+                        style={styles.button2}
+                        onPressIn={() => changeAlert()}
+                        >
+                        <Image source={image} style={styles.buttonImage}/>
+                    </TouchableOpacity>
+                </View>
+            </BottomSheet>
             <View style= {styles.profileDetails}>
                 <Text style={styles.userNameText}> {currentUsername}
                     <TouchableOpacity onPress={()=> navigation.replace("Configuración")}>
@@ -103,7 +128,7 @@ const OwnProfile = () => {
                 <Text style={styles.buttonText}> dame username </Text>
             </TouchableOpacity> */}
            <View style= {[styles.navBar,{backgroundColor:getColor()}]} >
-               <TouchableOpacity onPress={()=> navigation.replace("Alert")}>
+               <TouchableOpacity onPress={() => changeAlert()}>
                     <Image style={styles.alertIcon} source={require('../../assets/icons/alert.png')}></Image>
                </TouchableOpacity>
                <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Configuración")}>
@@ -139,6 +164,20 @@ const styles = StyleSheet.create({
         padding: 15,
         borderRadius: 10,
         elevation:10
+    },
+    button2:{
+        height: 50,
+        width: 150,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
+        marginTop: 240,
+        marginLeft:'31%'
+    },
+    buttonImage:{
+        alignSelf:"center",
+        width:'154%',
+        height:'460%'
     },
     buttonText: {
         color: 'white',
@@ -254,5 +293,6 @@ const styles = StyleSheet.create({
         alignItems:"center",
         width:"15%",
     }
+    
 
 })
