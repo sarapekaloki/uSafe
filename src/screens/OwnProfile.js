@@ -135,7 +135,7 @@ const OwnProfile = () => {
                <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Perfil")}>
                    <Image style={styles.profileIcon} source={profileIcon}></Image>
                </TouchableOpacity>
-               <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Map")}>
+               <TouchableOpacity style={styles.navBarButtons} onPress={()=> navigation.replace("Map Screen")}>
                    <Image style={styles.mapIcon} source={mapIcon}></Image>
                </TouchableOpacity>
            </View>

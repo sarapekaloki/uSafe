@@ -11,7 +11,7 @@ import Ionicons from "react-native-vector-icons/Ionicons"
 
 const alertName = 'Alert';
 const settingsName = 'Settings';
-const mapName = 'Map';
+const mapName = 'Map Screen';
 const profileName = 'Profile';
 
 const Tab = createBottomTabNavigator();

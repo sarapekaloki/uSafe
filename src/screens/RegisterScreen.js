@@ -109,18 +109,20 @@ const RegisterScreen = () => {
     const addData = async () => {
         const firestore = getFirestore();
 
-        await addDoc(collection(firestore, "users"), {
-            coordinates: {longitude:0,latitude:0},
-            email:email,
-            password:Base64.encode(password)
-        });
-        
-        await addDoc(collection(firestore, "profiles"), {
+        await addDoc(collection(firestore, "users2"), {
+            coordinates: {latitude:32.505008,longitude: -116.923947},
             email:email,
             helpResponses: 0,
-            profilePicture: "initialProfilePicture.jpeg",
-            username:username
+            pictureUrl:'',
+            username: username
         });
+        
+        // await addDoc(collection(firestore, "profiles"), {
+        //     email:email,
+        //     helpResponses: 0,
+        //     profilePicture: "initialProfilePicture.jpeg",
+        //     username:username
+        // });
     }
 
     return(
