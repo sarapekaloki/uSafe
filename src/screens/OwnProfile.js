@@ -11,6 +11,12 @@ import BottomSheet from "react-native-gesture-bottom-sheet";
 import image1 from '../../assets/img/buttonUnpressed.png'
 import image2 from '../../assets/img/buttonPressed2.png'
 
+//Alert button imports
+import * as Haptics from 'expo-haptics';
+import BottomSheet from "react-native-gesture-bottom-sheet";
+import image1 from '../../assets/img/buttonUnpressed.png'
+import image2 from '../../assets/img/buttonPressed2.png'
+
 const OwnProfile = () => {
 
     const navigation = useNavigation()
@@ -20,16 +26,6 @@ const OwnProfile = () => {
     const [currentUsername, setCurrentUsername] = useState('')
     const [helpResponses, setHelpResponses] = useState('')
     const [profilePictureURL, setProfilePictureURL] = useState('')
-    const [gotInfo, setGotInfo] = useState(false)
-    // var profileIcon = alerta
-    //     ? require ('../../assets/icons/invProfileDark.png')
-    //     : require ('../../assets/icons/profileDark.png');
-    // var settingsIcon = alerta
-    //     ? require ('../../assets/icons/invSettings.png')
-    //     : require ('../../assets/icons/settings.png');
-    // var mapIcon = alerta
-    //     ? require ('../../assets/icons/invMap.png')
-    //     : require ('../../assets/icons/map.png');
 
     const handleSignOut = () => {
         auth
@@ -53,16 +49,6 @@ const OwnProfile = () => {
         });
     }
 
-    // const getColor = () =>{
-    //     let color;
-    //     if (alerta === false){
-    //         color="#fff";
-    //     }
-    //     else if (alerta === true){
-    //         color="#28194C";
-    //     }
-    //     return color;
-    // }
 
     const [image, set_image ] = useState(image1)
     const bottomSheet = useRef();
@@ -83,13 +69,18 @@ const OwnProfile = () => {
                 </View>
             </BottomSheet>
             <View style= {styles.profileDetails}>
+                <Text style={styles.userNameText}> {currentUsername}
+                
+                </View>
+            </BottomSheet>
+            <View style= {styles.profileDetails}>
                 <Text style={styles.userNameText}> {currentUsername}</Text> 
                 <Text style={styles.userEmailText}> {currentEmail}</Text>
                 <Image style={styles.image} source={profilePictureURL!="" ? {uri: profilePictureURL} : require('../../assets/img/initial-profile-picture.jpeg')}></Image>
             </View>
 
             <View style= {styles.helpResponses}>
-                <Image style={styles.HPIcon} source={require('../../assets/icons/helpResponsesIcon.png')}></Image>
+                <Image style={styles.HRIcon} source={require('../../assets/icons/helpResponsesIcon.png')}></Image>
                 <Text style={styles.helpResponsesText}> Respuestas de ayuda: {helpResponses}</Text>
                 
             </View>
@@ -101,9 +92,10 @@ const OwnProfile = () => {
                 <Text style={styles.buttonText}> Cerrar Sesión </Text>
             </TouchableOpacity>
        </View>
+
+
     )
 }
-
 export default OwnProfile
 
 const styles = StyleSheet.create({
@@ -121,6 +113,21 @@ const styles = StyleSheet.create({
         width: '90%',
         padding: 15,
         borderRadius: 10,
+        elevation:10
+    },
+    button2:{
+        height: 50,
+        width: 150,
+        justifyContent: "center",
+        alignItems: "center",
+        borderRadius: 20,
+        marginTop: 240,
+        marginLeft:'31%'
+    },
+    buttonImage:{
+        alignSelf:"center",
+        width:'154%',
+        height:'460%'
     },
     button2:{
         height: 50,
@@ -181,73 +188,8 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         color: '#A5A5A5'
     },
-    HPIcon:{
+    HRIcon:{
         width:30,
         height:30,
-    },
-    settingsIcon:{
-        width:30,
-        height:30,
-        marginHorizontal: 5
-
-    },
-    navBar:{
-        width:"100%",
-        height:"13%",
-        borderTopLeftRadius: 13,
-        borderTopRightRadius: 13,
-        position:"absolute",
-        bottom:0,
-        flexDirection:"row",
-        alignItems: 'center',
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: .2,
-        justifyContent:"space-around",
-    },
-
-    mapIcon:{
-        height:30,
-        width:30,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: .2,
-    },
-
-    profileIcon:{
-        height:65,
-        width:65,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: .1,
-    },
-
-    navBarSettingsIcon:{
-        height:25,
-        width:25,
-        marginLeft:-15,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: .2,
-    },
-
-    alertIcon:{
-        width:200,
-        height:"100%",
-        marginTop:"5%",
-        marginLeft:-10,
-        shadowColor: 'black',
-        shadowOffset: { width: 0, height: 2 },
-        shadowOpacity: .2,
-        padding:.1,
-
-    },
-
-    navBarButtons:{
-        height:"100%",
-        justifyContent:"space-evenly",
-        alignItems:"center",
-        width:"15%",
     }
-
 })

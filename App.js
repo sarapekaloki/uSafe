@@ -9,10 +9,9 @@ import UpdatePassword from './src/screens/UpdatePassword';
 import UpdateUsername from './src/screens/UpdateUsername';
 import UpdateProfilePicture from './src/screens/UpdateProfilePicture';
 import Tabs from './src/screens/navigation/Tabs';
-
-
 const Stack = createNativeStackNavigator();
 global.alerta = false;
+
 export default function App(){
   return (
     <NavigationContainer>
@@ -29,11 +28,11 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Password" component={UpdatePassword} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Username" component={UpdateUsername} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Profile Picture" component={UpdateProfilePicture} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
 }
-
 const styles = StyleSheet.create({
   container: {
     flex: 1,

@@ -28,6 +28,7 @@ const LoginScreen = () => {
          const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
                 navigation.replace("Tabs")
+
             }
         })
         return unsubscribe
@@ -49,7 +50,7 @@ const LoginScreen = () => {
 
     return(
 
-            <KeyboardAvoidingView 
+            <KeyboardAvoidingView
                 style={styles.container}
                 behavior={Platform.OS ==="android"?"height":"padding"}
             >
@@ -81,10 +82,11 @@ const LoginScreen = () => {
                         secureTextEntry={passwordVisibility}
                     />
                     <Pressable onPress={handlePasswordVisibility} style={{left:'102%', top: -30}}>
+
                         <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                     </Pressable>
                 </View>
-               
+
                 <TouchableOpacity
                     onPress={handleLogin}
                     style = {styles.button}
@@ -154,12 +156,12 @@ const styles = StyleSheet.create({
         elevation:10
     },
     inputContainer: {
-        width: '80%'
+        width: '80%',
     },
     logo: {
         width: 250,
         height: 250,
-        marginTop: 20
+        marginTop: 20,
     },
     passwordContainer:{
         flexDirection: 'row',

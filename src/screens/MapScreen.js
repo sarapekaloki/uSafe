@@ -190,3 +190,4 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(101, 64, 245, .3)',
     }
 });
+

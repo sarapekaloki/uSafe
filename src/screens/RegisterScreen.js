@@ -93,6 +93,7 @@ const RegisterScreen = () => {
                 .createUserWithEmailAndPassword(email, password)
                 .then(userCredentials => {
                     const user = userCredentials.user;
+                    user.sendEmailVerification();
                     addData();
                     navigation.replace("Login");
                 })
@@ -234,7 +235,7 @@ const styles = StyleSheet.create({
         elevation:10
     },
     inputContainer: {
-        width: '80%'
+        width: '80%',
     },
     logo: {
         width: 250,
