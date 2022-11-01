@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, {useState} from "react";
 import {
     Image,
     KeyboardAvoidingView,
@@ -14,8 +14,7 @@ import {useNavigation} from "@react-navigation/native";
 import { MaterialCommunityIcons} from "@expo/vector-icons";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
 import { auth } from "../../firebase";
-import {getFirestore, addDoc, collection} from 'firebase/firestore';
-import {Base64} from "js-base64";
+import {getFirestore, setDoc, doc} from 'firebase/firestore';
 
 const RegisterScreen = () => {
 
@@ -106,21 +105,17 @@ const RegisterScreen = () => {
         }
     }
 
-    const addData = async () => {
+    const addData =  async() => {
         const firestore = getFirestore();
-
-        await addDoc(collection(firestore, "users"), {
-            coordinates: {longitude:0,latitude:0},
-            email:email,
-            password:Base64.encode(password)
-        });
-        
-        await addDoc(collection(firestore, "profiles"), {
-            email:email,
-            helpResponses: 0,
-            profilePicture: "initialProfilePicture.jpeg",
-            username:username
-        });
+        const docRef = doc(firestore, "users2", email.toLowerCase());
+        const data = {
+            coordinates: {longitude:0, latitude:0},
+            email: email,
+            helpResponses:0,
+            pictureUrl:"",
+            username: username
+        };
+        await setDoc(docRef, data);
     }
 
     return(
@@ -174,11 +169,7 @@ const RegisterScreen = () => {
                         <Text style =  {lowerPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>2. Contener mínimo una mayúscula y una minúscula </Text>
                         <Text style =  {numberPasswordErrorOccurs? styles.errorText: {display: 'none'}}>3. Contener por lo menos un número </Text>
                         <Text style =  {numberPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>3. Contener por lo menos un número </Text>
-
-
-
                     </View>
-
 
                     <TouchableOpacity
                         style = {styles.button}
@@ -186,7 +177,6 @@ const RegisterScreen = () => {
                     >
                         <Text style = {styles.buttonText}>Registrar cuenta</Text>
                     </TouchableOpacity>
-
 
                     <View  style={styles.registerText}>
                         <Text>Ya tienes cuenta? </Text>
@@ -197,7 +187,6 @@ const RegisterScreen = () => {
                     </View>
                 </View>
             </ScrollView>
-
 
         </KeyboardAvoidingView>
 
