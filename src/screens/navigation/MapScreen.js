@@ -7,13 +7,11 @@ import firebase from 'firebase/compat/app';
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import {updateUserLocation} from "../../hooks/updateUserLocation";
 import {fetchAllUsers} from "../../hooks/fetchAllUsers";
-import { getFirestore, collection, getDocs, doc, updateDoc} from "firebase/firestore";
+import {getFirestore, collection, getDocs, doc, updateDoc, addDoc} from "firebase/firestore";
 import {OtherUserMarker} from "../../components/OtherUserMarker";
 import {MapModal} from "../../components/MapModal";
-
-
-
-
+import firestore from '@react-native-firebase/firestore'
+import {fetchAllAlarms} from "../../hooks/fetchAllAlarms";
 
 export default function MapScreen({navigation}){
     firebase.initializeApp(firebaseConfig);
@@ -26,7 +24,9 @@ export default function MapScreen({navigation}){
     });
 
     const [allUsers, setAllUsers] = useState([]);
-    const [userMarkers, setUserMarkers] = useState([]);
+    const [allAlarms, setAllAlarms] = useState(collection(db, "alarms"));
+    const [alarmingUsers, setAlarmingUsers] = useState([]);
+
     const [isFirstLoad, setIsFirstLoad] = useState(true);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -38,25 +38,30 @@ export default function MapScreen({navigation}){
         }
         else{
             setTimeout(setCurrentUserLocation, 3000);
+            // setTimeout(updateAlarms, 5000);
         }
-
+        firestore().collection('alarms').onSnapshot(onResult,onError);
     });
-    useEffect(()=>{
-        if(allUsers.length){
-            updateUserMarkers();
-        }
 
-    },[allUsers]);
+    function onResult(QuerySnapshot) {
+        console.log('Got Alarm collection result.');
+    }
 
+    function onError(error) {
+        console.error(error);
+    }
 
     const updateUserMarkers = ()=>{
-        return allUsers.map(user =>{
-                return <OtherUserMarker
-                    key={Math.random()}
-                    coordinates={user.coordinates}
-                    src={require('../../../assets/brad.jpg')}/>
-            }
-        )
+            return allUsers.map(user =>{
+                    return <OtherUserMarker
+                        key={Math.random()}
+                        user={user}
+                        victim={alarmingUsers.includes(user.email)}
+                        handleModal={handleModal}
+                        src={require('../../../assets/brad.jpg')}
+                                    />
+                }
+            )
     }
 
     const setCurrentUserLocation = ()=> {
@@ -68,11 +73,28 @@ export default function MapScreen({navigation}){
         );
     }
 
+    // useEffect(()=>{
+    //     if(allAlarms.length){
+    //         const aux=[];
+    //         for(let i=0;i<allAlarms.length;i++){
+    //             aux.push(allAlarms[i].email);
+    //         }
+    //         setAlarmingUsers(aux);
+    //         console.log('Alarms have been sent!');
+    //         console.log(alarmingUsers);
+    //     }
+    // },[allAlarms])
+
+    // const updateAlarms = ()=>{
+    //     fetchAllAlarms(setAllAlarms);
+    // }
+
     const handleModal = ()=>{
-        setIsFirstLoad(false);
-        console.log(userMarkers.length);
-        // setIsModalVisible(!isModalVisible);
+        setIsModalVisible(!isModalVisible);
     }
+
+
+
 
     const map = useRef(null);
 
@@ -96,16 +118,6 @@ export default function MapScreen({navigation}){
                         </View>
                     </TouchableOpacity>
                 </Marker>
-
-
-                {/*<View >*/}
-                {/*    <OtherUserMarker*/}
-                {/*        key={'regrsdf'}*/}
-                {/*        coordinates={{*/}
-                {/*            latitude:32.505008,longitude:-116.923947*/}
-                {/*        }}*/}
-                {/*        src={require('../../../assets/icon.png')}/>*/}
-                {/*</View>*/}
 
                     {
                         updateUserMarkers()
@@ -140,30 +152,6 @@ const styles = StyleSheet.create({
     map:{
         width:'100%',
         height:'100%'
-    },
-    otherHelper:{
-        width: 35,
-        height: 35,
-        borderRadius: 100,
-        resizeMode:'cover',
-        overflow:'hidden',
-    },
-    otherHelperContainer:{
-        borderColor: 'rgba(71, 106, 232, .5)',
-        borderWidth: 6,
-        borderRadius: 100,
-    },
-    victim:{
-        width: 60,
-        height: 60,
-        borderRadius: 100,
-        resizeMode:'cover',
-        overflow:'hidden',
-    },
-    victimContainer:{
-        borderColor: 'rgba(229, 67, 67, .5)',
-        borderWidth: 12,
-        borderRadius: 100,
     },
     userLocation:{
         width:20,
