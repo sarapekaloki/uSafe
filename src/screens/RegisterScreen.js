@@ -110,7 +110,7 @@ const RegisterScreen = () => {
         const firestore = getFirestore();
 
         await addDoc(collection(firestore, "users2"), {
-            coordinates: {latitude:32.505008,longitude: -116.923947},
+            coordinates: {latitude:32.505098,longitude: -116.923999},
             email:email,
             helpResponses: 0,
             pictureUrl:'',

@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, DevSettings, TouchableOpacity, View} from 'react-native';
 import * as React from "react";
 import MapView, {Callout, Marker} from "react-native-maps";
 import {useEffect, useRef, useState} from "react";
@@ -14,6 +14,7 @@ import {MapModal} from "../../components/MapModal";
 
 
 
+
 export default function MapScreen({navigation}){
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
@@ -24,9 +25,8 @@ export default function MapScreen({navigation}){
         latitude:32.505008,longitude:-116.923947
     });
 
-    const [allUsers, setAllUsers] = useState([
-    ]);
-    const [userMarkers, setUserMarkers] = useState(null);
+    const [allUsers, setAllUsers] = useState([]);
+    const [userMarkers, setUserMarkers] = useState([]);
     const [isFirstLoad, setIsFirstLoad] = useState(true);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -38,16 +38,26 @@ export default function MapScreen({navigation}){
         }
         else{
             setTimeout(setCurrentUserLocation, 3000);
-
-            if(!userMarkers){
-                setTimeout(returnUserMarkers,3000);
-            }
-            if(userMarkers){
-
-            }
         }
 
     });
+    useEffect(()=>{
+        if(allUsers.length){
+            updateUserMarkers();
+        }
+
+    },[allUsers]);
+
+
+    const updateUserMarkers = ()=>{
+        return allUsers.map(user =>{
+                return <OtherUserMarker
+                    key={Math.random()}
+                    coordinates={user.coordinates}
+                    src={require('../../../assets/brad.jpg')}/>
+            }
+        )
+    }
 
     const setCurrentUserLocation = ()=> {
         updateUserLocation(
@@ -58,42 +68,10 @@ export default function MapScreen({navigation}){
         );
     }
 
-    // useEffect(()=>{
-    //     console.log(userMarkers);
-    // },[userMarkers])
-
-    function returnUserMarkers (){
-        // console.log(userMarkers);
-        setUserMarkers(updateUserMarkers());
-    }
-
-    const updateUserMarkers = ()=>{
-        let aux = allUsers.map(user=>
-            <OtherUserMarker
-                key={Math.random()*1000000}
-                coordinates={user.coordinates}
-                src={require('../../../assets/brad.jpg')}/>
-        )
-
-        if (allUsers.length && aux.length === allUsers.length){
-            return aux;
-        }
-        else{
-            return null;
-        }
-
-    }
-
-    // useEffect(()=>{
-    //
-    //     console.log(userMarkers);
-    //     // updateUserMarkers()
-    // },[allUsers]);
-
-
-
     const handleModal = ()=>{
-        setIsModalVisible(!isModalVisible);
+        setIsFirstLoad(false);
+        console.log(userMarkers.length);
+        // setIsModalVisible(!isModalVisible);
     }
 
     const map = useRef(null);
@@ -120,19 +98,18 @@ export default function MapScreen({navigation}){
                 </Marker>
 
 
-                {/*<OtherUserMarker*/}
-                {/*    key={'regrsdf'}*/}
-                {/*    coordinates={{*/}
-                {/*        latitude:0,longitude:0*/}
-                {/*    }}*/}
-                {/*    src={require('../../../assets/icon.png')}/>*/}
+                {/*<View >*/}
+                {/*    <OtherUserMarker*/}
+                {/*        key={'regrsdf'}*/}
+                {/*        coordinates={{*/}
+                {/*            latitude:32.505008,longitude:-116.923947*/}
+                {/*        }}*/}
+                {/*        src={require('../../../assets/icon.png')}/>*/}
+                {/*</View>*/}
 
-                <View>
                     {
-                        userMarkers
+                        updateUserMarkers()
                     }
-                </View>
-
 
 
 
