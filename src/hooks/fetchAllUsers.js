@@ -5,13 +5,13 @@ import firebase from 'firebase/compat/app';
 import {firebaseConfig} from "../../firebase";
 import {auth} from "../../firebase";
 
-export const fetchAllUsers = async (setAllUsers) => {
+export const fetchAllUsers = (setAllUsers) => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
     const usersRef = collection(db, "users2");
 
     const aux_users = [];
-    await getDocs(usersRef).then((res) => {
+    getDocs(usersRef).then((res) => {
         res.forEach((doc) => {
             if(doc.data().email && doc.data().email !== 'big@gmail.com'){
                 aux_users.push(doc.data());

@@ -10,7 +10,8 @@ import {fetchAllUsers} from "../../hooks/fetchAllUsers";
 import { getFirestore, collection, getDocs, doc, updateDoc} from "firebase/firestore";
 import {OtherUserMarker} from "../../components/OtherUserMarker";
 import {MapModal} from "../../components/MapModal";
-import {Button} from "../../components/Button";
+
+
 
 
 export default function MapScreen({navigation}){
@@ -24,28 +25,27 @@ export default function MapScreen({navigation}){
     });
 
     const [allUsers, setAllUsers] = useState([
-        {coordinates:{latitude:0,longitude:0},
-        src:require('../../../assets/brad.jpg')
-        }
     ]);
-    const [userMarkers, setUserMarkers] = useState([]);
+    const [userMarkers, setUserMarkers] = useState(null);
     const [isFirstLoad, setIsFirstLoad] = useState(true);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(()=>{
-        // if(isFirstLoad){
-        //     updateUserMarkers();
-        //     console.log(userMarkers.length);
-        //     setIsFirstLoad(false);
-        // }
-        // if(!currentUser){
-        //     getCurrentUser(setCurrentUser, setUserLocation);
-        //     fetchAllUsers(setAllUsers).then();
-        // }
-        // else{
-        //     setTimeout(setCurrentUserLocation, 3000);
-        // }
+        if(!currentUser){
+            getCurrentUser(setCurrentUser, setUserLocation);
+            fetchAllUsers(setAllUsers);
+        }
+        else{
+            setTimeout(setCurrentUserLocation, 3000);
+
+            if(!userMarkers){
+                setTimeout(returnUserMarkers,3000);
+            }
+            if(userMarkers){
+
+            }
+        }
 
     });
 
@@ -58,16 +58,39 @@ export default function MapScreen({navigation}){
         );
     }
 
+    // useEffect(()=>{
+    //     console.log(userMarkers);
+    // },[userMarkers])
+
+    function returnUserMarkers (){
+        // console.log(userMarkers);
+        setUserMarkers(updateUserMarkers());
+    }
 
     const updateUserMarkers = ()=>{
-        setUserMarkers(allUsers.map(user=>
+        let aux = allUsers.map(user=>
             <OtherUserMarker
-                key={user.email+user.username}
+                key={Math.random()*1000000}
                 coordinates={user.coordinates}
                 src={require('../../../assets/brad.jpg')}/>
+        )
 
-        ))
+        if (allUsers.length && aux.length === allUsers.length){
+            return aux;
+        }
+        else{
+            return null;
+        }
+
     }
+
+    // useEffect(()=>{
+    //
+    //     console.log(userMarkers);
+    //     // updateUserMarkers()
+    // },[allUsers]);
+
+
 
     const handleModal = ()=>{
         setIsModalVisible(!isModalVisible);
@@ -109,6 +132,7 @@ export default function MapScreen({navigation}){
                         userMarkers
                     }
                 </View>
+
 
 
 

@@ -110,6 +110,9 @@ const styles = StyleSheet.create({
             },
             android:{
                 elevation:5
+            },
+            default:{
+                elevation:5
             }
         })
     }

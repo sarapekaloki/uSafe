@@ -2,24 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/components/Button.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/MapModal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/Modal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/components/OtherUserMarker.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/getCurrentUser.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/getUserLocation.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/updateUserLocation.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/App.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/firebase.js" beforeDir="false" afterPath="$PROJECT_DIR$/firebase.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/HomePage.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomePage.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/OwnProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/OwnProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/RegisterScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/RegisterScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MapModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -67,7 +55,10 @@
       <workItem from="1665185910915" duration="294000" />
       <workItem from="1666057315330" duration="2909000" />
       <workItem from="1666593301716" duration="401000" />
-      <workItem from="1667184470152" duration="8165000" />
+      <workItem from="1667184470152" duration="8561000" />
+      <workItem from="1667194479386" duration="215000" />
+      <workItem from="1667264590584" duration="7126000" />
+      <workItem from="1667281711554" duration="4160000" />
     </task>
     <servers />
   </component>

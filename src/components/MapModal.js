@@ -55,17 +55,6 @@ export const MapModal = ({
 
 
 const styles = StyleSheet.create({
-    container: {
-        backgroundColor: "#ffffff",
-        borderRadius: 25,
-        borderWidth: 1,
-        borderColor: "#000",
-        borderStyle: "solid",
-    },
-    header: {
-        alignItems: "center",
-        justifyContent: "center",
-    },
     text: {
         textAlign: "center",
         fontSize: 14,
@@ -80,12 +69,4 @@ const styles = StyleSheet.create({
     userAttribute:{
         flexDirection: "row",
     },
-    footer: {
-        justifyContent: "center",
-        alignItems: "center",
-        padding: 10,
-        flexDirection: "row",
-    },
-
-
 });
