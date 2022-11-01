@@ -11,12 +11,6 @@ import BottomSheet from "react-native-gesture-bottom-sheet";
 import image1 from '../../assets/img/buttonUnpressed.png'
 import image2 from '../../assets/img/buttonPressed2.png'
 
-//Alert button imports
-import * as Haptics from 'expo-haptics';
-import BottomSheet from "react-native-gesture-bottom-sheet";
-import image1 from '../../assets/img/buttonUnpressed.png'
-import image2 from '../../assets/img/buttonPressed2.png'
-
 const OwnProfile = () => {
 
     const navigation = useNavigation()
@@ -26,6 +20,7 @@ const OwnProfile = () => {
     const [currentUsername, setCurrentUsername] = useState('')
     const [helpResponses, setHelpResponses] = useState('')
     const [profilePictureURL, setProfilePictureURL] = useState('')
+    const [gotInfo, setGotInfo] = useState(false);
 
     const handleSignOut = () => {
         auth
@@ -56,7 +51,7 @@ const OwnProfile = () => {
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         set_image(image === image1 ? image2 : image1);}
 
-    return(
+    return (
        <View style= {styles.container}>
             <BottomSheet hasDraggableIcon ref={bottomSheet} height={600} sheetBackgroundColor={"#D4B2EF"}>
                 <View>
@@ -67,12 +62,8 @@ const OwnProfile = () => {
                         <Image source={image} style={styles.buttonImage}/>
                     </TouchableOpacity>
                 </View>
-            </BottomSheet>
-            <View style= {styles.profileDetails}>
-                <Text style={styles.userNameText}> {currentUsername}
-                
-                </View>
-            </BottomSheet>
+            </BottomSheet>       
+
             <View style= {styles.profileDetails}>
                 <Text style={styles.userNameText}> {currentUsername}</Text> 
                 <Text style={styles.userEmailText}> {currentEmail}</Text>
@@ -93,9 +84,8 @@ const OwnProfile = () => {
             </TouchableOpacity>
        </View>
 
+    )}
 
-    )
-}
 export default OwnProfile
 
 const styles = StyleSheet.create({

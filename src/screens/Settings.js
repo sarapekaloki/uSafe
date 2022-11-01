@@ -5,8 +5,7 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
-    Image
+    View
 } from "react-native";
 import { auth } from "../../firebase";
 import {getFirestore, doc, onSnapshot} from 'firebase/firestore';
