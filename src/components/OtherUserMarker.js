@@ -4,30 +4,46 @@ import {Marker} from "react-native-maps";
 import {addDoc, collection, getFirestore} from "firebase/firestore";
 
 export const OtherUserMarker = ({
+                          visible,
                           user,
                           src,
                           victim,
+                          setFocusedUser,
+                          allAlarms,
+                          setAllAlarms,
+                          alarmingUsers,
+                          setAlarmingUsers,
                           handleModal
                       }) => {
 
     const db = getFirestore();
+    const alarm = {
+        alarmingUser:user.email,
+        users:['Peka@gmail.com']
+    }
     async function sendAlarm() {
-        await addDoc(collection(db, "alarms"), {
-            alarmingUser:user.email,
-            users:[]
-        });
+        await addDoc(collection(db, "alarms"), alarm);
+        setAlarmingUsers(alarmingUsers.concat([user]));
+        setAllAlarms(allAlarms.concat([alarm]));
     }
 
     return (
-        <Marker
-            coordinate={user.coordinates}
-        >
-            <TouchableOpacity onPress={victim ? handleModal : sendAlarm}>
-                <View style={victim ? styles.victimContainer : styles.container}>
-                    <Image style={victim ? styles.container : styles.image} source={src}/>
-                </View>
-            </TouchableOpacity>
-        </Marker>
+        <View>
+            {visible &&
+                <Marker
+                    coordinate={user.coordinates}
+                >
+                    <TouchableOpacity onPress={
+                        victim ? ()=>{handleModal();setFocusedUser(user)} : sendAlarm
+                    }>
+                        <View style={victim ? styles.victimContainer : styles.container}>
+                            <Image style={victim ? styles.victim : styles.image} source={src}/>
+                        </View>
+                    </TouchableOpacity>
+                </Marker>
+            }
+        </View>
+
     );
 };
 

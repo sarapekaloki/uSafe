@@ -2,15 +2,14 @@ import {Image, StyleSheet, DevSettings, TouchableOpacity, View} from 'react-nati
 import * as React from "react";
 import MapView, {Callout, Marker} from "react-native-maps";
 import {useEffect, useRef, useState} from "react";
-import { firebaseConfig} from "../../../firebase";
+import {auth, firebaseConfig} from "../../../firebase";
 import firebase from 'firebase/compat/app';
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import {updateUserLocation} from "../../hooks/updateUserLocation";
 import {fetchAllUsers} from "../../hooks/fetchAllUsers";
-import {getFirestore, collection, getDocs, doc, updateDoc, addDoc} from "firebase/firestore";
+import {getFirestore, collection, getDocs, doc, updateDoc, addDoc, onSnapshot} from "firebase/firestore";
 import {OtherUserMarker} from "../../components/OtherUserMarker";
 import {MapModal} from "../../components/MapModal";
-import firestore from '@react-native-firebase/firestore'
 import {fetchAllAlarms} from "../../hooks/fetchAllAlarms";
 
 export default function MapScreen({navigation}){
@@ -24,8 +23,12 @@ export default function MapScreen({navigation}){
     });
 
     const [allUsers, setAllUsers] = useState([]);
-    const [allAlarms, setAllAlarms] = useState(collection(db, "alarms"));
+    const [allAlarms, setAllAlarms] = useState([]);
     const [alarmingUsers, setAlarmingUsers] = useState([]);
+    const [focusedUser, setFocusedUser] = useState({});
+    const [acceptedAlarm, setAcceptedAlarm] = useState({});
+
+    const [helpingUser, setHelpingUser] = useState(false);
 
     const [isFirstLoad, setIsFirstLoad] = useState(true);
 
@@ -38,26 +41,25 @@ export default function MapScreen({navigation}){
         }
         else{
             setTimeout(setCurrentUserLocation, 3000);
-            // setTimeout(updateAlarms, 5000);
         }
-        firestore().collection('alarms').onSnapshot(onResult,onError);
     });
 
-    function onResult(QuerySnapshot) {
-        console.log('Got Alarm collection result.');
-    }
 
-    function onError(error) {
-        console.error(error);
-    }
 
     const updateUserMarkers = ()=>{
             return allUsers.map(user =>{
                     return <OtherUserMarker
                         key={Math.random()}
+                        visible={helpingUser ? (acceptedAlarm.users.includes(user.email) || user.email===focusedUser.email) : true}
+                        // visible={true}
                         user={user}
-                        victim={alarmingUsers.includes(user.email)}
-                        handleModal={handleModal}
+                        alarmingUsers={alarmingUsers}
+                        setAlarmingUsers={setAlarmingUsers}
+                        victim={alarmingUsers.includes(user)}
+                        allAlarms={allAlarms}
+                        setAllAlarms={setAllAlarms}
+                        setFocusedUser={setFocusedUser}
+                        handleModal={helpingUser ? ()=>{} : handleModalRejection}
                         src={require('../../../assets/brad.jpg')}
                                     />
                 }
@@ -73,29 +75,21 @@ export default function MapScreen({navigation}){
         );
     }
 
-    // useEffect(()=>{
-    //     if(allAlarms.length){
-    //         const aux=[];
-    //         for(let i=0;i<allAlarms.length;i++){
-    //             aux.push(allAlarms[i].email);
-    //         }
-    //         setAlarmingUsers(aux);
-    //         console.log('Alarms have been sent!');
-    //         console.log(alarmingUsers);
-    //     }
-    // },[allAlarms])
 
-    // const updateAlarms = ()=>{
-    //     fetchAllAlarms(setAllAlarms);
-    // }
-
-    const handleModal = ()=>{
+    const handleModalRejection = ()=>{
         setIsModalVisible(!isModalVisible);
     }
+    const handleModalAcceptance = ()=>{
+        handleModalRejection();
+        setHelpingUser(true);
+        for(let i=0;i<allAlarms.length;i++){
+            if(allAlarms[i].alarmingUser === focusedUser.email){
+                allAlarms[i].users.push('big@gmail.com');
+                setAcceptedAlarm(allAlarms[i]);
+            }
+        }
 
-
-
-
+    }
     const map = useRef(null);
 
     return(
@@ -112,7 +106,7 @@ export default function MapScreen({navigation}){
             >
 
                 <Marker coordinate={userLocation}>
-                    <TouchableOpacity onPress={handleModal}>
+                    <TouchableOpacity>
                         <View style={styles.userLocation2}>
                             <Image style={styles.userLocation}/>
                         </View>
@@ -135,7 +129,12 @@ export default function MapScreen({navigation}){
                 {/*    </View>*/}
                 {/*</Marker>*/}
                 <Callout>
-                    <MapModal isVisible={isModalVisible} handleModal={handleModal}/>
+                    <MapModal
+                        isVisible={isModalVisible}
+                        user={focusedUser}
+                        handleModalRejection={handleModalRejection}
+                        handleModalAcceptance={handleModalAcceptance}
+                    />
                 </Callout>
             </MapView>
         </View>

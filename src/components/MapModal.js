@@ -6,16 +6,18 @@ import Ionicons from "react-native-vector-icons/Ionicons";
 
 
 export const MapModal = ({
-                          handleModal,
+                          handleModalAcceptance,
+                          handleModalRejection,
                           isVisible,
+                          user,
                           ...props
                       }) => {
     return (
         <Modal isVisible={isVisible}>
             <Modal.Container>
 
-                <Modal.Header title="Usuario necesita tu ayuda!"
-                              handleModal={handleModal} />
+                <Modal.Header title={user.username+" necesita tu ayuda!"}
+                              handleModal={handleModalRejection} />
                 <Modal.Body>
                     <View style={styles.body}>
                         <View style={styles.userAttribute}>
@@ -23,7 +25,7 @@ export const MapModal = ({
                                       size={22}
                                       color={'#856CC2'}
                                       style={{marginTop: '-1%'}}/>
-                            <Text style={styles.text}>2 responses</Text>
+                            <Text style={styles.text}>{user.helpResponses} responses</Text>
                         </View>
                         <View style={[styles.userAttribute,
                             {marginTop: '4%'}]}>
@@ -43,8 +45,8 @@ export const MapModal = ({
                         marginTop:'-10%',
                         bottom:'30%'
                     }}>
-                        <Button title="ACCEPT" color='#70C053' onPress={handleModal} />
-                        <Button title="DECLINE" color='#EC4747' onPress={handleModal} />
+                        <Button title="ACCEPT" color='#70C053' onPress={handleModalAcceptance} />
+                        <Button title="DECLINE" color='#EC4747' onPress={handleModalRejection} />
                     </View>
 
                 </Modal.Footer>

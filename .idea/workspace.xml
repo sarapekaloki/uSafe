@@ -2,10 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="">
-      <change afterPath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MapModal.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/OtherUserMarker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/OtherUserMarker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -56,7 +58,7 @@
       <workItem from="1667194479386" duration="215000" />
       <workItem from="1667264590584" duration="7126000" />
       <workItem from="1667281711554" duration="7678000" />
-      <workItem from="1667338873045" duration="5612000" />
+      <workItem from="1667338873045" duration="11373000" />
     </task>
     <servers />
   </component>
