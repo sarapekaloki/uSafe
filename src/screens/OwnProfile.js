@@ -118,20 +118,6 @@ const styles = StyleSheet.create({
         width:'154%',
         height:'460%'
     },
-    button2:{
-        height: 50,
-        width: 150,
-        justifyContent: "center",
-        alignItems: "center",
-        borderRadius: 20,
-        marginTop: 240,
-        marginLeft:'31%'
-    },
-    buttonImage:{
-        alignSelf:"center",
-        width:'154%',
-        height:'460%'
-    },
     buttonText: {
         color: 'white',
         fontWeight: '700',
