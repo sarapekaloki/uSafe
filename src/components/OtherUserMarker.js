@@ -1,7 +1,7 @@
 import React from "react";
 import {StyleSheet, View, Text, Button, Image, TouchableOpacity} from "react-native";
 import {Marker} from "react-native-maps";
-import {addDoc, collection, getFirestore} from "firebase/firestore";
+import {addDoc, collection, doc, getFirestore, setDoc} from "firebase/firestore";
 
 export const OtherUserMarker = ({
                           visible,
@@ -9,22 +9,21 @@ export const OtherUserMarker = ({
                           src,
                           victim,
                           setFocusedUser,
-                          allAlarms,
-                          setAllAlarms,
-                          alarmingUsers,
-                          setAlarmingUsers,
                           handleModal
                       }) => {
 
     const db = getFirestore();
     const alarm = {
         alarmingUser:user.email,
-        users:['Peka@gmail.com']
+        users:[]
     }
     async function sendAlarm() {
-        await addDoc(collection(db, "alarms"), alarm);
-        setAlarmingUsers(alarmingUsers.concat([user]));
-        setAllAlarms(allAlarms.concat([alarm]));
+        const docRef = doc(db, "alarms", user.email);
+        const data = {
+            alarmingUser:user.email,
+            users:[]
+        };
+        await setDoc(docRef, data);
     }
 
     return (

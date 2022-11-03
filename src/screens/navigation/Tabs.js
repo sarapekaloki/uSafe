@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import OwnProfile from "../OwnProfile";
 import { Platform, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Settings from "../Settings"
+import MapScreen from "./MapScreen";
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
@@ -62,7 +63,7 @@ const Tabs = () => {
         }}
         />
 
-        <Tab.Screen name="Mapa" component={Settings} options={{
+        <Tab.Screen name="Mapa" component={MapScreen} options={{
             tabBarIcon: ({ focused }) => (
                 <Image 
                     source={focused? require( `../../../assets/icons/${theme}-map-selected.png`): require( `../../../assets/icons/${theme}-map-unselected.png`)}

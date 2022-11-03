@@ -7,15 +7,15 @@ import firebase from 'firebase/compat/app';
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import {updateUserLocation} from "../../hooks/updateUserLocation";
 import {fetchAllUsers} from "../../hooks/fetchAllUsers";
-import {getFirestore, collection, getDocs, doc, updateDoc, addDoc, onSnapshot} from "firebase/firestore";
+import {getFirestore, collection, getDocs, doc, updateDoc, addDoc, onSnapshot, query, where} from "firebase/firestore";
 import {OtherUserMarker} from "../../components/OtherUserMarker";
 import {MapModal} from "../../components/MapModal";
 import {fetchAllAlarms} from "../../hooks/fetchAllAlarms";
+import {acceptAlarm } from "../../hooks/acceptAlarm";
 
 export default function MapScreen({navigation}){
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
-    const usersRef = collection(db, "users2");
 
     const [currentUser, setCurrentUser] = useState(null);
     const [userLocation, setUserLocation] = useState({
@@ -26,18 +26,28 @@ export default function MapScreen({navigation}){
     const [allAlarms, setAllAlarms] = useState([]);
     const [alarmingUsers, setAlarmingUsers] = useState([]);
     const [focusedUser, setFocusedUser] = useState({});
+
     const [acceptedAlarm, setAcceptedAlarm] = useState({});
+    const [victim, setVictim] = useState({});
 
     const [helpingUser, setHelpingUser] = useState(false);
 
-    const [isFirstLoad, setIsFirstLoad] = useState(true);
+    const [gotInfo, setGotInfo] = useState(false);
+
+    useEffect(() => {
+        if(!gotInfo){
+            fetchAllAlarms(setAllAlarms, setAlarmingUsers, setAcceptedAlarm, setVictim, setHelpingUser);
+            console.log(allAlarms);
+            fetchAllUsers(setAllUsers);
+            setGotInfo(true);
+
+    }});
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
     useEffect(()=>{
         if(!currentUser){
             getCurrentUser(setCurrentUser, setUserLocation);
-            fetchAllUsers(setAllUsers);
         }
         else{
             setTimeout(setCurrentUserLocation, 3000);
@@ -50,14 +60,13 @@ export default function MapScreen({navigation}){
             return allUsers.map((user,index) =>{
                     return <OtherUserMarker
                         key={index}
-                        visible={helpingUser ? (acceptedAlarm.users.includes(user.email) || user.email===focusedUser.email) : true}
-                        // visible={true}
+                        visible={
+                        helpingUser ?
+                            (acceptedAlarm.users && acceptedAlarm.users.includes(user.email)
+                                || user.email===victim.email)
+                            : true}
                         user={user}
-                        alarmingUsers={alarmingUsers}
-                        setAlarmingUsers={setAlarmingUsers}
-                        victim={alarmingUsers.includes(user)}
-                        allAlarms={allAlarms}
-                        setAllAlarms={setAllAlarms}
+                        victim={alarmingUsers.includes(user.email)}
                         setFocusedUser={setFocusedUser}
                         handleModal={helpingUser ? ()=>{} : handleModalRejection}
                         src={require('../../../assets/brad.jpg')}
@@ -83,11 +92,11 @@ export default function MapScreen({navigation}){
         setHelpingUser(true);
         for(let i=0;i<allAlarms.length;i++){
             if(allAlarms[i].alarmingUser === focusedUser.email){
-                allAlarms[i].users.push(currentUser.email);
-                setAcceptedAlarm(allAlarms[i]);
+                acceptAlarm(setAcceptedAlarm, setVictim, focusedUser);
+                console.log(acceptedAlarm);
+                setVictim(focusedUser);
             }
         }
-
     }
     const map = useRef(null);
 
@@ -105,7 +114,7 @@ export default function MapScreen({navigation}){
             >
 
                 <Marker coordinate={userLocation} onCalloutPress={()=>{console.log('Pressed')}}>
-                    <TouchableNativeFeedback onPress={()=>{console.log('Presionado')}}>
+                    <TouchableNativeFeedback onPress={()=>{console.log(victim)}}>
                         <View style={styles.userLocation2}>
                             <Image style={styles.userLocation}/>
                         </View>
