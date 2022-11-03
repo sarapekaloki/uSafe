@@ -32,7 +32,7 @@ const DeleteAccount = () => {
         </View>
         
         <View style={styles.modalContentsContainer}>
-        <TouchableOpacity onPress={() => navigation.replace("Configuracion")}>
+        <TouchableOpacity onPress={() => navigation.navigate('Tabs', { screen: 'Configuracion' })}>
             <Image style={styles.leftArrow} source={require('../../assets/icons/leftArrow.png')}></Image>
         </TouchableOpacity>
         

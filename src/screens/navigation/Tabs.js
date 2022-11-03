@@ -38,7 +38,7 @@ const Tabs = () => {
           headerTitleStyle:{
             fontWeight: 'bold',
             fontSize: 25,
-            right: '52%',
+            textAlign: 'left',
             color: fontColor
           }
         }}
@@ -56,7 +56,7 @@ const Tabs = () => {
           headerTitleStyle:{
             fontWeight: 'bold',
             fontSize: 25,
-            right: '215%',
+            alignSelf: 'baseline',
             color: fontColor
           }
         }}
@@ -75,7 +75,7 @@ const Tabs = () => {
           headerTitleStyle:{
             fontWeight: 'bold',
             fontSize: 25,
-            right: '205%',
+            alignSelf: 'baseline',
             color: fontColor
           }
         }}
