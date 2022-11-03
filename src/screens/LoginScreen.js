@@ -27,7 +27,8 @@ const LoginScreen = () => {
     useEffect(() => {
          const unsubscribe = auth.onAuthStateChanged(user => {
             if (user) {
-                navigation.replace("Home Screen")
+                navigation.replace("Tabs")
+
             }
         })
         return unsubscribe
@@ -51,7 +52,7 @@ const LoginScreen = () => {
 
             <KeyboardAvoidingView
                 style={styles.container}
-                behavior="padding"
+                behavior={Platform.OS ==="android"?"height":"padding"}
             >
                 <Text style= {styles.headerText}> Iniciar Sesión</Text>
                 <ScrollView style = {styles.scrollView} >
@@ -80,7 +81,8 @@ const LoginScreen = () => {
                         style = {styles.input}
                         secureTextEntry={passwordVisibility}
                     />
-                    <Pressable onPress={handlePasswordVisibility} style={{left:335,top:-30}}>
+                    <Pressable onPress={handlePasswordVisibility} style={{left:'102%', top: -30}}>
+
                         <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                     </Pressable>
                 </View>
@@ -142,7 +144,6 @@ const styles = StyleSheet.create({
         color: 'white',
         paddingVertical: 10,
         paddingHorizontal: 10
-
     },
     input: {
         backgroundColor: '#EBEBEB',

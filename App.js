@@ -4,20 +4,14 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import LoginScreen from './src/screens/LoginScreen';
 import HomePage from './src/screens/HomePage'
 import RegisterScreen from './src/screens/RegisterScreen';
-import SettingsScreen from './src/screens/navigation/SettingsScreen'
-import ProfileScreen from './src/screens/navigation/ProfileScreen'
-import MapScreen from './src/screens/navigation/MapScreen'
-import AlertScreen from './src/screens/navigation/AlertScreen'
-import MainContainer from './src/screens/navigation/MainContainer'
-import HomeScreen from "./src/screens/HomeScreen";
-import OwnProfileScreen from './src/screens/OwnProfile';
-import Settings from './src/screens/Settings';
-import {useState} from "react";
-
-
-
+import DeleteAccount from './src/screens/DeleteAccount';
+import UpdatePassword from './src/screens/UpdatePassword';
+import UpdateUsername from './src/screens/UpdateUsername';
+import UpdateProfilePicture from './src/screens/UpdateProfilePicture';
+import Tabs from './src/screens/navigation/Tabs';
 const Stack = createNativeStackNavigator();
 global.alerta = false;
+
 export default function App(){
   return (
     <NavigationContainer>
@@ -25,10 +19,16 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Map Screen" component={MapScreen} />
-        <Stack.Screen options={{ headerShown: false }} name="Home Screen" component={HomeScreen} />
-        <Stack.Screen options={{ headerShown: true }} name="Perfil" component={OwnProfileScreen} />
-        <Stack.Screen options={{ headerShown: true}} name="Configuración" component={Settings} />
+        <Stack.Screen
+          name="Tabs"
+          component={Tabs}
+          options={{ headerShown: false }}
+        />
+       <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Delete Account" component={DeleteAccount} />
+        <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Password" component={UpdatePassword} />
+        <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Username" component={UpdateUsername} />
+        <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Profile Picture" component={UpdateProfilePicture} />
+
       </Stack.Navigator>
     </NavigationContainer>
   );
