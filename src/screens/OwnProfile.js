@@ -93,7 +93,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F5F5F5',
         alignItems: 'center',
-        justifyContent: 'center',
     },
     button: {
         justifyContent: 'center',
@@ -141,7 +140,7 @@ const styles = StyleSheet.create({
     profileDetails: {
         width: '90%',
         backgroundColor: '#fff',
-        marginTop: "-80%",
+        marginTop: "5%",
         borderRadius: 15,
         justifyContent: 'center',
         alignItems: 'center',

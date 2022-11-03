@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
     },
     modalHeader: {
         backgroundColor: '#D4B2EF',
-        height: 110,
+        height: '12%',
         justifyContent: 'center',
         alignItems: 'center',
         width: '100%',
@@ -95,7 +95,7 @@ const styles = StyleSheet.create({
     modalLogo: {
         marginTop:25,
         width: 180,
-        height: 68
+        height: 55
         
     },
     modalContentsContainer: {
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     },
     dividerModal: {
         width: '70%',
-        height: '0.2%',
+        height: '0.15%',
         backgroundColor: '#d4d2d2',
         marginTop: 10
     },

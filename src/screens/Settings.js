@@ -5,7 +5,8 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View
+    View,
+    Dimensions
 } from "react-native";
 import { auth } from "../../firebase";
 import {getFirestore, doc, onSnapshot} from 'firebase/firestore';
@@ -93,14 +94,13 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#F5F5F5',
         alignItems: 'center',
-        justifyContent: 'center'
     },
     profileInfo: {
         flexDirection: "row",
         width: '90%',
-        height: '20%',
+        height: 140,
         backgroundColor: '#fff',
-        marginTop: -250,
+        marginTop: '5%',
         marginBottom: 30,
         borderRadius: 15,
         justifyContent: 'center',
@@ -129,7 +129,7 @@ const styles = StyleSheet.create({
     },
     changeSection: {
         width: '90%',
-        height: '24%',
+        height: 180,
         backgroundColor: '#fff',
         borderRadius: 15,
         justifyContent: 'center',
@@ -137,7 +137,7 @@ const styles = StyleSheet.create({
         marginBottom: 15
     },
     deleteSection: {
-        height: '7%',
+        height: 55,
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 15,
@@ -157,7 +157,7 @@ const styles = StyleSheet.create({
     },
     divider: {
         width: '90%',
-        height: '1%',
+        height: '0.5%',
         backgroundColor: '#d4d2d2',
     },
     buttonText: {

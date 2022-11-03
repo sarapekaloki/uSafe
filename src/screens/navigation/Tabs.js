@@ -1,6 +1,6 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import OwnProfile from "../OwnProfile";
-import { StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { Platform, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Settings from "../Settings"
 const Tab = createBottomTabNavigator()
 
@@ -13,7 +13,7 @@ const Tabs = () => {
         <Tab.Navigator initialRouteName="Mapa" screenOptions={{tabBarShowLabel: false,tabBarStyle:{
             elevation: 0,
             backgroundColor: backgroundColor,
-            height: 90,
+            height: '11%',
             position: 'absolute',
             ...styles.shadow
         }
@@ -38,7 +38,7 @@ const Tabs = () => {
           headerTitleStyle:{
             fontWeight: 'bold',
             fontSize: 25,
-            textAlign: 'left',
+            right: Platform.OS == 'ios'? '55%': 0,
             color: fontColor
           }
         }}
@@ -56,7 +56,7 @@ const Tabs = () => {
           headerTitleStyle:{
             fontWeight: 'bold',
             fontSize: 25,
-            alignSelf: 'baseline',
+            right: Platform.OS == 'ios'? '225%': 0,
             color: fontColor
           }
         }}
@@ -75,7 +75,7 @@ const Tabs = () => {
           headerTitleStyle:{
             fontWeight: 'bold',
             fontSize: 25,
-            alignSelf: 'baseline',
+            right: Platform.OS == 'ios'? '210%': 0,
             color: fontColor
           }
         }}
@@ -102,8 +102,9 @@ const styles = StyleSheet.create({
         height: 25
     },
     alarm: {
-       width: 80,
-       height: 80,
+       width: 90,
+       height: 90,
+       bottom: 10,
        left: 10,
        borderRadius: 50,
     }
