@@ -1,4 +1,4 @@
-import {Image, StyleSheet, DevSettings, TouchableOpacity, View} from 'react-native';
+import {Image, StyleSheet, DevSettings, TouchableOpacity, TouchableHighlight, Touchable, TouchableNativeFeedback, TouchableWithoutFeedback, View} from 'react-native';
 import * as React from "react";
 import MapView, {Callout, Marker} from "react-native-maps";
 import {useEffect, useRef, useState} from "react";
@@ -47,9 +47,9 @@ export default function MapScreen({navigation}){
 
 
     const updateUserMarkers = ()=>{
-            return allUsers.map(user =>{
+            return allUsers.map((user,index) =>{
                     return <OtherUserMarker
-                        key={Math.random()}
+                        key={index}
                         visible={helpingUser ? (acceptedAlarm.users.includes(user.email) || user.email===focusedUser.email) : true}
                         // visible={true}
                         user={user}
@@ -70,7 +70,6 @@ export default function MapScreen({navigation}){
         updateUserLocation(
             userLocation,
             setUserLocation,
-            '6j0y2l0V3wQvzZtG53v8',
             currentUser
         );
     }
@@ -84,7 +83,7 @@ export default function MapScreen({navigation}){
         setHelpingUser(true);
         for(let i=0;i<allAlarms.length;i++){
             if(allAlarms[i].alarmingUser === focusedUser.email){
-                allAlarms[i].users.push('big@gmail.com');
+                allAlarms[i].users.push(currentUser.email);
                 setAcceptedAlarm(allAlarms[i]);
             }
         }
@@ -105,12 +104,12 @@ export default function MapScreen({navigation}){
                 }}
             >
 
-                <Marker coordinate={userLocation}>
-                    <TouchableOpacity>
+                <Marker coordinate={userLocation} onCalloutPress={()=>{console.log('Pressed')}}>
+                    <TouchableNativeFeedback onPress={()=>{console.log('Presionado')}}>
                         <View style={styles.userLocation2}>
                             <Image style={styles.userLocation}/>
                         </View>
-                    </TouchableOpacity>
+                    </TouchableNativeFeedback>
                 </Marker>
 
                     {

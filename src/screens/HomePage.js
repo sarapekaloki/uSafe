@@ -6,7 +6,7 @@ const HomePage = () => {
     const navigation = useNavigation()
 
     setTimeout(() => {
-        navigation.replace("Map Screen");
+        navigation.replace("Login");
       }, 2500)
 
     return(

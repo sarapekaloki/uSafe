@@ -6,6 +6,7 @@ import {firebaseConfig} from "../../firebase";
 import {auth} from "../../firebase";
 
 export const fetchAllUsers = (setAllUsers) => {
+    const current_user_ref = auth.currentUser;
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
     const usersRef = collection(db, "users2");
@@ -13,7 +14,7 @@ export const fetchAllUsers = (setAllUsers) => {
     const aux_users = [];
     getDocs(usersRef).then((res) => {
         res.forEach((doc) => {
-            if(doc.data().email && doc.data().email !== 'big@gmail.com'){
+            if(doc.data().email && doc.data().email !== current_user_ref.email){
                 aux_users.push(doc.data());
                 setAllUsers(aux_users);
             }
