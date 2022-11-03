@@ -159,7 +159,7 @@ const UpdatePassword = () => {
                         style = {styles.input}
                         secureTextEntry={passwordVisibility}
                     />
-                <Pressable onPress={handlePasswordVisibility} style={{left:340, top: -35}}>
+                <Pressable onPress={handlePasswordVisibility} style={{left:'97%', top: -35}}>
                         <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                     </Pressable>
                 <Text style={passwordEmptyError? styles.emptyErrorText: {display:'none'}}>Este campo no puede estar vacío</Text>

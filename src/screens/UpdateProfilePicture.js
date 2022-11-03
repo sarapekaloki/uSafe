@@ -113,8 +113,6 @@ const UpdateProfilePicture = () => {
     
       }
 
-    const uri = pickerResponse?.assets && pickerResponse.assets[0].uri;
-
 
     return( 
     <KeyboardAvoidingView style={styles.usernameModalContainer}>
