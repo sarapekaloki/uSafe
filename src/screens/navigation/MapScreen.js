@@ -13,7 +13,7 @@ import {MapModal} from "../../components/MapModal";
 import {fetchAllAlarms} from "../../hooks/fetchAllAlarms";
 import {acceptAlarm } from "../../hooks/acceptAlarm";
 
-export default function MapScreen({navigation}){
+export default function MapScreen(){
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
 
@@ -33,15 +33,17 @@ export default function MapScreen({navigation}){
     const [helpingUser, setHelpingUser] = useState(false);
 
     const [gotInfo, setGotInfo] = useState(false);
+    const [gotAlarms, setGotAlarms] = useState(false);
 
     useEffect(() => {
         if(!gotInfo){
-            fetchAllAlarms(setAllAlarms, setAlarmingUsers, setAcceptedAlarm, setVictim, setHelpingUser);
-            console.log(allAlarms);
+            fetchAllAlarms(setAllAlarms,setAlarmingUsers,setAcceptedAlarm,setHelpingUser,setVictim,setAllUsers);
             fetchAllUsers(setAllUsers);
             setGotInfo(true);
+        }});
 
-    }});
+    useEffect(()=>{
+    },[allAlarms,alarmingUsers,helpingUser,victim,acceptedAlarm,allUsers]);
 
     const [isModalVisible, setIsModalVisible] = useState(false);
 
@@ -55,16 +57,11 @@ export default function MapScreen({navigation}){
     });
 
 
-
     const updateUserMarkers = ()=>{
             return allUsers.map((user,index) =>{
                     return <OtherUserMarker
                         key={index}
-                        visible={
-                        helpingUser ?
-                            (acceptedAlarm.users && acceptedAlarm.users.includes(user.email)
-                                || user.email===victim.email)
-                            : true}
+                        visible={helpingUser ? victim.email==user.email : true}
                         user={user}
                         victim={alarmingUsers.includes(user.email)}
                         setFocusedUser={setFocusedUser}
@@ -89,12 +86,9 @@ export default function MapScreen({navigation}){
     }
     const handleModalAcceptance = ()=>{
         handleModalRejection();
-        setHelpingUser(true);
         for(let i=0;i<allAlarms.length;i++){
             if(allAlarms[i].alarmingUser === focusedUser.email){
-                acceptAlarm(setAcceptedAlarm, setVictim, focusedUser);
-                console.log(acceptedAlarm);
-                setVictim(focusedUser);
+                acceptAlarm(setAcceptedAlarm, setVictim, focusedUser,setHelpingUser,setAllUsers);
             }
         }
     }
@@ -113,8 +107,8 @@ export default function MapScreen({navigation}){
                 }}
             >
 
-                <Marker coordinate={userLocation} onCalloutPress={()=>{console.log('Pressed')}}>
-                    <TouchableNativeFeedback onPress={()=>{console.log(victim)}}>
+                <Marker coordinate={userLocation}>
+                    <TouchableNativeFeedback onPress={()=>{console.log(helpingUser)}}>
                         <View style={styles.userLocation2}>
                             <Image style={styles.userLocation}/>
                         </View>

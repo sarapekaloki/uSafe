@@ -4,34 +4,28 @@ import {useState} from "react";
 import firebase from 'firebase/compat/app';
 import {firebaseConfig} from "../../firebase";
 import {auth} from "../../firebase";
+import {fetchSpecificUser} from "./fetchSpecificUser"
+import {fetchAllUsers} from "./fetchAllUsers";
 
-export const fetchAllAlarms = (setAllAlarms, setAlarmingUsers, setAcceptedAlarm, setVictim, setHelpingUser) => {
+export const fetchAllAlarms = (setAllAlarms, setAlarmingUsers, setAcceptedAlarm,setHelpingUser,setVictim,setAllUsers) => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
-    let found = false;
     const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        console.log('Alarm received!');
-        const alarms = [];
-        const alarming_users=[];
+    onSnapshot(q, (querySnapshot) => {
+        let aux_alarms=[];
+        let aux_alarming_users=[];
         querySnapshot.forEach((doc) => {
-            alarms.push(doc.data());
-            alarming_users.push(doc.data().alarmingUser);
+            aux_alarming_users.push(doc.data().alarmingUser);
+            aux_alarms.push(doc.data());
+
             if(doc.data().users.includes(auth.currentUser.email)){
                 setAcceptedAlarm(doc.data());
-                found = true;
-                setHelpingUser(found);
+                setHelpingUser(true);
+                fetchSpecificUser(doc.data().alarmingUser,setVictim);
+                fetchAllUsers(setAllUsers);
             }
         });
-        let aux_users=[]
-        for(let i=0;i<alarms.length;i++){
-            aux_users.push(alarms[i].alarmingUser)
-        }
-        if(!aux_users.includes(auth.currentUser.email)){
-            setHelpingUser(false);
-        }
-
-        setAllAlarms(alarms);
-        setAlarmingUsers(alarming_users);
+        setAllAlarms(aux_alarms);
+        setAlarmingUsers(aux_alarming_users);
     });
 }

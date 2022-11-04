@@ -2,16 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
-      <change afterPath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hooks/fetchSpecificUser.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/OtherUserMarker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/OtherUserMarker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn-error.log" beforeDir="false" afterPath="$PROJECT_DIR$/yarn-error.log" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -67,6 +62,7 @@
       <workItem from="1667445373912" duration="1049000" />
       <workItem from="1667459671367" duration="8527000" />
       <workItem from="1667505443618" duration="806000" />
+      <workItem from="1667516843543" duration="7892000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>
