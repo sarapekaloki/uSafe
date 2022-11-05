@@ -1,146 +1,181 @@
-import { StatusBar } from 'expo-status-bar';
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, StyleSheet, DevSettings, TouchableOpacity, TouchableHighlight, Touchable, TouchableNativeFeedback, TouchableWithoutFeedback, View} from 'react-native';
 import * as React from "react";
-import * as Location from 'expo-location';
-import MapView, {Marker, Polyline} from "react-native-maps";
-import MapViewDirections from 'react-native-maps-directions';
-import { GOOGLE_MAPS_KEY } from '@env';
-import {useRef} from "react";
+import MapView, {Callout, Marker} from "react-native-maps";
+import {useEffect, useRef, useState} from "react";
+import {auth, firebaseConfig} from "../../firebase";
+import firebase from 'firebase/compat/app';
+import {getCurrentUser} from "../hooks/getCurrentUser";
+import {updateUserLocation} from "../hooks/updateUserLocation";
+import {fetchAllUsers} from "../hooks/fetchAllUsers";
+import {
+    getFirestore,
+    collection,
+    getDocs,
+    doc,
+    updateDoc,
+    addDoc,
+    onSnapshot,
+    query,
+    where,
+    setDoc, deleteDoc
+} from "firebase/firestore";
+import {OtherUserMarker} from "../components/OtherUserMarker";
+import {MapModal} from "../components/MapModal";
+import {RejectionMapModal} from "../components/RejectionMapModal";
+import {fetchAllAlarms} from "../hooks/fetchAllAlarms";
+import {acceptAlarm } from "../hooks/acceptAlarm";
+import {rejectAlarm} from "../hooks/rejectAlarm";
+import {send} from "ionicons/icons";
 
-const brad = require('./assets/brad.png');
-const queen = require('./assets/queen.png');
+export default function MapScreen(){
+    firebase.initializeApp(firebaseConfig);
+    const db = getFirestore();
 
+    const [currentUser, setCurrentUser] = useState(null);
+    const [userLocation, setUserLocation] = useState({
+        latitude:32.505008,longitude:-116.923947
+    });
 
-export default function App() {
+    const [askedForHelp, setAskedForHelp] = useState(false);
+    const [currentUserAlarm, setCurrentUserAlarm] = useState(false);
 
-    const [view_origin, setViewOrigin] = React.useState({
-        latitude:32.507504,
-        longitude:-116.923159
-    })
-    const [queen_origin, setQueenOrigin] = React.useState({
-        latitude:32.507504,
-        longitude:-116.923159
-    })
-    const [brad_origin, setBradOrigin] = React.useState({
-        latitude:32.505242,
-        longitude:-116.923191
-    })
-    const [origin, setOrigin] = React.useState({
-        latitude:32.523016,
-        longitude:-117.032167
-    })
+    const [allUsers, setAllUsers] = useState([]);
+    const [allAlarms, setAllAlarms] = useState([]);
+    const [focusedUser, setFocusedUser] = useState({});
+    const [acceptedAlarm, setAcceptedAlarm] = useState(null);
 
-    const map_limits = {
-        left:32.506839,
+    const [helpingUser, setHelpingUser] = useState(false);
+
+    const [gotInfo, setGotInfo] = useState(false);
+
+    const [isModalVisible, setIsModalVisible] = useState(false);
+    const [isRejectionModalVisible, setIsRejectionModalVisible] = useState(false);
+
+    useEffect(() => {
+        if(!gotInfo){
+            fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
+            fetchAllUsers(setAllUsers);
+            setGotInfo(true);
+        }});
+
+    useEffect(()=>{
+        if(!currentUser){
+            getCurrentUser(setCurrentUser, setUserLocation).then();
+        }
+        else{
+            setTimeout(setCurrentUserLocation, 3000);
+        }
+    });
+
+    const setCurrentUserLocation = ()=> {
+        updateUserLocation(
+            userLocation,
+            setUserLocation,
+            currentUser
+        );
     }
+
+
+    const handleModalRejection = ()=>{
+        setIsModalVisible(!isModalVisible);
+    }
+    const handleModalAcceptance = ()=>{
+        handleModalRejection();
+        acceptAlarm(focusedUser);
+    }
+
+    const cancelAcceptedAlarm = ()=>{
+        setHelpingUser(false);
+        setAcceptedAlarm(null);
+        rejectAlarm(focusedUser);
+        setIsRejectionModalVisible(false);
+    }
+
+    const sendAlarm = async () => {
+        if(!helpingUser){
+            const docRef = doc(db, "alarms", auth.currentUser.email);
+            if(!askedForHelp){
+
+                await setDoc(docRef, {
+                    alarmingUser:auth.currentUser.email,
+                    users:[]
+                });
+                setAskedForHelp(true);
+            }
+            else{
+                await deleteDoc(docRef);
+                setAskedForHelp(false);
+            }
+        }
+
+    }
+
+    const updateUserMarkers = ()=>{
+        return allUsers.map((user,index) =>{
+                return <OtherUserMarker
+                    key={index}
+                    visible={helpingUser ? (!!allAlarms.map((alarm)=>
+                        alarm.users.includes(auth.currentUser.email) ? alarm.users : []
+                    ).map(users=>users.includes(user.email))[0]) || acceptedAlarm.alarmingUser === user.email :
+                        askedForHelp ? currentUserAlarm && currentUserAlarm.users.includes(user.email) :true}
+                    user={user}
+                    victim={allAlarms.map((alarm)=>alarm.alarmingUser).includes(user.email)}
+                    setFocusedUser={setFocusedUser}
+                    handleModal={helpingUser ? ()=>{
+                        setIsRejectionModalVisible(!isRejectionModalVisible)
+                    } : handleModalRejection}
+                    src={require('../../assets/brad.jpg')}
+                />
+            }
+        )
+    }
+
     const map = useRef(null);
 
-    function checkMapLimit(region){
-        // this.setMapBoundaries(
-        //     {latitude:32.508134, longitude:-116.925772},
-        //     {latitude:32.505288, longitude:-116.922362}
-        //     )
-        // if(region.longitude <-116.925784){
-        //     region.longitude =-116.925784
-        // }
-        // if(region.longitude >  -116.922332){
-        //     region.longitude =  -116.922332
-        // }
-        // if(region.latitude < 32.504747){
-        //     region.latitude = 32.504747
-        // }
-        // if(region.latitude > 32.508144){
-        //     region.latitude = 32.508144
-        // }
-
-        if(region.longitude <-116.925784 || region.longitude >  -116.922332 ||
-            region.latitude < 32.504747 || region.latitude > 32.508144){
-            // console.log("Out of bounds");
-            // this.map.animateToRegion({
-            //     latitude:queen_origin.latitude,
-            //     longitude:queen_origin.longitude,
-            //     latitudeDelta:0.09,
-            //     longitudeDelta:0.04
-            // })
-        }
-    }
-
-    React.useEffect(()=> {
-        getLocationPermission();
-    }, [])
-
-    async function getLocationPermission() {
-        let { status } = await Location.requestForegroundPermissionsAsync();
-        if(status !== 'granted'){
-            alert('Permission denied');
-            return;
-        }
-        let location = await Location.getCurrentPositionAsync({});
-        const current = {
-            latitude: location.coords.latitude,
-            longitude: location.coords.longitude
-        }
-
-        setOrigin(current);
-    }
-    return (
+    return(
         <View style={styles.container}>
             <MapView
                 ref={map}
                 style={styles.map}
-                region={{
-                    latitude:queen_origin.latitude,
-                    longitude:queen_origin.longitude,
+                initialRegion={{
+                    latitude:userLocation.latitude,
+                    longitude:userLocation.longitude,
                     latitudeDelta:0.09,
                     longitudeDelta:0.04
                 }}
-                minZoomLevel={17}
-                maxZoomLevel={30}
-                onRegionChange={checkMapLimit}
-                // onRegionChange={checkMapLimit}
-
             >
-                <Marker
-                    draggable
-                    coordinate={brad_origin}
-                    onDragEnd={(direction) =>
-                        setBradOrigin(direction.nativeEvent.coordinate)}
-                >
-                    <View style={styles.otherHelperContainer}>
-                        <Image style={styles.otherHelper} source={require('./assets/brad.png')}/>
-                    </View>
-                </Marker>
-                <Marker
-                    draggable
-                    coordinate={queen_origin}
-                    onDragEnd={(direction) =>
-                        setQueenOrigin(direction.nativeEvent.coordinate)}
-                >
-                    <View style={styles.victimContainer}>
-                        <Image style={styles.victim} source={require('./assets/queen.png')}/>
-                    </View>
-                </Marker>
-                <Marker
-                    draggable
-                    coordinate={origin}
-                    onDragEnd={(direction) =>
-                        setOrigin(direction.nativeEvent)}
-                >
-                    <View style={styles.userLocation2}>
-                        <Image style={styles.userLocation}/>
-                    </View>
+
+                <Marker coordinate={userLocation}>
+                    <TouchableNativeFeedback onPress={sendAlarm}>
+                        <View style={styles.userLocation2}>
+                            <Image style={styles.userLocation}/>
+                        </View>
+                    </TouchableNativeFeedback>
                 </Marker>
 
-                <MapViewDirections
-                    origin={queen_origin}
-                    destination={origin}
-                    apikey={GOOGLE_MAPS_KEY}
-                    strokeColor="#D4B2EF"
-                    strokeWidth={6}
-                />
+                    {
+                        updateUserMarkers()
+                    }
+
+                <Callout>
+                    <MapModal
+                        isVisible={isModalVisible}
+                        user={focusedUser}
+                        handleModalRejection={handleModalRejection}
+                        handleModalAcceptance={handleModalAcceptance}
+                        loggedUser={currentUser}
+                    />
+                    <RejectionMapModal
+                        isVisible={isRejectionModalVisible}
+                        user={focusedUser}
+                        handleModal={()=>
+                            setIsRejectionModalVisible(!isRejectionModalVisible)}
+                        cancelAlarm={cancelAcceptedAlarm}
+                    />
+                </Callout>
             </MapView>
         </View>
-    );
+    )
 }
 
 const styles = StyleSheet.create({
@@ -154,35 +189,13 @@ const styles = StyleSheet.create({
         width:'100%',
         height:'100%'
     },
-    otherHelper:{
-        width: 35,
-        height: 35,
-        borderRadius: 100,
-        resizeMode:'cover',
-        overflow:'hidden',
-    },
-    otherHelperContainer:{
-        borderColor: 'rgba(71, 106, 232, .5)',
-        borderWidth: 6,
-        borderRadius: 100,
-    },
-    victim:{
-        width: 60,
-        height: 60,
-        borderRadius: 100,
-        resizeMode:'cover',
-        overflow:'hidden',
-    },
-    victimContainer:{
-        borderColor: 'rgba(229, 67, 67, .5)',
-        borderWidth: 12,
-        borderRadius: 100,
-    },
     userLocation:{
         width:20,
         height:20,
         backgroundColor: 'rgba(101, 64, 245,1)',
         borderRadius: 100,
+        borderColor:'white',
+        borderWidth:1
     },
     userLocation2:{
         borderWidth: 28,
@@ -190,4 +203,5 @@ const styles = StyleSheet.create({
         borderColor: 'rgba(101, 64, 245, .3)',
     }
 });
+
 

@@ -4,7 +4,7 @@ import { NavigationContainer} from "@react-navigation/native";
 import { createBottomTabNavigator} from "@react-navigation/bottom-tabs";
 import AlertScreen from "./AlertScreen";
 import SettingsScreen from "./SettingsScreen";
-import MapScreen from "./MapScreen";
+import MapScreen from "../MapScreen";
 import ProfileScreen from "./ProfileScreen";
 import {createNativeStackNavigator} from "@react-navigation/native-stack";
 import Ionicons from "react-native-vector-icons/Ionicons"

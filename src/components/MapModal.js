@@ -3,6 +3,7 @@ import {StyleSheet, View, Text, Image, TouchableOpacity} from "react-native";
 import {Modal} from "./Modal";
 import {Button} from "./Button";
 import Ionicons from "react-native-vector-icons/Ionicons";
+import {getPreciseDistance} from "geolib";
 
 
 export const MapModal = ({
@@ -10,6 +11,7 @@ export const MapModal = ({
                           handleModalRejection,
                           isVisible,
                           user,
+                          loggedUser,
                           ...props
                       }) => {
     return (
@@ -21,19 +23,24 @@ export const MapModal = ({
                 <Modal.Body>
                     <View style={styles.body}>
                         <View style={styles.userAttribute}>
-                            <Ionicons name={'checkmark-circle'}
+                            <Ionicons name={'checkmark-circle-outline'}
                                       size={22}
-                                      color={'#856CC2'}
+                                      color={'#3b1945'}
                                       style={{marginTop: '-1%'}}/>
+
                             <Text style={styles.text}>{user.helpResponses} responses</Text>
                         </View>
                         <View style={[styles.userAttribute,
                             {marginTop: '4%'}]}>
-                            <Ionicons name={'checkmark-circle'}
-                                      size={22}
-                                      color={'#856CC2'}
-                                      style={{marginTop: '-1%'}}/>
-                            <Text style={styles.text}>223m</Text>
+                            <Image source={require( '../../assets/icons/light-map-selected.png')}
+                                   style={styles.icons}/>
+                            <Text style={styles.text}>
+                                {loggedUser && user.coordinates ?
+                                    getPreciseDistance(
+                                        user.coordinates,
+                                        loggedUser.coordinates
+                                ) : 0}m
+                            </Text>
                         </View>
                     </View>
 
@@ -70,5 +77,11 @@ const styles = StyleSheet.create({
     },
     userAttribute:{
         flexDirection: "row",
+    },
+    icons: {
+        width: 23,
+        height: 23,
+        marginTop:"-2%",
+        // marginLeft:'-1%'
     },
 });

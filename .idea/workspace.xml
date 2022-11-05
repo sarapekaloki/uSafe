@@ -2,17 +2,18 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
-      <change afterPath="$PROJECT_DIR$/src/components/RejectionMapModal.js" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/hooks/rejectAlarm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Button.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/components/MapModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MapModal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Modal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/OtherUserMarker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/OtherUserMarker.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/hooks/fetchSpecificUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchSpecificAlarm.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/getCurrentUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/getCurrentUser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/rejectAlarm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/rejectAlarm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/updateUserLocation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/updateUserLocation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/HomeScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/HomeScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MainContainer.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -44,9 +45,15 @@
   &quot;keyToString&quot;: {
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2022.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hugui\WebstormProjects\uSafe\src\screens" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -69,6 +76,7 @@
       <workItem from="1667459671367" duration="8527000" />
       <workItem from="1667505443618" duration="806000" />
       <workItem from="1667516843543" duration="7892000" />
+      <workItem from="1667631538999" duration="1512000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>

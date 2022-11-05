@@ -4,7 +4,7 @@ import { StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { auth } from "../../firebase";
 import MainContainer from "./navigation/MainContainer";
 import OwnProfile from "./OwnProfile";
-import MapScreen from "./navigation/MapScreen";
+import MapScreen from "./MapScreen";
 import ModalInjection from "react-native/Libraries/Modal/ModalInjection";
 
 const HomeScreen = () => {

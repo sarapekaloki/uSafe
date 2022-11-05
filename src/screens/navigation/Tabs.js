@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import OwnProfile from "../OwnProfile";
 import { Platform, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Settings from "../Settings"
-import MapScreen from "./MapScreen";
+import MapScreen from "../MapScreen";
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {

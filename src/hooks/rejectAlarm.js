@@ -21,14 +21,16 @@ export const rejectAlarm = async (focusedUser) => {
         res.forEach((doc) => {
             if(doc.data().alarmingUser === focusedUser.email){
                 const users=doc.data().users;
-                const index = users.indexOf(auth.currentUser.email);
-                if(index > -1){
-                    users.splice(index,1);
+                if(users){
+                    const index = users.indexOf(auth.currentUser.email);
+                    if(index > -1){
+                        users.splice(index,1);
+                    }
+                    rejectAlarm({
+                        alarmingUser:doc.data().alarmingUser,
+                        users:users
+                    });
                 }
-                rejectAlarm({
-                    alarmingUser:doc.data().alarmingUser,
-                    users:users
-                });
             }
         })
     })
