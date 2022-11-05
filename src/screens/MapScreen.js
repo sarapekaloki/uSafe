@@ -1,4 +1,4 @@
-import {Image, StyleSheet, DevSettings, TouchableOpacity, TouchableHighlight, Touchable, TouchableNativeFeedback, TouchableWithoutFeedback, View} from 'react-native';
+import {Image, StyleSheet, TouchableNativeFeedback, View} from 'react-native';
 import * as React from "react";
 import MapView, {Callout, Marker} from "react-native-maps";
 import {useEffect, useRef, useState} from "react";
@@ -7,30 +7,17 @@ import firebase from 'firebase/compat/app';
 import {getCurrentUser} from "../hooks/getCurrentUser";
 import {updateUserLocation} from "../hooks/updateUserLocation";
 import {fetchAllUsers} from "../hooks/fetchAllUsers";
-import {
-    getFirestore,
-    collection,
-    getDocs,
-    doc,
-    updateDoc,
-    addDoc,
-    onSnapshot,
-    query,
-    where,
-    setDoc, deleteDoc
-} from "firebase/firestore";
+import {getFirestore, doc, setDoc, deleteDoc} from "firebase/firestore";
 import {OtherUserMarker} from "../components/OtherUserMarker";
 import {MapModal} from "../components/MapModal";
 import {RejectionMapModal} from "../components/RejectionMapModal";
 import {fetchAllAlarms} from "../hooks/fetchAllAlarms";
 import {acceptAlarm } from "../hooks/acceptAlarm";
 import {rejectAlarm} from "../hooks/rejectAlarm";
-import {send} from "ionicons/icons";
 
 export default function MapScreen(){
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
-
     const [currentUser, setCurrentUser] = useState(null);
     const [userLocation, setUserLocation] = useState({
         latitude:32.505008,longitude:-116.923947
@@ -81,13 +68,13 @@ export default function MapScreen(){
     }
     const handleModalAcceptance = ()=>{
         handleModalRejection();
-        acceptAlarm(focusedUser);
+        acceptAlarm(focusedUser).then();
     }
 
     const cancelAcceptedAlarm = ()=>{
         setHelpingUser(false);
         setAcceptedAlarm(null);
-        rejectAlarm(focusedUser);
+        rejectAlarm(focusedUser).then();
         setIsRejectionModalVisible(false);
     }
 
@@ -95,7 +82,6 @@ export default function MapScreen(){
         if(!helpingUser){
             const docRef = doc(db, "alarms", auth.currentUser.email);
             if(!askedForHelp){
-
                 await setDoc(docRef, {
                     alarmingUser:auth.currentUser.email,
                     users:[]
@@ -153,9 +139,9 @@ export default function MapScreen(){
                     </TouchableNativeFeedback>
                 </Marker>
 
-                    {
-                        updateUserMarkers()
-                    }
+                {
+                    updateUserMarkers()
+                }
 
                 <Callout>
                     <MapModal

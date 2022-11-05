@@ -1,4 +1,4 @@
-import {collection, getDocs, getFirestore, onSnapshot, query, where} from "firebase/firestore";
+import {collection, getDocs, getFirestore} from "firebase/firestore";
 import {auth, firebaseConfig} from "../../firebase";
 import firebase from 'firebase/compat/app';
 
