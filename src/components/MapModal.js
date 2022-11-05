@@ -45,8 +45,8 @@ export const MapModal = ({
                         marginTop:'-10%',
                         bottom:'30%'
                     }}>
-                        <Button title="ACCEPT" color='#70C053' onPress={handleModalAcceptance} />
-                        <Button title="DECLINE" color='#EC4747' onPress={handleModalRejection} />
+                        <Button title="ACCEPT" color='#70C053' onPress={handleModalAcceptance} width="40%"/>
+                        <Button title="DECLINE" color='#EC4747' onPress={handleModalRejection} width="40%" />
                     </View>
 
                 </Modal.Footer>

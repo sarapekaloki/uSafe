@@ -2,10 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
-      <change afterPath="$PROJECT_DIR$/src/hooks/fetchSpecificUser.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/components/RejectionMapModal.js" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/hooks/rejectAlarm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Button.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Button.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/MapModal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/MapModal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Modal.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Modal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/OtherUserMarker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/OtherUserMarker.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/fetchSpecificUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchSpecificAlarm.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/MapScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

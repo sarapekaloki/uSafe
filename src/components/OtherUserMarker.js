@@ -28,19 +28,27 @@ export const OtherUserMarker = ({
 
     return (
         <View>
-            {visible &&
+
                 <Marker
                     coordinate={user.coordinates}
                 >
                     <TouchableOpacity onPress={
                         victim ? ()=>{handleModal();setFocusedUser(user)} : sendAlarm
                     }>
-                        <View style={victim ? styles.victimContainer : styles.container}>
-                            <Image style={victim ? styles.victim : styles.image} source={src}/>
+                        <View style={victim ?
+                            [styles.victimContainer,visible ? {borderWidth: 12} :
+                                {borderWidth:0}] :
+                            [styles.container, visible ? {borderWidth: 6} :
+                                {borderWidth:0}]}>
+                            <Image style={victim ?
+                                [styles.victim,visible ? {width:60,height:60} :
+                                    {width:0,height:0}] :
+                                [styles.image,visible ? {width:35,height:35} :
+                                    {width:0,height:0}]} source={src}/>
                         </View>
                     </TouchableOpacity>
                 </Marker>
-            }
+
         </View>
 
     );
@@ -48,15 +56,12 @@ export const OtherUserMarker = ({
 
 const styles = StyleSheet.create({
     image:{
-        width: 35,
-        height: 35,
         borderRadius: 100,
         resizeMode:'cover',
         overflow:'hidden',
     },
     container:{
         borderColor: 'rgba(71, 106, 232, .5)',
-        borderWidth: 6,
         borderRadius: 100,
     },
     victim:{

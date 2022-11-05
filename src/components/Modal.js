@@ -99,7 +99,7 @@ const styles = StyleSheet.create({
 
     },
     imageContainer:{
-        marginLeft:'6%',
+        marginLeft:'4%',
         top:'7%',
         ...Platform.select({
             ios:{

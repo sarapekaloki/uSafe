@@ -3,13 +3,13 @@ import firebase from "firebase/compat";
 import {auth} from "../../firebase";
 
 
-export const fetchSpecificUser = (email,setVictim)=>{
+export const fetchSpecificAlarm = (email, setHelpingUsers)=>{
     const db = getFirestore();
-    const alarmsRef = collection(db, "users2");
+    const alarmsRef = collection(db, "alarms");
     getDocs(alarmsRef).then((res) => {
         res.forEach((doc) => {
-            if(doc.data().email===email){
-                setVictim(doc.data());
+            if(doc.data().alarmingUser===email){
+                setHelpingUsers(doc.data().users);
             }
         })
     })
