@@ -1,32 +1,51 @@
 import * as React from 'react';
-import { useState, useRef} from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
-import BottomSheet from "react-native-gesture-bottom-sheet";
-//Alert button imports
 import * as Haptics from 'expo-haptics';
+import { useState } from 'react';
+import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
 
+
 const AlertScreen = () =>{
-    const [image, set_image ] = useState(image1)
-    const bottomSheet = useRef();
-    function changeAlert(){
+    // const sleep = ms => new Promise(
+    //     resolve => setTimeout(resolve,ms)
+    // )
+
+    const modoNoAlerta = "Iniciar Modo Alerta!"
+    const modoAlerta = "Terminar Modo Alerta?"
+    const [ message, set_message ] = useState(modoNoAlerta);
+    const [image, set_image ] = useState(image1);
+
+    async function changeAlert(){
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-        set_image(image === image1 ? image2 : image1);}
+        set_image(image === image1 ? image2 : image1);
+        set_message(message === modoNoAlerta ? modoAlerta : modoNoAlerta);
+        // await sleep(5000);
+    }
 
     return(
         <View style={styles.modal}>
             <TouchableOpacity
                 style={styles.button2}
-                onPressIn={() => changeAlert()}
+                onPressOut={() => changeAlert()}
             >
                 <Image source={image} style={styles.buttonImage}/>
             </TouchableOpacity>
+            <Text style={styles.message}>
+                {message}
+            </Text>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    message:{
+        color: "#28194C",
+        fontSize: 30,
+        fontWeight: "bold",
+        top: 110,
+        alignSelf: "center"
+    },
     modal:{
         backgroundColor: '#D4B2EF',
         flex:1,
