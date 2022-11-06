@@ -11,8 +11,11 @@ const AlertScreen = () =>{
     //     resolve => setTimeout(resolve,ms)
     // )
 
+    const light = "light"
+    const dark = "dark"
     const modoNoAlerta = "Iniciar Modo Alerta!"
     const modoAlerta = "Terminar Modo Alerta?"
+    const [ theme , set_theme ] = useState(light);
     const [ message, set_message ] = useState(modoNoAlerta);
     const [image, set_image ] = useState(image1);
 
