@@ -1,17 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="">
+    <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/OwnProfile.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/OwnProfile.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/acceptAlarm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllAlarms.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/fetchSpecificAlarm.js" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/getCurrentUser.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/getCurrentUser.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/rejectAlarm.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/rejectAlarm.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/updateUserLocation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/updateUserLocation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="JavaScript File" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
@@ -31,9 +42,15 @@
   &quot;keyToString&quot;: {
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
+    &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2022.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
+  <component name="RecentsManager">
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hugui\WebstormProjects\uSafe\src\screens" />
+    </key>
+  </component>
   <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="Default task">
@@ -46,7 +63,26 @@
       <workItem from="1665185910915" duration="294000" />
       <workItem from="1666057315330" duration="2909000" />
       <workItem from="1666593301716" duration="401000" />
+      <workItem from="1667184470152" duration="8561000" />
+      <workItem from="1667194479386" duration="215000" />
+      <workItem from="1667264590584" duration="7126000" />
+      <workItem from="1667281711554" duration="7678000" />
+      <workItem from="1667338873045" duration="12105000" />
+      <workItem from="1667435648306" duration="3511000" />
+      <workItem from="1667445373912" duration="1049000" />
+      <workItem from="1667459671367" duration="8527000" />
+      <workItem from="1667505443618" duration="806000" />
+      <workItem from="1667516843543" duration="7892000" />
+      <workItem from="1667631538999" duration="1512000" />
     </task>
+    <task id="LOCAL-00001" summary="Merge master y mapa">
+      <created>1667450297359</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1667450297359</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -62,5 +98,9 @@
         </entry>
       </map>
     </option>
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Merge master y mapa" />
+    <option name="LAST_COMMIT_MESSAGE" value="Merge master y mapa" />
   </component>
 </project>

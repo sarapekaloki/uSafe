@@ -62,10 +62,10 @@ const OwnProfile = () => {
                         <Image source={image} style={styles.buttonImage}/>
                     </TouchableOpacity>
                 </View>
-            </BottomSheet>       
+            </BottomSheet>
 
             <View style= {styles.profileDetails}>
-                <Text style={styles.userNameText}> {currentUsername}</Text> 
+                <Text style={styles.userNameText}> {currentUsername}</Text>
                 <Text style={styles.userEmailText}> {currentEmail}</Text>
                 <Image style={styles.image} source={profilePictureURL!="" ? {uri: profilePictureURL} : require('../../assets/img/initial-profile-picture.jpeg')}></Image>
             </View>
