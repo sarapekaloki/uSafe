@@ -3,13 +3,15 @@ import OwnProfile from "../OwnProfile";
 import { Platform, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Settings from "../Settings"
 import MapScreen from "../MapScreen";
+import AlertScreen from "./AlertScreen";
 const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
     //cambiar esta variable para cuando sea dark
     const theme = "light"
-    const backgroundColor = theme == 'light'? '#fff' : '#28194C'
-    const fontColor = theme == 'light'? '#000' : '#fff'
+    const backgroundColor = theme === 'light'? '#fff' : '#28194C'
+    const fontColor = theme === 'light'? '#000' : '#fff'
+
     return (
         <Tab.Navigator initialRouteName="Mapa" screenOptions={{tabBarShowLabel: false,tabBarStyle:{
             elevation: 0,
@@ -19,7 +21,12 @@ const Tabs = () => {
             ...styles.shadow
         }
             }}>
-        <Tab.Screen name="Alarma" component={OwnProfile} options={{
+        <Tab.Screen name="Alarma"  component={AlertScreen}  listeners={({ navigation }) => ({
+            tabPress: (e) => {
+                e.preventDefault()
+                navigation.navigate("AlertScreen")
+            },
+        })} options={{
             tabBarIcon: ({focused}) => (
                 <Image source={focused? require( '../../../assets/icons/selected-alarm-icon.png') : require( '../../../assets/icons/unselected-alarm-icon.png') } 
                         style={styles.alarm}/>

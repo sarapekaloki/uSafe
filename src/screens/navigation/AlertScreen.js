@@ -7,7 +7,7 @@ import * as Haptics from 'expo-haptics';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
 
-export default function AlertScreen({navigation}){
+const AlertScreen = () =>{
     const [image, set_image ] = useState(image1)
     const bottomSheet = useRef();
     function changeAlert(){
@@ -15,22 +15,22 @@ export default function AlertScreen({navigation}){
         set_image(image === image1 ? image2 : image1);}
 
     return(
-        <View style={{flex:1,alignItems:'center',justifyContent:'center'}}>
-            <BottomSheet hasDraggableIcon ref={bottomSheet} height={600} sheetBackgroundColor={"#D4B2EF"}>
-                <View>
-                    <TouchableOpacity
-                        style={styles.button2}
-                        onPressIn={() => changeAlert()}
-                    >
-                        <Image source={image} style={styles.buttonImage}/>
-                    </TouchableOpacity>
-                </View>
-            </BottomSheet>
+        <View style={styles.modal}>
+            <TouchableOpacity
+                style={styles.button2}
+                onPressIn={() => changeAlert()}
+            >
+                <Image source={image} style={styles.buttonImage}/>
+            </TouchableOpacity>
         </View>
     )
 }
 
 const styles = StyleSheet.create({
+    modal:{
+        backgroundColor: '#D4B2EF',
+        flex:1,
+    },
     button: {
         height: 50,
         width: 150,
@@ -71,3 +71,5 @@ const styles = StyleSheet.create({
     },
 
 });
+
+export default AlertScreen;

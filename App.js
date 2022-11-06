@@ -9,6 +9,7 @@ import UpdatePassword from './src/screens/UpdatePassword';
 import UpdateUsername from './src/screens/UpdateUsername';
 import UpdateProfilePicture from './src/screens/UpdateProfilePicture';
 import Tabs from './src/screens/navigation/Tabs';
+import AlertScreen from "./src/screens/navigation/AlertScreen";
 const Stack = createNativeStackNavigator();
 global.alerta = false;
 
@@ -19,6 +20,7 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
+          <Stack.Screen options={{ headerShown: false, presentation:'modal' }} name="AlertScreen" component={AlertScreen} />
         <Stack.Screen
           name="Tabs"
           component={Tabs}
