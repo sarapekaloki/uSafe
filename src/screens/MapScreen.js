@@ -1,4 +1,4 @@
-import {Image, StyleSheet, TouchableNativeFeedback, View} from 'react-native';
+import {Image, StyleSheet, View} from 'react-native';
 import * as React from "react";
 import MapView, {Callout, Marker} from "react-native-maps";
 import {useEffect, useRef, useState} from "react";
@@ -7,7 +7,6 @@ import firebase from 'firebase/compat/app';
 import {getCurrentUser} from "../hooks/getCurrentUser";
 import {updateUserLocation} from "../hooks/updateUserLocation";
 import {fetchAllUsers} from "../hooks/fetchAllUsers";
-import {getFirestore, doc, setDoc, deleteDoc} from "firebase/firestore";
 import {OtherUserMarker} from "../components/OtherUserMarker";
 import {MapModal} from "../components/MapModal";
 import {RejectionMapModal} from "../components/RejectionMapModal";
@@ -17,7 +16,6 @@ import {rejectAlarm} from "../hooks/rejectAlarm";
 
 export default function MapScreen(){
     firebase.initializeApp(firebaseConfig);
-    const db = getFirestore();
     const [currentUser, setCurrentUser] = useState(null);
     const [askedForHelp, setAskedForHelp] = useState(false);
     const [currentUserAlarm, setCurrentUserAlarm] = useState(false);
@@ -34,28 +32,30 @@ export default function MapScreen(){
     });
 
     useEffect(() => {
-        if(!gotInfo){
+        if(!gotInfo || !currentUser){
+            getCurrentUser(setCurrentUser, setUserLocation).then();
             fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
             fetchAllUsers(setAllUsers);
             setGotInfo(true);
+
         }});
 
     useEffect(()=>{
-        if(!currentUser){
-            getCurrentUser(setCurrentUser, setUserLocation).then();
-        }
-        else{
-            setTimeout(setCurrentUserLocation, 3000);
-        }
-    });
+    },[currentUser]);
 
-    const setCurrentUserLocation = ()=> {
-        updateUserLocation(
-            userLocation,
-            setUserLocation,
-            currentUser
-        );
-    }
+
+    useEffect(()=>{
+        const interval = setInterval(()=>{
+            if(currentUser){
+                updateUserLocation(
+                    userLocation,
+                    currentUser,
+                    setCurrentUser
+                ).then();
+            }
+        },6000)
+        return () => clearInterval(interval);
+    });
 
     const handleModalRejection = ()=>{
         setIsModalVisible(!isModalVisible);
@@ -71,22 +71,6 @@ export default function MapScreen(){
         rejectAlarm(focusedUser).then();
         setIsRejectionModalVisible(false);
     }
-
-    // const sendAlarm = async () => {
-    //     if(!helpingUser){
-    //         const docRef = doc(db, "alarms", auth.currentUser.email);
-    //         if(!askedForHelp){
-    //             await setDoc(docRef, {
-    //                 alarmingUser:auth.currentUser.email,
-    //                 users:[]
-    //             });
-    //         }
-    //         else{
-    //             await deleteDoc(docRef);
-    //         }
-    //     }
-    // }
-
 
     const updateUserMarkers = ()=>{
         return allUsers.map((user,index) =>{
@@ -122,7 +106,7 @@ export default function MapScreen(){
                 }}
             >
 
-                <Marker coordinate={userLocation}>
+                <Marker coordinate={currentUser ? currentUser.coordinates : userLocation}>
                     <View style={styles.userLocation2}>
                         <Image style={styles.userLocation}/>
                     </View>

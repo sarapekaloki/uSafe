@@ -103,7 +103,6 @@ const AlertScreen = () =>{
                     users = doc.data().users
                 }
             })
-            console.log(users)
         })
             const allUsers = collection(db, "users2");
             await getDocs(allUsers).then((res) => {
@@ -117,7 +116,6 @@ const AlertScreen = () =>{
                             pictureUrl:document.data().pictureUrl,
                             username:document.data().username
                         }).then();
-                        console.log(document.data())
                     }
                 })
             })
