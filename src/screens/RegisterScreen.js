@@ -123,6 +123,7 @@ const RegisterScreen = () => {
             style={styles.container}
             behavior="padding"
         >
+        <View>
             <Text style= {styles.headerText}>Crea una cuenta</Text>
             <ScrollView style = {styles.scrollView} >
                 <View  style= {styles.whiteBox}>
@@ -158,7 +159,7 @@ const RegisterScreen = () => {
                                 style = {styles.input}
                                 secureTextEntry={passwordVisibility}
                             />
-                            <Pressable onPress={handlePasswordVisibility} style={{left:5}}>
+                            <Pressable onPress={handlePasswordVisibility} style={{left:5, top:5}}>
                                 <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
                             </Pressable>
                         </View>
@@ -187,7 +188,7 @@ const RegisterScreen = () => {
                     </View>
                 </View>
             </ScrollView>
-
+        </View>
         </KeyboardAvoidingView>
 
     )
@@ -263,6 +264,7 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor:'white',
         width:'100%',
+        height:'100%',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
     },

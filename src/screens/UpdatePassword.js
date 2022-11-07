@@ -42,7 +42,7 @@ const UpdatePassword = () => {
          setCurrentPasswordError(false);
 
          if(!res.lenght && !res.number && !res.upperLower){
-             setNewPasswordError(false);
+             setNewPasswordError(true);
              currentUser.updatePassword(newPassword).then(() => {
                  sleep(1000);
                  setCurrentPassword('');
