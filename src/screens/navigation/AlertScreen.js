@@ -19,33 +19,79 @@ const AlertScreen = () =>{
     const modoNoAlerta = "Iniciar Modo Alerta!"
     const modoAlerta = "Terminar Modo Alerta?"
     const [ mode , set_mode ] = useState(false)
+    const [ currentUser , set_currentUser] = useState({})
+    const [ helping, set_helping ] = useState(false)
 
+    async function fetchCurrentUser(){
+        const usersRef = collection(db, "users2");
+        await getDocs(usersRef).then((res) => {
+            res.forEach((doc) => {
+                if((doc.data().email).toLowerCase() === auth.currentUser.email){
+                    set_currentUser(doc.data());
+                }
+            })
+        })
+    }
 
-    useEffect(() => {
+    // useEffect(() => {
+    //     const alarmsRef = collection(db, "alarms");
+    //     getDocs(alarmsRef).then((res) => {
+    //         let aux = false;
+    //         res.forEach((doc) => {
+    //             if(doc.data().users.includes(auth.currentUser.email)){
+    //                 aux = true;
+    //             }
+    //         })
+    //         set_helping(aux);
+    //     })
+    // })
+
+    useEffect( () => {
         if(!gotInfo){
-            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email));
+            fetchCurrentUser().then();
+            const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
             onSnapshot(q, (querySnapshot) => {
                 let alertMode = false
+                let aux = false
                 querySnapshot.forEach((doc) => {
-                    if(doc.data().alarmingUser === auth.currentUser.email){
+                    if(doc.data().alarmingUser === auth.currentUser.email) {
                         alertMode = true
+                    }
+                    if(doc.data().users.includes(auth.currentUser.email)){
+                        aux = true
                     }
                 });
                 set_mode(alertMode)
+                set_helping(aux)
             });
             set_gotInfo(true);
         }
     })
 
-    useEffect( () => {}, [mode] )
+    useEffect( () => {}, [mode,helping] )
+
+    function checkMapLimits(){
+        if( ((currentUser.coordinates.latitude < 32.508106) && (currentUser.coordinates.latitude > 32.505292))
+            && ((currentUser.coordinates.longitude < -116.924757) && (currentUser.coordinates.longitude > -116.925755))){
+            console.log("true")
+        }
+        else{
+            console.log("false")
+        }
+    }
 
     async function sendAlarm() {
-        const docRef = doc(db, "alarms", auth.currentUser.email);
-        const data = {
-            alarmingUser:auth.currentUser.email,
-            users:[]
-        };
-        await setDoc(docRef, data)
+        if(!helping){
+            const docRef = doc(db, "alarms", auth.currentUser.email);
+            const data = {
+                alarmingUser:auth.currentUser.email,
+                users:[]
+            };
+            await setDoc(docRef, data)
+        }
+        else{
+            alert("No puedes entrar en modo alerta mientras ayudas a alguien!")
+        }
     }
 
     async function cancelAlarm() {
@@ -75,16 +121,7 @@ const AlertScreen = () =>{
                     }
                 })
             })
-            // users.forEach((user) => {
-            //     const usersRef = doc(db, "users2", user);
-            //     updateDoc(usersRef, {
-            //         coordinates:user.coordinates,
-            //         email:user.email,
-            //         helpResponses:user.helpResponses++,
-            //         pictureUrl:user.pictureUrl,
-            //         username:user.username
-            //     }).then();
-            // })
+
         const docRef = doc(db, "alarms", auth.currentUser.email);
         await deleteDoc(docRef)
     }

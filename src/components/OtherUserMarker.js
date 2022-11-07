@@ -6,25 +6,10 @@ import {addDoc, collection, doc, getFirestore, setDoc} from "firebase/firestore"
 export const OtherUserMarker = ({
                           visible,
                           user,
-                          src,
                           victim,
                           setFocusedUser,
                           handleModal
                       }) => {
-
-    const db = getFirestore();
-    const alarm = {
-        alarmingUser:user.email,
-        users:[]
-    }
-    async function sendAlarm() {
-        const docRef = doc(db, "alarms", user.email);
-        const data = {
-            alarmingUser:user.email,
-            users:[]
-        };
-        await setDoc(docRef, data);
-    }
 
     return (
         <View>
@@ -32,7 +17,7 @@ export const OtherUserMarker = ({
                     coordinate={user.coordinates}
                 >
                     <TouchableOpacity onPress={
-                        victim ? ()=>{handleModal();setFocusedUser(user)} : sendAlarm
+                        victim ? ()=>{handleModal();setFocusedUser(user)} : () => {}
                     }>
                         <View style={victim ?
                             [styles.victimContainer,visible ? {borderWidth: 12} :

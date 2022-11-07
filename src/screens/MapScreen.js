@@ -19,24 +19,19 @@ export default function MapScreen(){
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
     const [currentUser, setCurrentUser] = useState(null);
-    const [userLocation, setUserLocation] = useState({
-        latitude:32.505008,longitude:-116.923947
-    });
-
     const [askedForHelp, setAskedForHelp] = useState(false);
     const [currentUserAlarm, setCurrentUserAlarm] = useState(false);
-
     const [allUsers, setAllUsers] = useState([]);
     const [allAlarms, setAllAlarms] = useState([]);
     const [focusedUser, setFocusedUser] = useState({});
     const [acceptedAlarm, setAcceptedAlarm] = useState(null);
-
     const [helpingUser, setHelpingUser] = useState(false);
-
     const [gotInfo, setGotInfo] = useState(false);
-
     const [isModalVisible, setIsModalVisible] = useState(false);
     const [isRejectionModalVisible, setIsRejectionModalVisible] = useState(false);
+    const [userLocation, setUserLocation] = useState({
+        latitude:32.505008,longitude:-116.923947
+    });
 
     useEffect(() => {
         if(!gotInfo){
@@ -62,7 +57,6 @@ export default function MapScreen(){
         );
     }
 
-
     const handleModalRejection = ()=>{
         setIsModalVisible(!isModalVisible);
     }
@@ -78,20 +72,21 @@ export default function MapScreen(){
         setIsRejectionModalVisible(false);
     }
 
-    const sendAlarm = async () => {
-        if(!helpingUser){
-            const docRef = doc(db, "alarms", auth.currentUser.email);
-            if(!askedForHelp){
-                await setDoc(docRef, {
-                    alarmingUser:auth.currentUser.email,
-                    users:[]
-                });
-            }
-            else{
-                await deleteDoc(docRef);
-            }
-        }
-    }
+    // const sendAlarm = async () => {
+    //     if(!helpingUser){
+    //         const docRef = doc(db, "alarms", auth.currentUser.email);
+    //         if(!askedForHelp){
+    //             await setDoc(docRef, {
+    //                 alarmingUser:auth.currentUser.email,
+    //                 users:[]
+    //             });
+    //         }
+    //         else{
+    //             await deleteDoc(docRef);
+    //         }
+    //     }
+    // }
+
 
     const updateUserMarkers = ()=>{
         return allUsers.map((user,index) =>{
@@ -107,7 +102,6 @@ export default function MapScreen(){
                     handleModal={helpingUser ? ()=>{
                         setIsRejectionModalVisible(!isRejectionModalVisible)
                     } : handleModalRejection}
-                    src={require('../../assets/brad.jpg')}
                 />
             }
         )
@@ -129,11 +123,9 @@ export default function MapScreen(){
             >
 
                 <Marker coordinate={userLocation}>
-                    <TouchableNativeFeedback onPress={sendAlarm}>
-                        <View style={styles.userLocation2}>
-                            <Image style={styles.userLocation}/>
-                        </View>
-                    </TouchableNativeFeedback>
+                    <View style={styles.userLocation2}>
+                        <Image style={styles.userLocation}/>
+                    </View>
                 </Marker>
 
                 {
