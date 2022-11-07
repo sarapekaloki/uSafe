@@ -16,9 +16,9 @@ const Tabs = () => {
     const db = getFirestore();
     const [ alertMode , set_alertMode ] = useState(false);
     const [ gotInfo, set_gotInfo ] = useState(false);
-    const theme = 'light';
-    const backgroundColor = theme === 'light'? '#fff' : '#28194C'
-    const fontColor = theme === 'light'? '#000' : '#fff'
+
+    const backgroundColor = !alertMode ? '#fff' : '#28194C'
+    const fontColor = !alertMode ? '#000' : '#fff'
 
     useEffect( () => {
         if(!gotInfo){
@@ -80,7 +80,7 @@ const Tabs = () => {
         <Tab.Screen name="Perfil" component={OwnProfile} options={{
             tabBarIcon: ({ focused }) => (
                 <Image 
-                    source={focused? (alertMode ? require( `../../../assets/icons/dark-profile-selected.png`): require( `../../../assets/icons/light-profile-unselected.png`)) : (alertMode ? require( `../../../assets/icons/dark-profile-unselected.png`) : require( `../../../assets/icons/light-profile-unselected.png`)) }
+                    source={focused? (alertMode ? require( `../../../assets/icons/dark-profile-selected.png`): require( `../../../assets/icons/light-profile-selected.png`)) : (alertMode ? require( `../../../assets/icons/dark-profile-unselected.png`) : require( `../../../assets/icons/light-profile-unselected.png`)) }
                     style={styles.icons}
                     />
           ),
