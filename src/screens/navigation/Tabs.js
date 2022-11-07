@@ -1,22 +1,42 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import OwnProfile from "../OwnProfile";
 import { Platform, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Settings from "../Settings"
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
+import {collection, getFirestore, onSnapshot, query, where} from "firebase/firestore";
+import firebase from "firebase/compat";
+import {auth, firebaseConfig} from "../../../firebase";
 const Tab = createBottomTabNavigator()
-
-// export const [ theme, set_theme ] = useState("light");
 
 
 const Tabs = () => {
-    //cambiar esta variable para cuando sea dark
-
-    const [ niggers, set_niggers ] = useState('light');
+    firebase.initializeApp(firebaseConfig);
+    const db = getFirestore();
+    const [ alertMode , set_alertMode ] = useState(false);
+    const [ gotInfo, set_gotInfo ] = useState(false);
     const theme = 'light';
     const backgroundColor = theme === 'light'? '#fff' : '#28194C'
     const fontColor = theme === 'light'? '#000' : '#fff'
+
+    useEffect( () => {
+        if(!gotInfo){
+            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
+            onSnapshot(q,  (querySnapshot) => {
+                let alertModeActive = false
+                querySnapshot.forEach((doc) => {
+                    if(doc.data().alarmingUser === auth.currentUser.email){
+                        alertModeActive = true
+                    }
+                });
+                set_alertMode(alertModeActive)
+            } )
+            set_gotInfo(true)
+        }
+    } )
+
+    useEffect( () => {}, [alertMode])
 
     return (
         <Tab.Navigator initialRouteName="Mapa" screenOptions={{tabBarShowLabel: false,tabBarStyle:{
@@ -42,7 +62,7 @@ const Tabs = () => {
         <Tab.Screen name="Configuración" component={Settings} options={{
             tabBarIcon: ({ focused }) => (
                 <Image 
-                    source={focused? require( `../../../assets/icons/${theme}-settings-selected.png`): require( `../../../assets/icons/${theme}-settings-unselected.png`)}
+                    source={focused ? (alertMode ? require( `../../../assets/icons/dark-settings-selected.png`) :  require( `../../../assets/icons/light-settings-selected.png`) ): alertMode ? require( `../../../assets/icons/dark-settings-unselected.png`) : require( `../../../assets/icons/light-settings-unselected.png`) }
                     style={styles.icons}
                     />
           ),
@@ -60,7 +80,7 @@ const Tabs = () => {
         <Tab.Screen name="Perfil" component={OwnProfile} options={{
             tabBarIcon: ({ focused }) => (
                 <Image 
-                    source={focused? require( `../../../assets/icons/${theme}-profile-selected.png`): require( `../../../assets/icons/${theme}-profile-unselected.png`)}
+                    source={focused? (alertMode ? require( `../../../assets/icons/dark-profile-selected.png`): require( `../../../assets/icons/light-profile-unselected.png`)) : (alertMode ? require( `../../../assets/icons/dark-profile-unselected.png`) : require( `../../../assets/icons/light-profile-unselected.png`)) }
                     style={styles.icons}
                     />
           ),
@@ -79,7 +99,7 @@ const Tabs = () => {
         <Tab.Screen name="Mapa" component={MapScreen} options={{
             tabBarIcon: ({ focused }) => (
                 <Image 
-                    source={focused? require( `../../../assets/icons/${theme}-map-selected.png`): require( `../../../assets/icons/${theme}-map-unselected.png`)}
+                    source={focused? (alertMode ? require( `../../../assets/icons/dark-map-selected.png`) : require( `../../../assets/icons/light-map-selected.png`)):(alertMode ? require( `../../../assets/icons/dark-map-unselected.png`) :  require( `../../../assets/icons/light-map-unselected.png`))}
                     style={styles.icons}
                     />
           ),
