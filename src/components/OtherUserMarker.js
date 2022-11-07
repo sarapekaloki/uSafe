@@ -28,7 +28,6 @@ export const OtherUserMarker = ({
 
     return (
         <View>
-
                 <Marker
                     coordinate={user.coordinates}
                 >
@@ -48,9 +47,7 @@ export const OtherUserMarker = ({
                         </View>
                     </TouchableOpacity>
                 </Marker>
-
         </View>
-
     );
 };
 

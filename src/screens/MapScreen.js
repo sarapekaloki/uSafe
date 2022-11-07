@@ -86,14 +86,11 @@ export default function MapScreen(){
                     alarmingUser:auth.currentUser.email,
                     users:[]
                 });
-                setAskedForHelp(true);
             }
             else{
                 await deleteDoc(docRef);
-                setAskedForHelp(false);
             }
         }
-
     }
 
     const updateUserMarkers = ()=>{

@@ -1,28 +1,59 @@
 import * as React from 'react';
 import * as Haptics from 'expo-haptics';
-import { useState } from 'react';
+import { useState , useEffect } from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
+import {deleteDoc, doc, setDoc} from "firebase/firestore";
+import {getFirestore, collection, query, where, onSnapshot} from "firebase/firestore";
+import firebase from 'firebase/compat/app';
+import {auth, firebaseConfig} from "../../../firebase";
+
+
 
 
 const AlertScreen = () =>{
-    // const sleep = ms => new Promise(
-    //     resolve => setTimeout(resolve,ms)
-    // )
-
-    const light = "light"
-    const dark = "dark"
+    firebase.initializeApp(firebaseConfig);
+    const db = getFirestore();
+    const [ gotInfo, set_gotInfo ] = useState(false);
     const modoNoAlerta = "Iniciar Modo Alerta!"
     const modoAlerta = "Terminar Modo Alerta?"
-    const [ theme , set_theme ] = useState(light);
+    const [ mode , set_mode ] = useState(false)
     const [ message, set_message ] = useState(modoNoAlerta);
     const [image, set_image ] = useState(image1);
 
+    useEffect(() => {
+        if(!gotInfo){
+            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email));
+            onSnapshot(q, (querySnapshot) => {
+                let alertMode = false
+                querySnapshot.forEach((doc) => {
+                    if(doc.data().alarmingUser === auth.currentUser.email){
+                        alertMode = true
+                    }
+                });
+                set_mode(alertMode)
+            });
+            set_gotInfo(true);
+        }
+    })
+
+    useEffect( () => {}, [mode] )
+
+    async function sendAlarm() {
+        const docRef = doc(db, "alarms", auth.currentUser.email);
+        const data = {
+            alarmingUser:auth.currentUser.email,
+            users:[]
+        };
+        mode ? await deleteDoc(docRef) : await setDoc(docRef, data)
+    }
+
     async function changeAlert(){
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-        set_image(image === image1 ? image2 : image1);
-        set_message(message === modoNoAlerta ? modoAlerta : modoNoAlerta);
+        sendAlarm();
+        // set_image(image === image1 ? image2 : image1);
+        // console.log("Alarmita")
         // await sleep(5000);
     }
 
@@ -32,10 +63,10 @@ const AlertScreen = () =>{
                 style={styles.button2}
                 onPressOut={() => changeAlert()}
             >
-                <Image source={image} style={styles.buttonImage}/>
+                <Image source={mode ? image2 : image1} style={styles.buttonImage}/>
             </TouchableOpacity>
             <Text style={styles.message}>
-                {message}
+                {mode ? modoAlerta : modoNoAlerta}
             </Text>
         </View>
     )

@@ -1,4 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import { useState } from 'react';
 import OwnProfile from "../OwnProfile";
 import { Platform, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
 import Settings from "../Settings"
@@ -6,9 +7,14 @@ import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
 const Tab = createBottomTabNavigator()
 
+// export const [ theme, set_theme ] = useState("light");
+
+
 const Tabs = () => {
     //cambiar esta variable para cuando sea dark
-    const theme = "light"
+
+    const [ niggers, set_niggers ] = useState('light');
+    const theme = 'light';
     const backgroundColor = theme === 'light'? '#fff' : '#28194C'
     const fontColor = theme === 'light'? '#000' : '#fff'
 
