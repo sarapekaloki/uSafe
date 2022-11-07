@@ -49,12 +49,12 @@ const LoginScreen = () => {
     }
 
     return(
-
             <KeyboardAvoidingView
                 style={styles.container}
                 behavior={Platform.OS ==="android"?"height":"padding"}
             >
-                <Text style= {styles.headerText}> Iniciar Sesión</Text>
+            <View>
+            <Text style= {styles.headerText}> Iniciar Sesión</Text>
                 <ScrollView style = {styles.scrollView} >
                 <View style= {styles.whiteBox}>
 
@@ -105,7 +105,11 @@ const LoginScreen = () => {
                 </View>
                 </View>
             </ScrollView>
+
+            </View>
+                
         </KeyboardAvoidingView>
+        
     )
 }
 
@@ -176,6 +180,7 @@ const styles = StyleSheet.create({
     scrollView: {
         backgroundColor:'white',
         width:'100%',
+        height:'100%',
         borderTopLeftRadius: 30,
         borderTopRightRadius: 30,
     },
