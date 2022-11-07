@@ -24,10 +24,10 @@ const ModalContainer = ({ children }) => (
     <View style={styles.container}>{children}</View>
 );
 
-const ModalHeader = ({ title, handleModal }) => (
+const ModalHeader = ({ title, handleModal, user }) => (
     <View style={styles.header}>
         <View style={styles.imageContainer}>
-            <Image source={require('../../assets/brad.jpg')}
+            <Image source={user.pictureUrl ? {uri:user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg')}
                    style={styles.image}/>
         </View>
         <View style={styles.textContainer}>

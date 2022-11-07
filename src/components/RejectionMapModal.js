@@ -18,7 +18,7 @@ export const RejectionMapModal = ({
 
                 <Modal.Header title={"Aceptaste el pedido de ayuda de "+
                     user.username}
-                              handleModal={handleModal} />
+                              handleModal={handleModal} user={user} />
                 <Modal.Body>
                     <View style={styles.body}>
                         <Button

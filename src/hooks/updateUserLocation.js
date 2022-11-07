@@ -1,17 +1,25 @@
 import {getUserLocation} from "./getUserLocation";
-import {doc, getFirestore, updateDoc} from "firebase/firestore";
+import {collection, doc, getDocs, getFirestore, updateDoc} from "firebase/firestore";
 import {auth} from "../../firebase";
 
-export const updateUserLocation = (userLocation, setUserLocation, currentUser) => {
-    const current_user_ref=auth.currentUser
-    getUserLocation(setUserLocation).then();
+export const updateUserLocation = async (userLocation, setUserLocation, currentUser) => {
+    let current_user_ref;
     const db = getFirestore();
+    const usersRef = collection(db, "users2");
+    await getDocs(usersRef).then((res) => {
+        res.forEach((doc) => {
+            if((doc.data().email).toLowerCase() === auth.currentUser.email){
+                current_user_ref= doc.data()
+            }
+        })
+    })
+    getUserLocation(setUserLocation).then();
     const userRef = doc(db, "users2", current_user_ref.email);
     updateDoc(userRef, {
         coordinates:userLocation,
-        email:currentUser.email,
-        helpResponses:currentUser.helpResponses,
-        pictureUrl:currentUser.pictureUrl,
-        username:currentUser.username
+        email:current_user_ref.email,
+        helpResponses:current_user_ref.helpResponses,
+        pictureUrl:current_user_ref.pictureUrl,
+        username:current_user_ref.username
     }).then();
 }

@@ -19,7 +19,8 @@ export const MapModal = ({
             <Modal.Container>
 
                 <Modal.Header title={user.username+" necesita tu ayuda!"}
-                              handleModal={handleModalRejection} />
+                              handleModal={handleModalRejection}
+                              user={user}/>
                 <Modal.Body>
                     <View style={styles.body}>
                         <View style={styles.userAttribute}>

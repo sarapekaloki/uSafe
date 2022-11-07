@@ -4,7 +4,7 @@ import { useState , useEffect } from 'react';
 import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
-import {deleteDoc, doc, setDoc} from "firebase/firestore";
+import {deleteDoc, doc, getDocs, setDoc, updateDoc} from "firebase/firestore";
 import {getFirestore, collection, query, where, onSnapshot} from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
@@ -45,12 +45,53 @@ const AlertScreen = () =>{
             alarmingUser:auth.currentUser.email,
             users:[]
         };
-        mode ? await deleteDoc(docRef) : await setDoc(docRef, data)
+        await setDoc(docRef, data)
+    }
+
+    async function cancelAlarm() {
+        let users;
+        const alarmRef = collection(db, "alarms");
+        await getDocs(alarmRef).then((res) => {
+            res.forEach((doc) => {
+                if((doc.data().alarmingUser).toLowerCase() === auth.currentUser.email){
+                    users = doc.data().users
+                }
+            })
+            console.log(users)
+        })
+            const allUsers = collection(db, "users2");
+            await getDocs(allUsers).then((res) => {
+                res.forEach((document) => {
+                    if(users.includes(document.data().email)){
+                        const usersRef = doc(db, "users2", document.data().email);
+                        updateDoc(usersRef, {
+                            coordinates:document.data().coordinates,
+                            email:document.data().email,
+                            helpResponses:document.data().helpResponses + 1,
+                            pictureUrl:document.data().pictureUrl,
+                            username:document.data().username
+                        }).then();
+                        console.log(document.data())
+                    }
+                })
+            })
+            // users.forEach((user) => {
+            //     const usersRef = doc(db, "users2", user);
+            //     updateDoc(usersRef, {
+            //         coordinates:user.coordinates,
+            //         email:user.email,
+            //         helpResponses:user.helpResponses++,
+            //         pictureUrl:user.pictureUrl,
+            //         username:user.username
+            //     }).then();
+            // })
+        const docRef = doc(db, "alarms", auth.currentUser.email);
+        await deleteDoc(docRef)
     }
 
     async function changeAlert(){
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
-        sendAlarm();
+        mode ?  cancelAlarm() : sendAlarm();
     }
 
     return(
