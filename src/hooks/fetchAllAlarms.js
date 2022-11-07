@@ -19,7 +19,6 @@ export const fetchAllAlarms = (setAllAlarms,setAcceptedAlarm,setHelpingUser,setA
             }
             else if(doc.data().alarmingUser === auth.currentUser.email){
                 setCurrentUserAlarm(doc.data());
-                console.log("hugo")
                 user_asked_for_help=true;
             }
         });

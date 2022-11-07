@@ -19,8 +19,7 @@ const AlertScreen = () =>{
     const modoNoAlerta = "Iniciar Modo Alerta!"
     const modoAlerta = "Terminar Modo Alerta?"
     const [ mode , set_mode ] = useState(false)
-    const [ message, set_message ] = useState(modoNoAlerta);
-    const [image, set_image ] = useState(image1);
+
 
     useEffect(() => {
         if(!gotInfo){
@@ -52,9 +51,6 @@ const AlertScreen = () =>{
     async function changeAlert(){
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         sendAlarm();
-        // set_image(image === image1 ? image2 : image1);
-        // console.log("Alarmita")
-        // await sleep(5000);
     }
 
     return(
