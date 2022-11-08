@@ -11,17 +11,19 @@ export const fetchAllAlarms = (setAllAlarms,setAcceptedAlarm,setHelpingUser,setA
         let aux_alarms=[];
         let aux_helping_user = false;
         let user_asked_for_help=false;
-        querySnapshot.forEach((doc) => {
-            aux_alarms.push(doc.data());
-            if(doc.data().users.includes(auth.currentUser.email)){
-                setAcceptedAlarm(doc.data());
-                aux_helping_user=true;
-            }
-            else if(doc.data().alarmingUser === auth.currentUser.email){
-                setCurrentUserAlarm(doc.data());
-                user_asked_for_help=true;
-            }
-        });
+        if(auth){
+            querySnapshot.forEach((doc) => {
+                aux_alarms.push(doc.data());
+                if(doc.data().users.includes(auth.currentUser.email)){
+                    setAcceptedAlarm(doc.data());
+                    aux_helping_user=true;
+                }
+                else if(doc.data().alarmingUser === auth.currentUser.email){
+                    setCurrentUserAlarm(doc.data());
+                    user_asked_for_help=true;
+                }
+            });
+        }
         setAllAlarms(aux_alarms);
         setHelpingUser(aux_helping_user);
         setAskedForHelp(user_asked_for_help);
