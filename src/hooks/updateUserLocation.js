@@ -16,7 +16,7 @@ export const updateUserLocation = async (userLocation, currentUser, setCurrentUs
     }
 
     if(current.latitude && current.longitude){
-        if(auth){
+        if(auth && auth.currentUser && auth.currentUser.email){
             const userRef = doc(db, "users2", auth.currentUser.email);
             const userObject = {
                 coordinates:current,
