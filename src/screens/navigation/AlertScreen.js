@@ -48,23 +48,25 @@ const AlertScreen = () =>{
 
     useEffect( () => {
         if(!gotInfo){
-            fetchCurrentUser().then();
-            const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
-            onSnapshot(q, (querySnapshot) => {
-                let alertMode = false
-                let aux = false
-                querySnapshot.forEach((doc) => {
-                    if(doc.data().alarmingUser === auth.currentUser.email) {
-                        alertMode = true
-                    }
-                    if(doc.data().users.includes(auth.currentUser.email)){
-                        aux = true
-                    }
+            if(auth){
+                fetchCurrentUser().then();
+                const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
+                onSnapshot(q, (querySnapshot) => {
+                    let alertMode = false
+                    let aux = false
+                    querySnapshot.forEach((doc) => {
+                        if(doc.data().alarmingUser === auth.currentUser.email) {
+                            alertMode = true
+                        }
+                        if(doc.data().users.includes(auth.currentUser.email)){
+                            aux = true
+                        }
+                    });
+                    set_mode(alertMode)
+                    set_helping(aux)
                 });
-                set_mode(alertMode)
-                set_helping(aux)
-            });
-            set_gotInfo(true);
+                set_gotInfo(true);
+            }
         }
     })
 
