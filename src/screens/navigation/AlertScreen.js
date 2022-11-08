@@ -68,20 +68,16 @@ const AlertScreen = () =>{
         }
     })
 
-    useEffect( () => {}, [mode,helping] )
+    useEffect( () => {
+    }, [mode,helping] )
 
-    function checkMapLimits(){
-        if( ((currentUser.coordinates.latitude < 32.508106) && (currentUser.coordinates.latitude > 32.505292))
-            && ((currentUser.coordinates.longitude < -116.924757) && (currentUser.coordinates.longitude > -116.925755))){
-            console.log("true")
-        }
-        else{
-            console.log("false")
-        }
+    function userIsInZone(){
+        return ((currentUser.coordinates.longitude > -116.925793) && (currentUser.coordinates.longitude < -116.922382))
+            && currentUser.coordinates.latitude < 32.508180 && currentUser.coordinates.latitude > 32.505300;
     }
 
     async function sendAlarm() {
-        if(!helping){
+        if(!helping && userIsInZone()){
             const docRef = doc(db, "alarms", auth.currentUser.email);
             const data = {
                 alarmingUser:auth.currentUser.email,

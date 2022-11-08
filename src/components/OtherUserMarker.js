@@ -14,23 +14,23 @@ export const OtherUserMarker = ({
     return (
         <View>
                 <Marker
-                    coordinate={user.coordinates}
-                >
-                    <TouchableOpacity onPress={
+                    coordinate={(user.coordinates.latitude && user.coordinates.longitude)
+                        ? user.coordinates : {latitude:0,longitude:0}}
+                    onPress={
                         victim ? ()=>{handleModal();setFocusedUser(user)} : () => {}
-                    }>
-                        <View style={victim ?
-                            [styles.victimContainer,visible ? {borderWidth: 12} :
-                                {borderWidth:0}] :
-                            [styles.container, visible ? {borderWidth: 6} :
-                                {borderWidth:0}]}>
-                            <Image style={victim ?
-                                [styles.victim,visible ? {width:60,height:60} :
-                                    {width:0,height:0}] :
-                                [styles.image,visible ? {width:35,height:35} :
-                                    {width:0,height:0}]} source={user.pictureUrl ? {uri:user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg') }/>
-                        </View>
-                    </TouchableOpacity>
+                    }
+                >
+                    <View style={victim ?
+                        [styles.victimContainer,visible ? {borderWidth: 12} :
+                            {borderWidth:0}] :
+                        [styles.container, visible ? {borderWidth: 6} :
+                            {borderWidth:0}]}>
+                        <Image style={victim ?
+                            [styles.victim,visible ? {width:60,height:60} :
+                                {width:0,height:0}] :
+                            [styles.image,visible ? {width:35,height:35} :
+                                {width:0,height:0}]} source={user.pictureUrl ? {uri:user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg') }/>
+                    </View>
                 </Marker>
         </View>
     );

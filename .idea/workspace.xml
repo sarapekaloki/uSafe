@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa" />
+    <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/OtherUserMarker.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/OtherUserMarker.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -67,6 +71,7 @@
       <workItem from="1667761791227" duration="19566000" />
       <workItem from="1667795006224" duration="10351000" />
       <workItem from="1667859565338" duration="1566000" />
+      <workItem from="1667865352722" duration="2417000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>
@@ -75,7 +80,14 @@
       <option name="project" value="LOCAL" />
       <updated>1667450297359</updated>
     </task>
-    <option name="localTasksCounter" value="2" />
+    <task id="LOCAL-00002" summary="Merge master y mapa">
+      <created>1667865518026</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1667865518026</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
