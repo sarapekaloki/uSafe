@@ -10,6 +10,15 @@ import {getFirestore, collection, query, where, onSnapshot} from "firebase/fires
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
 
+const sleep = (milliseconds) => {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
+}
+
 const AlertScreen = () =>{
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
@@ -120,6 +129,7 @@ const AlertScreen = () =>{
     async function changeAlert(){
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         mode ?  cancelAlarm() : sendAlarm();
+        sleep(5000);
     }
 
     return(
@@ -129,7 +139,7 @@ const AlertScreen = () =>{
         }}>
             <TouchableOpacity
                 style={styles.button2}
-                onPressOut={() => changeAlert()}
+                onPress={() => changeAlert()}
             >
                 <Image source={userIsInZone() ? (mode ? image2 : image1) : image3} style={styles.buttonImage}/>
             </TouchableOpacity>
