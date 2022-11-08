@@ -46,13 +46,13 @@ export default function MapScreen(){
 
     useEffect(()=>{
         const interval = setInterval(()=>{
-            if(currentUser){
-                updateUserLocation(
-                    userLocation,
-                    currentUser,
-                    setCurrentUser
-                ).then();
-            }
+            // if(currentUser){
+            //     updateUserLocation(
+            //         userLocation,
+            //         currentUser,
+            //         setCurrentUser
+            //     ).then();
+            // }
         },6000)
         return () => clearInterval(interval);
     });
