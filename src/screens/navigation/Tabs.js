@@ -1,7 +1,7 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect } from 'react';
 import OwnProfile from "../OwnProfile";
-import { Platform, StyleSheet, View, Image, Text, TouchableOpacity } from "react-native";
+import { Platform, StyleSheet, Image } from "react-native";
 import Settings from "../Settings"
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";

@@ -11,7 +11,7 @@ export const fetchAllAlarms = (setAllAlarms,setAcceptedAlarm,setHelpingUser,setA
         let aux_alarms=[];
         let aux_helping_user = false;
         let user_asked_for_help=false;
-        if(auth){
+        if(auth && auth.currentUser && auth.currentUser.email){
             querySnapshot.forEach((doc) => {
                 aux_alarms.push(doc.data());
                 if(doc.data().users.includes(auth.currentUser.email)){

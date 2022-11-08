@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as Haptics from 'expo-haptics';
 import { useState , useEffect } from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Platform, Vibration} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
 import image3 from '../../../assets/img/buttonUnpressedGray.png';
@@ -9,6 +9,8 @@ import {deleteDoc, doc, getDocs, setDoc, updateDoc} from "firebase/firestore";
 import {getFirestore, collection, query, where, onSnapshot} from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
+
+
 
 const sleep = (milliseconds) => {
     var start = new Date().getTime();
@@ -23,11 +25,12 @@ const AlertScreen = () =>{
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
     const [ gotInfo, set_gotInfo ] = useState(false);
-    const modoNoAlerta = "Iniciar Modo Alerta!"
-    const modoAlerta = "Terminar Modo Alerta?"
+    const modoNoAlerta = "¡Iniciar Modo Alerta!"
+    const modoAlerta = "¿Terminar Modo Alerta?"
     const [ mode , set_mode ] = useState(false)
     const [ currentUser , set_currentUser] = useState({})
     const [ helping, set_helping ] = useState(false)
+    const tabColor = Platform.OS =='ios'? '#c9c9c9': userIsInZone()?'#D4B2EF': '#a3a3a3'
     // const backgroundColor = userIsInZone() ? '#D4B2EF' : '#a3a3a3';
 
     async function fetchCurrentUser(){
@@ -127,7 +130,7 @@ const AlertScreen = () =>{
     }
 
     async function changeAlert(){
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+        Vibration.vibrate(2000)
         mode ?  cancelAlarm() : sendAlarm();
         sleep(5000);
     }
@@ -137,6 +140,8 @@ const AlertScreen = () =>{
             backgroundColor: userIsInZone() ? '#D4B2EF' : '#a3a3a3',
             flex: 1
         }}>
+            <View style={[styles.pullTab, {backgroundColor: tabColor}]}>
+            </View>
             <TouchableOpacity
                 style={styles.button2}
                 onPress={() => changeAlert()}
@@ -157,6 +162,13 @@ const styles = StyleSheet.create({
         fontWeight: "bold",
         top: 110,
         alignSelf: "center"
+    },
+    pullTab:{
+        width: 100,
+        height:7,
+        alignSelf:'center',
+        marginTop: 7,
+        borderRadius: 10
     },
     button: {
         height: 50,
