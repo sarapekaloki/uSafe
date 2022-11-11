@@ -29,9 +29,6 @@
     },
     "web": {
       "favicon": "./assets/favicon.png"
-    },
-    "infoPlist": {
-      "NSLocationWhenInUseUsageDescription": "uSafe quiere tener acceso a tu ubicación"
     }
   }
 }

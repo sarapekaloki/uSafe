@@ -110,9 +110,9 @@ const RegisterScreen = () => {
         const docRef = doc(firestore, "users2", email.toLowerCase());
         const data = {
             coordinates: {longitude:0, latitude:0},
-            email: email,
-            helpResponses:0,
-            pictureUrl:"",
+            email: email.toLowerCase(),
+            helpResponses: 0,
+            pictureUrl: "",
             username: username
         };
         await setDoc(docRef, data);

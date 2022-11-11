@@ -54,6 +54,7 @@ const LoginScreen = () => {
                 behavior={Platform.OS ==="android"?"height":"padding"}
             >
             <View>
+
             <Text style= {styles.headerText}> Iniciar Sesión</Text>
                 <ScrollView style = {styles.scrollView} >
                 <View style= {styles.whiteBox}>
@@ -119,7 +120,7 @@ const styles = StyleSheet.create({
     button: {
         justifyContent: 'center',
         alignItems: 'center',
-        marginTop: 40,
+        marginTop: 20,
         backgroundColor:'#D4B2EF',
         width: '80%',
         padding: 15,
