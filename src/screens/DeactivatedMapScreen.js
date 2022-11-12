@@ -16,10 +16,10 @@ export default function DeactivatedMapScreen(){
     return (
         <View style={{justifyContent:'center',alignItems:'center', backgroundColor:'rgb(200,200,200)'}}>
             <View style={styles.container}>
-                <Image style={styles.logo} source={require('../assets/img/buttonUnavailable.png')}/>
+                <Image style={styles.logo} source={require('../../assets/img/buttonUnavailable.png')}/>
                 <View styles={styles.textContainer}>
                     <Text style={[styles.text,{fontSize:FONT_BACK_LABEL}]}>Para usar el mapa ve a las preferencias de
-                        tu dispositivo y habilita la ubicación para la app.</Text>
+                        tu dispositivo y habilita la ubicación para la app. Recuerda que debes estar en CETYS para ver y utilizar el mapa</Text>
                 </View>
             </View>
         </View>

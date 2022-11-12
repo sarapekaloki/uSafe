@@ -26,6 +26,7 @@ export default function MapScreen(){
     const [helpingUser, setHelpingUser] = useState(false);
     const [gotInfo, setGotInfo] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
+    const [locationPermission, setLocationPermission] = useState(false);
     const [isRejectionModalVisible, setIsRejectionModalVisible] = useState(false);
     const [userLocation, setUserLocation] = useState({
         latitude:32.505008,longitude:-116.923947
@@ -47,7 +48,7 @@ export default function MapScreen(){
     useEffect(()=>{
         const interval = setInterval(()=>{
             if(currentUser){
-                updateUserLocation(currentUser).then();
+                updateUserLocation(currentUser,setLocationPermission).then();
             }
         },6000)
         return () => clearInterval(interval);
