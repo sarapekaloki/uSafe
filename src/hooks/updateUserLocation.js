@@ -2,7 +2,7 @@ import {doc, getFirestore, updateDoc} from "firebase/firestore";
 import {auth} from "../../firebase";
 import * as Location from "expo-location";
 
-export const updateUserLocation = async (userLocation, currentUser, setCurrentUser) => {
+export const updateUserLocation = async (currentUser) => {
     const db = getFirestore();
     let { status } = await Location.requestForegroundPermissionsAsync();
     if(status !== 'granted'){

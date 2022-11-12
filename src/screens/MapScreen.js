@@ -33,7 +33,7 @@ export default function MapScreen(){
 
     useEffect(() => {
         if(!gotInfo || !currentUser){
-            getCurrentUser(setCurrentUser, setUserLocation).then();
+            getCurrentUser(setCurrentUser).then();
             fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
             fetchAllUsers(setAllUsers);
             setGotInfo(true);
@@ -47,11 +47,7 @@ export default function MapScreen(){
     useEffect(()=>{
         const interval = setInterval(()=>{
             if(currentUser){
-                updateUserLocation(
-                    userLocation,
-                    currentUser,
-                    setCurrentUser
-                ).then();
+                updateUserLocation(currentUser).then();
             }
         },6000)
         return () => clearInterval(interval);
