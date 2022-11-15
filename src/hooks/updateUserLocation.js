@@ -6,13 +6,10 @@ export const updateUserLocation = async (currentUser,setLocationPermission) => {
     const db = getFirestore();
     let { status } = await Location.requestForegroundPermissionsAsync();
     if(status !== 'granted'){
-        console.log('No se puede ver la ubicacion');
-        // alert('Permission denied');
         setLocationPermission(false);
         return;
     }
     setLocationPermission(true);
-    console.log('Si se puede ver la ubicacion');
     let location = await Location.getCurrentPositionAsync({});
     const current = {
         latitude: location.coords.latitude,
