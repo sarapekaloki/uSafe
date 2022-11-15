@@ -111,8 +111,8 @@ const RegisterScreen = () => {
         const data = {
             coordinates: {longitude:0, latitude:0},
             email: email.toLowerCase(),
-            helpResponses:0,
-            pictureUrl:"",
+            helpResponses: 0,
+            pictureUrl: "",
             username: username
         };
         await setDoc(docRef, data);

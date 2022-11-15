@@ -1,9 +1,10 @@
 import * as React from 'react';
 import * as Haptics from 'expo-haptics';
 import { useState , useEffect } from 'react';
-import {View, Text, TouchableOpacity, StyleSheet, Image} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Platform, Vibration} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
+import image3 from '../../../assets/img/buttonUnpressedGray.png';
 import {deleteDoc, doc, getDocs, setDoc, updateDoc} from "firebase/firestore";
 import {getFirestore, collection, query, where, onSnapshot} from "firebase/firestore";
 import firebase from 'firebase/compat/app';
@@ -11,16 +12,26 @@ import {auth, firebaseConfig} from "../../../firebase";
 
 
 
+const sleep = (milliseconds) => {
+    var start = new Date().getTime();
+    for (var i = 0; i < 1e7; i++) {
+        if ((new Date().getTime() - start) > milliseconds){
+            break;
+        }
+    }
+}
 
 const AlertScreen = () =>{
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
     const [ gotInfo, set_gotInfo ] = useState(false);
-    const modoNoAlerta = "Iniciar Modo Alerta!"
-    const modoAlerta = "Terminar Modo Alerta?"
+    const modoNoAlerta = "¡Iniciar Modo Alerta!"
+    const modoAlerta = "¿Terminar Modo Alerta?"
     const [ mode , set_mode ] = useState(false)
     const [ currentUser , set_currentUser] = useState({})
     const [ helping, set_helping ] = useState(false)
+    const tabColor = Platform.OS =='ios'? '#c9c9c9': userIsInZone()?'#D4B2EF': '#a3a3a3'
+    // const backgroundColor = userIsInZone() ? '#D4B2EF' : '#a3a3a3';
 
     async function fetchCurrentUser(){
         const usersRef = collection(db, "users2");
@@ -33,38 +44,27 @@ const AlertScreen = () =>{
         })
     }
 
-    // useEffect(() => {
-    //     const alarmsRef = collection(db, "alarms");
-    //     getDocs(alarmsRef).then((res) => {
-    //         let aux = false;
-    //         res.forEach((doc) => {
-    //             if(doc.data().users.includes(auth.currentUser.email)){
-    //                 aux = true;
-    //             }
-    //         })
-    //         set_helping(aux);
-    //     })
-    // })
-
     useEffect( () => {
         if(!gotInfo){
-            fetchCurrentUser().then();
-            const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
-            onSnapshot(q, (querySnapshot) => {
-                let alertMode = false
-                let aux = false
-                querySnapshot.forEach((doc) => {
-                    if(doc.data().alarmingUser === auth.currentUser.email) {
-                        alertMode = true
-                    }
-                    if(doc.data().users.includes(auth.currentUser.email)){
-                        aux = true
-                    }
+            if(auth){
+                fetchCurrentUser().then();
+                const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
+                onSnapshot(q, (querySnapshot) => {
+                    let alertMode = false
+                    let aux = false
+                    querySnapshot.forEach((doc) => {
+                        if(doc.data().alarmingUser === auth.currentUser.email) {
+                            alertMode = true
+                        }
+                        if(doc.data().users.includes(auth.currentUser.email)){
+                            aux = true
+                        }
+                    });
+                    set_mode(alertMode)
+                    set_helping(aux)
                 });
-                set_mode(alertMode)
-                set_helping(aux)
-            });
-            set_gotInfo(true);
+                set_gotInfo(true);
+            }
         }
     })
 
@@ -72,22 +72,31 @@ const AlertScreen = () =>{
     }, [mode,helping] )
 
     function userIsInZone(){
-        return ((currentUser.coordinates.longitude > -116.925793) && (currentUser.coordinates.longitude < -116.922382))
-            && currentUser.coordinates.latitude < 32.508180 && currentUser.coordinates.latitude > 32.505300;
+        if(currentUser && currentUser.coordinates && currentUser.coordinates.latitude && currentUser.coordinates.longitude){
+            return ((currentUser.coordinates.longitude > -116.925793) && (currentUser.coordinates.longitude < -116.922382))
+                && currentUser.coordinates.latitude < 32.508180 && currentUser.coordinates.latitude > 32.505300;
+        }
+        return false;
     }
 
     async function sendAlarm() {
-        if(!helping && userIsInZone()){
-            const docRef = doc(db, "alarms", auth.currentUser.email);
-            const data = {
-                alarmingUser:auth.currentUser.email,
-                users:[]
-            };
-            await setDoc(docRef, data)
+        if(userIsInZone()){
+            if(!helping){
+                const docRef = doc(db, "alarms", auth.currentUser.email);
+                const data = {
+                    alarmingUser:auth.currentUser.email,
+                    users:[]
+                };
+                await setDoc(docRef, data)
+            }
+            else{
+                alert("¡No puedes entrar en modo alerta mientras ayudas a alguien!")
+            }
         }
         else{
-            alert("No puedes entrar en modo alerta mientras ayudas a alguien!")
+            alert("¡No puedes entrar en modo alerta fuera de CETYS!")
         }
+
     }
 
     async function cancelAlarm() {
@@ -121,17 +130,23 @@ const AlertScreen = () =>{
     }
 
     async function changeAlert(){
-        Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
+        Vibration.vibrate(2000)
         mode ?  cancelAlarm() : sendAlarm();
+        sleep(5000);
     }
 
     return(
-        <View style={styles.modal}>
+        <View style={{
+            backgroundColor: userIsInZone() ? '#D4B2EF' : '#a3a3a3',
+            flex: 1
+        }}>
+            <View style={[styles.pullTab, {backgroundColor: tabColor}]}>
+            </View>
             <TouchableOpacity
                 style={styles.button2}
-                onPressOut={() => changeAlert()}
+                onPress={() => changeAlert()}
             >
-                <Image source={mode ? image2 : image1} style={styles.buttonImage}/>
+                <Image source={userIsInZone() ? (mode ? image2 : image1) : image3} style={styles.buttonImage}/>
             </TouchableOpacity>
             <Text style={styles.message}>
                 {mode ? modoAlerta : modoNoAlerta}
@@ -148,9 +163,12 @@ const styles = StyleSheet.create({
         top: 110,
         alignSelf: "center"
     },
-    modal:{
-        backgroundColor: '#D4B2EF',
-        flex:1,
+    pullTab:{
+        width: 100,
+        height:7,
+        alignSelf:'center',
+        marginTop: 7,
+        borderRadius: 10
     },
     button: {
         height: 50,

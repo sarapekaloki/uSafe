@@ -32,6 +32,7 @@ export default function MapScreen(){
         latitude:32.505008,longitude:-116.923947
     });
 
+
     useEffect(() => {
         if(!gotInfo || !currentUser){
             getCurrentUser(setCurrentUser).then();
@@ -104,8 +105,8 @@ export default function MapScreen(){
             >
 
                 <Marker coordinate={currentUser ? currentUser.coordinates : userLocation}>
-                    <View style={styles.userLocation2}>
-                        <Image style={styles.userLocation}/>
+                    <View style={[styles.userLocation2, {borderColor:askedForHelp?'rgba(98, 0, 255, 0.3)':'rgba(0, 66, 255, 0.3)' }]}>
+                        <Image style={[styles.userLocation, {backgroundColor: askedForHelp? '#6540F5': '#0035f2'}]}/>
                     </View>
                 </Marker>
 
@@ -148,7 +149,6 @@ const styles = StyleSheet.create({
     userLocation:{
         width:20,
         height:20,
-        backgroundColor: 'rgba(101, 64, 245,1)',
         borderRadius: 100,
         borderColor:'white',
         borderWidth:1
@@ -156,7 +156,6 @@ const styles = StyleSheet.create({
     userLocation2:{
         borderWidth: 28,
         borderRadius: 100,
-        borderColor: 'rgba(101, 64, 245, .3)',
     }
 });
 

@@ -1,24 +1,61 @@
 import React, { useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { ref, getStorage, deleteObject } from "firebase/storage";
-import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions, KeyboardAvoidingView } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
 import { auth } from "../../firebase";
-import {getFirestore, doc, deleteDoc} from 'firebase/firestore';
-const screenWidth = Dimensions.get("screen").width;
-// import {storage} from '@react-native-firebase/storage';
+import {getFirestore, doc, deleteDoc, query, onSnapshot, where, collection} from 'firebase/firestore';
 
 const DeleteAccount = () => {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const db = getFirestore();
     const currentEmail = auth.currentUser.email;
     const currentUser = auth.currentUser;
     const storage = getStorage();
-    const firestore = getFirestore()
+    const firestore = getFirestore();
+    const [ gotInfo, set_gotInfo ] = useState(false);
+    const [ disabledButton , setDisabledButton ] = useState(false);
+  
+    useEffect( () => {
+        if(!gotInfo){
+            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
+            onSnapshot(q,  (querySnapshot) => {
+                let alertModeActive = false
+                querySnapshot.forEach((doc) => {
+                    if(doc.data().alarmingUser === auth.currentUser.email){
+                        alertModeActive = true
+                    } 
+                });
+                setDisabledButton(alertModeActive);
+            })
+
+            const q2 = query(collection(db, "alarms"), where("users", "array-contains", auth.currentUser.email));
+            onSnapshot(q2,  (querySnapshot) => {
+                let helpingMode = false
+                querySnapshot.forEach((doc) => {
+                    if(doc){
+                        helpingMode = true
+                    }
+                });
+                setDisabledButton(helpingMode);
+            });
+        set_gotInfo(true)
+        }
+    })
 
     const deleteUser = () => {
         deleteObject(ref(storage,`users-images/${currentEmail}`))
-        // TODO: que pedo con alarms , y fotos de perfil guardadas en storage
+        const storageRef = ref(storage, `users-images/${currentEmail}`);
+
+        // TODO: que pedo con alarms
         currentUser.delete().then(() => {
             deleteDoc(doc(firestore, "users2", currentEmail.toLowerCase()));
+            if(storageRef){
+                deleteObject(storageRef).then(() => {
+                    // File deleted successfully
+                }).catch((error) => {
+                    // Uh-oh, an error occurred!
+                });
+            }
             navigation.replace("Register");
         })
     }
@@ -45,7 +82,7 @@ const DeleteAccount = () => {
                 <Text style ={styles.deleteMessage}>Estas a punto de eliminar tu cuenta, esta acción es irreversible. Si estas seguro, presiona el botón de eliminar cuenta. </Text>
         </View>
 
-        <TouchableOpacity style = {styles.confirmButton} onPress = {deleteUser}>
+        <TouchableOpacity style = {disabledButton? styles.disabledButton: styles.confirmButton} onPress = {deleteUser} disabled = {disabledButton}>
             <Text style={styles.deleteText} >Eliminar cuenta</Text>
         </TouchableOpacity>
     </KeyboardAvoidingView>
@@ -130,5 +167,14 @@ const styles = StyleSheet.create({
         fontWeight: '700',
         fontSize: 16
      
+    },
+    disabledButton: {
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 15,
+        backgroundColor:'#b8b8b8',
+        width: '90%',
+        borderRadius: 10,
     }
 })
