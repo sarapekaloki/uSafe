@@ -21,7 +21,6 @@ const LoginScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [anErrorOccurs, setError] = useState(false)
-
     const navigation = useNavigation()
 
     useEffect(() => {
@@ -53,9 +52,7 @@ const LoginScreen = () => {
                 style={styles.container}
                 behavior={Platform.OS ==="android"?"height":"padding"}
             >
-            <View>
 
-            <Text style= {styles.headerText}> Iniciar Sesión</Text>
                 <ScrollView style = {styles.scrollView} >
                 <View style= {styles.whiteBox}>
 
@@ -63,6 +60,8 @@ const LoginScreen = () => {
                     style={styles.logo}
                     source={require( '../../assets/img/logoPurple.png')}
                 />
+                <Text style= {styles.headerText}> Iniciar Sesión</Text>
+
                 <View  style = {styles.inputContainer}>
                     <Text style = {styles.text} >Correo</Text>
                     <TextInput
@@ -105,11 +104,9 @@ const LoginScreen = () => {
                         </Text>
                 </View>
                 </View>
-            </ScrollView>
+            </ScrollView> 
+            </KeyboardAvoidingView>               
 
-            </View>
-                
-        </KeyboardAvoidingView>
         
     )
 }
@@ -121,11 +118,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center',
         marginTop: 20,
-        backgroundColor:'#D4B2EF',
+        backgroundColor:'#914FFC',
         width: '80%',
         padding: 15,
         borderRadius: 10,
-        elevation:10
+        elevation: 10
     },
     buttonText: {
         color: 'white',
@@ -134,8 +131,8 @@ const styles = StyleSheet.create({
     },
     container: {
         flex:1,
-        backgroundColor: '#28194C',
         height: '100%',
+        backgroundColor: 'white'
     },
     errorText: {
         paddingTop: 10,
@@ -143,30 +140,29 @@ const styles = StyleSheet.create({
     },
     headerText:{
         fontWeight: 'bold',
-        fontSize: 30,
-        marginTop: 60,
-        marginBottom: 10,
-        color: 'white',
-        paddingVertical: 10,
-        paddingHorizontal: 10
+        fontSize: 26,
+        marginBottom: 5,
+        color: '#28194C',
     },
     input: {
-        backgroundColor: '#EBEBEB',
         paddingHorizontal: 10,
         paddingVertical: 10,
         borderRadius: 10,
         marginTop: 10,
-        height: 40,
+        height: 45,
         width:'100%',
-        elevation:10
+        elevation:10,
+        borderWidth: 1,
+        borderColor: '#CFCFCF'
     },
     inputContainer: {
-        width: '80%',
+        width: '80%'
     },
     logo: {
-        width: 250,
-        height: 250,
-        marginTop: 20,
+        width: 230,
+        height: 230,
+        marginTop: '10%',
+        marginBottom: 30
     },
     passwordContainer:{
         flexDirection: 'row',
@@ -179,11 +175,9 @@ const styles = StyleSheet.create({
 
     },
     scrollView: {
-        backgroundColor:'white',
         width:'100%',
-        height:'100%',
-        borderTopLeftRadius: 30,
-        borderTopRightRadius: 30,
+        height: '100%'
+    
     },
     text: {
         fontWeight: 'bold',
@@ -195,5 +189,6 @@ const styles = StyleSheet.create({
         flex: 1,
         justifyContent: 'center',
         alignItems: 'center',
+        height: '100%'
     },
 })

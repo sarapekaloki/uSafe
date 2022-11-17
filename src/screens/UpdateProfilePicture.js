@@ -21,15 +21,15 @@ const UpdateProfilePicture = () => {
 
 
 //Change profile picture
- const changeProfilePic = () =>  {
+ const changeProfilePic = async() =>  {
     if(userData.pictureUrl != ""){
-        deleteObject(ref(storage,`users-images/${currentEmail}`))
+        await deleteObject(ref(storage,`users-images/${currentEmail}`))
     }
     const storageRef = ref(storage, `users-images/${currentEmail}`);
     try {
       // Here we transform our uri into a blob image
       fetch(image).then((res) => {
-        res.blob().then((myBlob) => {
+        res.blob().then(async (myBlob) => {
             const uploadTask = uploadBytesResumable(storageRef, myBlob);
             // When executing our opload
             uploadTask.on(
@@ -58,14 +58,9 @@ const UpdateProfilePicture = () => {
                 }
             );
         })
-      });
-      // Then we get the reference of WHERE exactly in our bucket we want to store the image
-  
-      // Then we create our job
-  
-     
+      });  
     } catch (error) {
-      console.log(error);
+        console.log(error);
     }
   }
     
@@ -104,7 +99,7 @@ const UpdateProfilePicture = () => {
                 allowsEditing: true,
                 selectionLimit: 1,
                 aspect: [4, 3],
-                quality: 1,
+                quality: 0,
               });
             if (!result.cancelled) {
             setImage(result.uri);
@@ -214,7 +209,7 @@ const styles = StyleSheet.create({
     },
       buttonSectionImageModal: {
         width: '90%',
-        height: '15%',
+        height: '13%',
         marginTop: "5%",
         backgroundColor: "#F1F1F1",
         borderRadius: 15,

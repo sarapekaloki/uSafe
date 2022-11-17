@@ -1,6 +1,7 @@
 import * as React from 'react';
-import * as Haptics from 'expo-haptics';
 import { useState , useEffect } from 'react';
+// import {Notifications} from 'expo';
+// import messaging from '@react-native-firebase/messaging';
 import {View, Text, TouchableOpacity, StyleSheet, Image, Platform, Vibration} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
@@ -11,7 +12,17 @@ import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
 
 
+// const getToken = async () => {
+//     const {status} = await messaging().requestPermission();
 
+//     if(status !== "granted") {
+//         return;
+//     }
+
+//     const token = await Notifications.getExpoPushTokenAsync();
+//     console.log(token);
+//     return token;
+// }
 const sleep = (milliseconds) => {
     var start = new Date().getTime();
     for (var i = 0; i < 1e7; i++) {
@@ -82,6 +93,7 @@ const AlertScreen = () =>{
     async function sendAlarm() {
         if(userIsInZone()){
             if(!helping){
+                // getToken();
                 const docRef = doc(db, "alarms", auth.currentUser.email);
                 const data = {
                     alarmingUser:auth.currentUser.email,
