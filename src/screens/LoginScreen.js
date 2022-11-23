@@ -14,6 +14,16 @@ import {
 import { auth } from "../../firebase";
 import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
+import AsyncStorage from '@react-native-async-storage/async-storage';
+
+export const setData = async (key, value) => {
+    value = JSON.stringify(value);
+    await AsyncStorage.setItem(key, value);
+};
+
+export const getData = async (key) => {
+    return JSON.parse(await AsyncStorage.getItem(key));
+}
 
 const LoginScreen = () => {
     const {passwordVisibility, rightIcon, handlePasswordVisibility} =
@@ -29,16 +39,21 @@ const LoginScreen = () => {
                 navigation.replace("Tabs")
 
             }
-        })
+        });
+        getData("userCredentials").then((res) => {
+            if (!res) return;
+            handleLogin(res.email, res.password);
+        });
         return unsubscribe
     }, [])
 
-    const handleLogin = () => {
+    const handleLogin = (email, password) => {
         auth
         .signInWithEmailAndPassword(email, password)
         .then(userCredentials => {
             setError(false);
             userCredentials.user;
+            setData("userCredentials", {email, password});
         })
         .catch(error => {
             if (error.code === 'auth/invalid-email' || 'auth/wrong-password') {
@@ -46,6 +61,8 @@ const LoginScreen = () => {
               }
            })
     }
+
+    
 
     return(
             <KeyboardAvoidingView
@@ -88,7 +105,7 @@ const LoginScreen = () => {
                 </View>
 
                 <TouchableOpacity
-                    onPress={handleLogin}
+                    onPress={() => handleLogin(email, password)}
                     style = {styles.button}
                 >
                     <Text style = {styles.buttonText}>Iniciar Sesión</Text>

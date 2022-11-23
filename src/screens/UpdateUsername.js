@@ -20,7 +20,8 @@ const UpdateUsername = () => {
             email: userData.email,
             helpResponses: userData.helpResponses,
             pictureUrl: userData.pictureUrl,
-            username: updatedUsername
+            username: updatedUsername,
+            token: userData.token
         };
         setUpdatedUsername(updatedUsername.trim())
         if(updatedUsername != ""){
@@ -55,6 +56,7 @@ const UpdateUsername = () => {
                         placeholder={userData.username}
                         onChangeText = {text => setUpdatedUsername(text)}
                         style = {styles.input}
+                        maxLength={15}
                     />
                 <View style = {styles.infoContainer}>
                     <Image style={styles.infoIcon} source={require('../../assets/icons/infoIcon.png')}></Image>

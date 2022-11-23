@@ -21,6 +21,7 @@ const UpdatePassword = () => {
     const [passwordLenghtError, setPasswordLenghtError] = useState(false);
     const [passwordNumberError, setPasswordNumberError] = useState(false); 
     const [passwordUpperLowerCaseError, setPasswordUpperLowerCaseError] = useState(false);
+    const [disableButton, setDisableButton] = useState(false);
 
 
     const updatePassword = () => {
@@ -42,6 +43,7 @@ const UpdatePassword = () => {
          setCurrentPasswordError(false);
 
          if(!res.lenght && !res.number && !res.upperLower){
+            setDisableButton(true);
              setNewPasswordError(true);
              currentUser.updatePassword(newPassword).then(() => {
                  sleep(1000);
@@ -169,7 +171,7 @@ const UpdatePassword = () => {
                     <Text style =  {passwordNumberError? styles.errorText: styles.noErrorText}>3. Contener por lo menos un número </Text>
                 </View>
             </View>
-            <TouchableOpacity style = {styles.confirmButton} onPress={updatePassword}>
+            <TouchableOpacity style = {disableButton? styles.disabledButton: styles.confirmButton} onPress={updatePassword} disabled={disableButton}>
                 <Text style={styles.buttonText}>Confirmar</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
@@ -283,5 +285,14 @@ const styles = StyleSheet.create({
     emptyErrorText:{
         top:-12,
         color: 'red'
+    },
+    disabledButton: {
+        height: 45,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: 15,
+        backgroundColor:'#b8b8b8',
+        width: '90%',
+        borderRadius: 10,
     },
 })

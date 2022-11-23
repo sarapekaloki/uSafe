@@ -10,6 +10,8 @@ import {
     ScrollView,
     View
 } from "react-native";
+import * as Notifications from 'expo-notifications';
+import { Platform } from "react-native";
 import {useNavigation} from "@react-navigation/native";
 import { MaterialCommunityIcons} from "@expo/vector-icons";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
@@ -104,8 +106,34 @@ const RegisterScreen = () => {
                 })
         }
     }
+    async function registerForPushNotificationsAsync() {
+        let token;
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            alert('Failed to get push token for push notification!');
+            return;
+        }
+        token = (await Notifications.getExpoPushTokenAsync()).data;
+        return token;
+        
+      
+        // if (Platform.OS === 'android') {
+        //   Notifications.setNotificationChannelAsync('default', {
+        //     name: 'default',
+        //     importance: Notifications.AndroidImportance.MAX,
+        //     vibrationPattern: [0, 250, 250, 250],
+        //     lightColor: '#FF231F7C',
+        //   });
+        // }
+    }      
 
     const addData =  async() => {
+        const token = await registerForPushNotificationsAsync();
         const firestore = getFirestore();
         const docRef = doc(firestore, "users2", email.toLowerCase());
         const data = {
@@ -113,7 +141,8 @@ const RegisterScreen = () => {
             email: email.toLowerCase(),
             helpResponses: 0,
             pictureUrl: "",
-            username: username
+            username: username,
+            token: token
         };
         await setDoc(docRef, data);
     }
@@ -137,6 +166,7 @@ const RegisterScreen = () => {
                             value={username}
                             onChangeText={text => setUsername(text)}
                             style = {styles.input}
+                            maxLength={15}
                         />
                 <Text style =  {usernameErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
                 <Text style = {styles.text} >Correo</Text>

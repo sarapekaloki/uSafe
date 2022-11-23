@@ -15,11 +15,11 @@ const Settings = () => {
     const navigation = useNavigation();
     const currentEmail = auth.currentUser.email;
     const firestore = getFirestore();
-    const [imageModal, imageModalOpen] = useState(false);
     const [currentUsername, setCurrentUsername] = useState('');  
     const [currentCoordinates, setCurrentCoordinates] = useState({});
     const [currentProfilePicture, setProfilePicture] = useState('');  
     const [helpResponses, setHelpResponses] = useState('');
+    const [token, setToken] = useState('');
     const [gotInfo, setGotInfo] = useState(false);
 
     useEffect(() => {
@@ -29,7 +29,8 @@ const Settings = () => {
                 setCurrentUsername(doc.data().username)
                 setHelpResponses(doc.data().helpResponses)
                 setProfilePicture(doc.data().pictureUrl)
-                setCurrentCoordinates(doc.data().coordinates)    
+                setCurrentCoordinates(doc.data().coordinates)   
+                setToken(doc.data().token) 
                 
             });
             setGotInfo(true);
@@ -56,7 +57,8 @@ const Settings = () => {
                         email: currentEmail, 
                         coordinates: currentCoordinates,
                         helpResponses: helpResponses,
-                        pictureUrl: currentProfilePicture
+                        pictureUrl: currentProfilePicture,
+                        token:token
                     }})}>
                     <Text style={styles.buttonText} >Cambiar foto de perfil</Text>
                     <Image style={styles.rightArrow} source={require('../../assets/icons/rightArrow.png')}></Image>
@@ -68,7 +70,8 @@ const Settings = () => {
                         email: currentEmail, 
                         coordinates: currentCoordinates,
                         helpResponses: helpResponses,
-                        pictureUrl: currentProfilePicture
+                        pictureUrl: currentProfilePicture,
+                        token: token
                     }})}>
                     <Text style={styles.buttonText} >Cambiar nombre de usuario</Text>
                     <Image style={styles.rightArrow} source={require('../../assets/icons/rightArrow.png')}></Image>
