@@ -18,6 +18,7 @@ const UpdateProfilePicture = () => {
     const [pickerResponse, setPickerResponse] = useState(null);
     const [image, setImage] = useState(null);
     const userData = route.params.userData;
+    const [disableButton, setDisableButton] = useState(true);
 
 
 //Change profile picture
@@ -29,6 +30,7 @@ const UpdateProfilePicture = () => {
     try {
       // Here we transform our uri into a blob image
       fetch(image).then((res) => {
+        setDisableButton(false);
         res.blob().then(async (myBlob) => {
             const uploadTask = uploadBytesResumable(storageRef, myBlob);
             // When executing our opload
@@ -46,7 +48,8 @@ const UpdateProfilePicture = () => {
                         email: userData.email,
                         helpResponses: userData.helpResponses,
                         pictureUrl: url,
-                        username: userData.username
+                        username: userData.username,
+                        token: userData.token
                     };
                 
                     const docRef = doc(firestore, "users2", currentEmail);
@@ -76,7 +79,7 @@ const UpdateProfilePicture = () => {
                 allowsEditing: true,
                 selectionLimit: 1,
                 aspect: [4, 3],
-                quality: 1,
+                quality: 0,
               });
             if (!pickerResult.cancelled) {
                 setImage(pickerResult.uri);
@@ -144,10 +147,9 @@ const UpdateProfilePicture = () => {
                 <Image style={styles.infoIcon} source={require('../../assets/icons/infoIcon.png')}></Image>
                 <Text style ={styles.reminderMessage}>Recuerda que será visible para todos los usuarios</Text>
             </View>
-        <TouchableOpacity style = {image? styles.confirmButton: styles.disabledButton} onPress={changeProfilePic} disabled={image? false: true}>
+        <TouchableOpacity style = {image && disableButton? styles.confirmButton: styles.disabledButton} onPress={changeProfilePic} disabled={image&& disableButton? false: true}>
             <Text style={styles.deleteText} >Confirmar</Text>
         </TouchableOpacity>
-        
     </KeyboardAvoidingView>
     )
 }
@@ -159,7 +161,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         backgroundColor: '#FFF',
         height: '100%'
-        // justifyContent: 'center'
     },
     modalHeader: {
         backgroundColor: '#D4B2EF',
@@ -176,7 +177,6 @@ const styles = StyleSheet.create({
         marginTop:25,
         width: 180,
         height: 55
-        
     },
     modalContentsContainer: {
         flexDirection: "row",
@@ -242,8 +242,7 @@ const styles = StyleSheet.create({
     },
     infoContainer: {
         flexDirection: "row",
-        marginTop: 10,
-        marginLeft: 30
+        marginTop: 10
     },
     infoIcon: {
         width:15,
@@ -279,7 +278,5 @@ const styles = StyleSheet.create({
         color: 'white',
         fontWeight: '700',
         fontSize: 16
-     
     },
-
 })

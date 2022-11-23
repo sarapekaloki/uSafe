@@ -10,6 +10,8 @@ import * as Haptics from 'expo-haptics';
 import BottomSheet from "react-native-gesture-bottom-sheet";
 import image1 from '../../assets/img/buttonUnpressed.png'
 import image2 from '../../assets/img/buttonPressed2.png'
+import { setData } from "./LoginScreen";
+
 
 const OwnProfile = () => {
 
@@ -22,7 +24,9 @@ const OwnProfile = () => {
     const [profilePictureURL, setProfilePictureURL] = useState('')
     const [gotInfo, setGotInfo] = useState(false);
 
-    const handleSignOut = () => {
+
+    const handleSignOut =async  () => {
+        await setData("userCredentials", null);
         auth
         .signOut()
         .then(() => navigation.replace("Login"));
@@ -44,7 +48,7 @@ const OwnProfile = () => {
         });
     }
 
-
+   
     const [image, set_image ] = useState(image1)
     const bottomSheet = useRef();
     function changeAlert(){
@@ -82,6 +86,7 @@ const OwnProfile = () => {
             >
                 <Text style={styles.buttonText}> Cerrar Sesión </Text>
             </TouchableOpacity>
+          
        </View>
 
     )}
