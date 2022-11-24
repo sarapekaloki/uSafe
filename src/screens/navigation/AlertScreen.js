@@ -9,6 +9,7 @@ import {deleteDoc, doc, getDocs, setDoc, updateDoc} from "firebase/firestore";
 import {getFirestore, collection, query, where, onSnapshot} from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
+import {getCurrentUser} from "../../hooks/getCurrentUser";
 
 
 
@@ -31,37 +32,28 @@ const AlertScreen = () =>{
     const [ currentUser , set_currentUser] = useState({})
     const [ helping, set_helping ] = useState(false)
     const tabColor = Platform.OS =='ios'? '#c9c9c9': userIsInZone()?'#D4B2EF': '#a3a3a3'
-    // const backgroundColor = userIsInZone() ? '#D4B2EF' : '#a3a3a3';
-
-    async function fetchCurrentUser(){
-        const usersRef = collection(db, "users2");
-        await getDocs(usersRef).then((res) => {
-            res.forEach((doc) => {
-                if((doc.data().email).toLowerCase() === auth.currentUser.email){
-                    set_currentUser(doc.data());
-                }
-            })
-        })
-    }
+    const backgroundColor = userIsInZone() ? '#D4B2EF' : '#a3a3a3';
 
     useEffect( () => {
         if(!gotInfo){
             if(auth){
-                fetchCurrentUser().then();
+                getCurrentUser(set_currentUser).then();
                 const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
                 onSnapshot(q, (querySnapshot) => {
-                    let alertMode = false
-                    let aux = false
-                    querySnapshot.forEach((doc) => {
-                        if(doc.data().alarmingUser === auth.currentUser.email) {
-                            alertMode = true
-                        }
-                        if(doc.data().users.includes(auth.currentUser.email)){
-                            aux = true
-                        }
-                    });
-                    set_mode(alertMode)
-                    set_helping(aux)
+                        let alertMode = false
+                        let aux = false
+                    if(auth && auth.currentUser && auth.currentUser.email){
+                        querySnapshot.forEach((doc) => {
+                            if(doc.data().users.includes(auth.currentUser.email)){
+                                aux = true;
+                            }
+                            else if(doc.data().alarmingUser === auth.currentUser.email){
+                                alertMode = true
+                            }
+                        });
+                        set_mode(alertMode);
+                        set_helping(aux);
+                    }
                 });
                 set_gotInfo(true);
             }
@@ -69,7 +61,7 @@ const AlertScreen = () =>{
     })
 
     useEffect( () => {
-    }, [mode,helping] )
+    }, [mode,helping,currentUser] )
 
     function userIsInZone(){
         if(currentUser && currentUser.coordinates && currentUser.coordinates.latitude && currentUser.coordinates.longitude){

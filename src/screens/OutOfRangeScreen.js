@@ -1,7 +1,7 @@
 import React, {Image, StyleSheet, Text, View} from 'react-native';
 import Ionicons from "react-native-vector-icons/Ionicons";
 
-export default function DeactivatedMapScreen(){
+export default function OutOfRangeScreen(){
 
     const React = require('react-native');
 
@@ -18,8 +18,7 @@ export default function DeactivatedMapScreen(){
             <View style={styles.container}>
                 <Image style={styles.logo} source={require('../../assets/img/buttonUnavailable.png')}/>
                 <View styles={styles.textContainer}>
-                    <Text style={[styles.text,{fontSize:FONT_BACK_LABEL}]}>Para usar el mapa ve a las preferencias de
-                        tu dispositivo y habilita la ubicación para la app. Recuerda que debes estar en CETYS para ver y utilizar el mapa</Text>
+                    <Text style={[styles.text,{fontSize:FONT_BACK_LABEL}]}>Recuerda que debes estar en CETYS para ver y utilizar el mapa</Text>
                 </View>
             </View>
         </View>

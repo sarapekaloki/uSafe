@@ -3,6 +3,11 @@
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/updateUserLocation.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/updateUserLocation.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/DeactivatedMapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/OutOfRangeScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/AlertScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -33,12 +38,16 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hugui/WebstormProjects/uSafe/src/screens&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2022.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
 }</component>
   <component name="RecentsManager">
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\hugui\WebstormProjects\uSafe\src\screens" />
+    </key>
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\hugui\WebstormProjects\uSafe\src\screens" />
     </key>
@@ -75,6 +84,10 @@
       <workItem from="1668133201507" duration="4084000" />
       <workItem from="1668212797356" duration="2240000" />
       <workItem from="1668408020289" duration="618000" />
+      <workItem from="1668629426414" duration="1609000" />
+      <workItem from="1668643233671" duration="371000" />
+      <workItem from="1668745734774" duration="3463000" />
+      <workItem from="1669179061696" duration="380000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>

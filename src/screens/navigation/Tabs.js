@@ -8,10 +8,8 @@ import AlertScreen from "./AlertScreen";
 import {collection, getFirestore, onSnapshot, query, where} from "firebase/firestore";
 import firebase from "firebase/compat";
 import {auth, firebaseConfig} from "../../../firebase";
-import DeactivatedMapScreen from "../DeactivatedMapScreen";
+import OutOfRangeScreen from "../OutOfRangeScreen";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
-import {fetchAllAlarms} from "../../hooks/fetchAllAlarms";
-import {fetchAllUsers} from "../../hooks/fetchAllUsers";
 import {updateUserLocation} from "../../hooks/updateUserLocation";
 
 const Tab = createBottomTabNavigator()
@@ -23,30 +21,34 @@ const Tabs = () => {
     const [ alertMode , set_alertMode ] = useState(false);
     const [ gotInfo, setGotInfo ] = useState(false);
 
-    const [locationShared,setLocationShared] = useState(false);
-
     const backgroundColor = !alertMode ? '#fff' : '#28194C'
     const fontColor = !alertMode ? '#000' : '#fff'
 
     const [currentUser, setCurrentUser] = useState(null);
 
-    const [locationPermission, setLocationPermission] = useState(false);
-
-
     useEffect(() => {
         if(!gotInfo || !currentUser){
             getCurrentUser(setCurrentUser).then();
+            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
+            onSnapshot(q,  (querySnapshot) => {
+                let alertModeActive = false
+                querySnapshot.forEach((doc) => {
+                    if(doc.data().alarmingUser === auth.currentUser.email){
+                        alertModeActive = true
+                    }
+                });
+                set_alertMode(alertModeActive)
+            } )
             setGotInfo(true);
-
         }});
 
-    useEffect(()=>{
-    },[currentUser,locationPermission]);
+    useEffect( () => {}, [alertMode,currentUser]);
+
 
     useEffect(()=>{
         const interval = setInterval(()=>{
             if(currentUser){
-                updateUserLocation(currentUser,setLocationPermission).then();
+                updateUserLocation(currentUser).then();
             }
         },6000)
         return () => clearInterval(interval);
@@ -54,8 +56,8 @@ const Tabs = () => {
 
     function userIsInZone(){
         if(currentUser){
-            return ((currentUser.coordinates.longitude > -116.925793) && (currentUser.coordinates.longitude < -116.922382))
-                && currentUser.coordinates.latitude < 32.508180 && currentUser.coordinates.latitude > 32.505300;
+            return ((currentUser.coordinates.longitude > -116.925975) && (currentUser.coordinates.longitude < -116.922080))
+                && currentUser.coordinates.latitude < 32.508246 && currentUser.coordinates.latitude > 32.505197;
         }
         return false;
 
@@ -119,7 +121,7 @@ const Tabs = () => {
         }}
         />
 
-        <Tab.Screen name="Mapa" component={locationPermission && userIsInZone() ? MapScreen : DeactivatedMapScreen} options={{
+        <Tab.Screen name="Mapa" component={userIsInZone() ? MapScreen : OutOfRangeScreen} options={{
             tabBarIcon: ({ focused }) => (
                 <Image 
                     source={focused? (alertMode ? require( `../../../assets/icons/dark-map-selected.png`) : require( `../../../assets/icons/light-map-selected.png`)):(alertMode ? require( `../../../assets/icons/dark-map-unselected.png`) :  require( `../../../assets/icons/light-map-unselected.png`))}

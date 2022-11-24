@@ -29,7 +29,7 @@ export default function MapScreen(){
     const [locationPermission, setLocationPermission] = useState(false);
     const [isRejectionModalVisible, setIsRejectionModalVisible] = useState(false);
     const [userLocation, setUserLocation] = useState({
-        latitude:32.505008,longitude:-116.923947
+        latitude:32.506418,longitude: -116.923893
     });
 
 
@@ -40,20 +40,10 @@ export default function MapScreen(){
             fetchAllUsers(setAllUsers);
             setGotInfo(true);
 
-        }});
+    }});
 
     useEffect(()=>{
     },[currentUser]);
-
-
-    useEffect(()=>{
-        const interval = setInterval(()=>{
-            if(currentUser){
-                updateUserLocation(currentUser,setLocationPermission).then();
-            }
-        },6000)
-        return () => clearInterval(interval);
-    });
 
     const handleModalRejection = ()=>{
         setIsModalVisible(!isModalVisible);
@@ -70,14 +60,25 @@ export default function MapScreen(){
         setIsRejectionModalVisible(false);
     }
 
+    const setUserVisibility = (user) => {
+        if(!askedForHelp){
+            if(helpingUser){
+                return acceptedAlarm.alarmingUser === user.email ||
+                    acceptedAlarm.users.includes(user.email)
+            }
+            return allAlarms.map((alarm)=>alarm.alarmingUser).includes(user.email) ||
+                (acceptedAlarm && acceptedAlarm.users.includes(user.email));
+        }
+        return currentUserAlarm && currentUserAlarm.users.includes(user.email);
+
+    }
+
+
     const updateUserMarkers = ()=>{
         return allUsers.map((user,index) =>{
                 return <OtherUserMarker
                     key={index}
-                    visible={helpingUser ? (!!allAlarms.map((alarm)=>
-                        alarm.users.includes(auth.currentUser.email) ? alarm.users : []
-                    ).map(users=>users.includes(user.email))[0]) || acceptedAlarm.alarmingUser === user.email :
-                        askedForHelp ? currentUserAlarm && currentUserAlarm.users.includes(user.email) :true}
+                    visible={setUserVisibility(user)}
                     user={user}
                     victim={allAlarms.map((alarm)=>alarm.alarmingUser).includes(user.email)}
                     setFocusedUser={setFocusedUser}
@@ -99,8 +100,8 @@ export default function MapScreen(){
                 initialRegion={{
                     latitude:userLocation.latitude,
                     longitude:userLocation.longitude,
-                    latitudeDelta:0.09,
-                    longitudeDelta:0.04
+                    latitudeDelta:0.004,
+                    longitudeDelta:0.004
                 }}
             >
 
