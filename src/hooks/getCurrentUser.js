@@ -8,8 +8,10 @@ export const getCurrentUser = async (setCurrentUser) => {
     const q = query(collection(db, "users2"), where("email", "!=", ""));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            if(doc.data().email.toLowerCase() === auth.currentUser.email){
-                setCurrentUser(doc.data());
+            if(auth && auth.currentUser && auth.currentUser.email){
+                if(doc.data().email.toLowerCase() === auth.currentUser.email){
+                    setCurrentUser(doc.data());
+                }
             }
         });
     });

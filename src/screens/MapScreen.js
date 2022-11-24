@@ -67,9 +67,18 @@ export default function MapScreen(){
                     acceptedAlarm.users.includes(user.email)
             }
             return allAlarms.map((alarm)=>alarm.alarmingUser).includes(user.email) ||
-                (acceptedAlarm && acceptedAlarm.users.includes(user.email));
+                (acceptedAlarm && acceptedAlarm.users.includes(user.email)) || userIsInZone(user);
         }
         return currentUserAlarm && currentUserAlarm.users.includes(user.email);
+
+    }
+
+    function userIsInZone(user){
+        if(user){
+            return ((user.coordinates.longitude > -116.925975) && (user.coordinates.longitude < -116.922080))
+                && user.coordinates.latitude < 32.508246 && user.coordinates.latitude > 32.505197;
+        }
+        return false;
 
     }
 
