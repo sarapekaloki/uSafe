@@ -33,7 +33,8 @@ export const updateUserLocation = async (currentUser) => {
                 email:auth.currentUser.email,
                 helpResponses:currentUser.helpResponses,
                 pictureUrl:currentUser.pictureUrl,
-                username:currentUser.username
+                username:currentUser.username,
+                token: currentUser.token
             }
             updateDoc(userRef, userObject).then();
         }

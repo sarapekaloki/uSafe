@@ -29,7 +29,7 @@ export const OtherUserMarker = ({
                             [styles.victim,visible ? {width:60,height:60} :
                                 {width:0,height:0}] :
                             [styles.image,visible ? {width:35,height:35} :
-                                {width:0,height:0}]} source={user.pictureUrl ? {uri:user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg') }/>
+                                {width:0,height:0}]} source={user.pictureUrl ? {uri: user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg') }/>
                     </View>
                 </Marker>
         </View>

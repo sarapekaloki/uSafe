@@ -1,6 +1,6 @@
 import * as React from 'react';
-import * as Haptics from 'expo-haptics';
 import { useState , useEffect } from 'react';
+import { fetchAllUsers } from '../../hooks/fetchAllUsers';
 import {View, Text, TouchableOpacity, StyleSheet, Image, Platform, Vibration} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
@@ -10,7 +10,6 @@ import {getFirestore, collection, query, where, onSnapshot} from "firebase/fires
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
-
 
 
 const sleep = (milliseconds) => {
@@ -31,6 +30,7 @@ const AlertScreen = () =>{
     const [ mode , set_mode ] = useState(false)
     const [ currentUser , set_currentUser] = useState({})
     const [ helping, set_helping ] = useState(false)
+    const [allUsers, SetAllUsers] = useState([])
     const tabColor = Platform.OS =='ios'? '#c9c9c9': userIsInZone()?'#D4B2EF': '#a3a3a3'
     const backgroundColor = userIsInZone() ? '#D4B2EF' : '#a3a3a3';
 
@@ -57,6 +57,7 @@ const AlertScreen = () =>{
                 });
                 set_gotInfo(true);
             }
+            fetchAllUsers(SetAllUsers);
         }
     })
 
@@ -74,12 +75,20 @@ const AlertScreen = () =>{
     async function sendAlarm() {
         if(userIsInZone()){
             if(!helping){
+                Vibration.vibrate(2000);
                 const docRef = doc(db, "alarms", auth.currentUser.email);
                 const data = {
                     alarmingUser:auth.currentUser.email,
                     users:[]
                 };
-                await setDoc(docRef, data)
+                await setDoc(docRef, data);
+                allUsers.forEach(user => {
+                    if((user.email != currentUser.email) && user.token != ""){
+                        if(user.token != currentUser.token){
+                            sendNotification(user.token);
+                        }
+                    }
+                })
             }
             else{
                 alert("¡No puedes entrar en modo alerta mientras ayudas a alguien!")
@@ -89,6 +98,25 @@ const AlertScreen = () =>{
             alert("¡No puedes entrar en modo alerta fuera de CETYS!")
         }
 
+    }
+
+    const sendNotification = async (userToken) => {
+        const message = {
+            to: userToken,
+            sound: 'default',
+            title: 'uSafe',
+            body:  `¡${currentUser.username} necesita ayuda!`,
+            data: { someData:'' },
+          };
+        await fetch('https://exp.host/--/api/v2/push/send', {
+        method: 'POST',
+        headers: {
+            Accept: 'application/json',
+            'Accept-encoding': 'gzip, deflate',
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(message),
+        });
     }
 
     async function cancelAlarm() {
@@ -111,20 +139,22 @@ const AlertScreen = () =>{
                             email:document.data().email,
                             helpResponses:document.data().helpResponses + 1,
                             pictureUrl:document.data().pictureUrl,
-                            username:document.data().username
+                            username:document.data().username,
+                            token: document.data().token
                         }).then();
                     }
                 })
             })
 
         const docRef = doc(db, "alarms", auth.currentUser.email);
-        await deleteDoc(docRef)
+        await deleteDoc(docRef);
+        Vibration.vibrate(2000)
+
     }
 
     async function changeAlert(){
-        Vibration.vibrate(2000)
         mode ?  cancelAlarm() : sendAlarm();
-        sleep(5000);
+        sleep(3000);
     }
 
     return(
