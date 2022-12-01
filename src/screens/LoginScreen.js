@@ -33,19 +33,21 @@ const LoginScreen = () => {
     const [anErrorOccurs, setError] = useState(false)
     const navigation = useNavigation()
 
-    useEffect(() => {
-         const unsubscribe = auth.onAuthStateChanged(user => {
-            if (user) {
-                navigation.replace("Tabs")
+    // useEffect(() => {
+    //      const unsubscribe = auth.onAuthStateChanged(user => {
+    //         setError(false)
+    //         if (user) {
+    //             navigation.replace("Tabs")
 
-            }
-        });
-        getData("userCredentials").then((res) => {
-            if (!res) return;
-            handleLogin(res.email, res.password);
-        });
-        return unsubscribe
-    }, [])
+    //         }
+    //     });
+    //     getData("userCredentials").then((res) => {
+    //         if (!res) return;
+    //         handleLogin(res.email, res.password);
+    //         setError(false)
+    //     });
+    //     return unsubscribe
+    // }, [])
 
     const handleLogin = (email, password) => {
         auth
@@ -53,7 +55,7 @@ const LoginScreen = () => {
         .then(userCredentials => {
             setError(false);
             userCredentials.user;
-            setData("userCredentials", {email, password});
+            navigation.replace("Tabs");
         })
         .catch(error => {
             if (error.code === 'auth/invalid-email' || 'auth/wrong-password') {
