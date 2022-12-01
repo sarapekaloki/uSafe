@@ -170,7 +170,6 @@ const styles = StyleSheet.create({
         marginTop: 10,
         height: 45,
         width:'100%',
-        elevation:10,
         borderWidth: 1,
         borderColor: '#CFCFCF'
     },
