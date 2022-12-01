@@ -29,7 +29,7 @@ export default function MapScreen(){
     const [locationPermission, setLocationPermission] = useState(false);
     const [isRejectionModalVisible, setIsRejectionModalVisible] = useState(false);
     const [userLocation, setUserLocation] = useState({
-        latitude:32.506418,longitude: -116.923893
+        latitude:32.50605,longitude: -116.92371
     });
 
 

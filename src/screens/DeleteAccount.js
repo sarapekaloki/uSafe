@@ -15,29 +15,29 @@ const DeleteAccount = () => {
     const [ gotInfo, set_gotInfo ] = useState(false);
     const [ disabledButton , setDisabledButton ] = useState(false);
   
-    useEffect( () => {
+    useEffect(() => {
         if(!gotInfo){
-            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
-            onSnapshot(q,  (querySnapshot) => {
-                let alertModeActive = false
+            setDisabledButton(false)
+            let helpingMode = false
+
+            const q =  query(  collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
+             onSnapshot(q,  (querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     if(doc.data().alarmingUser === auth.currentUser.email){
-                        alertModeActive = true
-                    } 
+                        setDisabledButton(true)
+                    }  
                 });
-                setDisabledButton(alertModeActive);
             })
 
             const q2 = query(collection(db, "alarms"), where("users", "array-contains", auth.currentUser.email));
             onSnapshot(q2,  (querySnapshot) => {
-                let helpingMode = false
                 querySnapshot.forEach((doc) => {
                     if(doc){
-                        helpingMode = true
+                        setDisabledButton(true)
                     }
                 });
-                setDisabledButton(helpingMode);
             });
+          
         set_gotInfo(true)
         }
     })
