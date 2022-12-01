@@ -116,7 +116,7 @@ const LoginScreen = () => {
                 <Text style =  {anErrorOccurs? styles.errorText: {display: 'none'}}> Contraseña o correo incorrectos. </Text>
 
                 <View style={styles.registerText}>
-                        <Text>No tienes cuenta? </Text>
+                        <Text>¿No tienes cuenta? </Text>
                         <Text style={{color: 'blue'}}
                             onPress={() => navigation.replace("Register")}>
                         Regístrate
