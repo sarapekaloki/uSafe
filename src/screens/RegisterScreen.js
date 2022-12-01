@@ -97,7 +97,7 @@ const RegisterScreen = () => {
                     const user = userCredentials.user;
                     user.sendEmailVerification();
                     addData();
-                    navigation.replace("Tabs");
+                    navigation.replace("Login");
                 })
                 .catch(error =>{
                     if (error.code === 'auth/email-already-in-use' ) {
