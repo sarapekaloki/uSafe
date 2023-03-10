@@ -10,10 +10,10 @@ import {
     ScrollView,
     View
 } from "react-native";
+import { Ionicons } from '@expo/vector-icons'; 
 import * as Notifications from 'expo-notifications';
 import { Platform } from "react-native";
 import {useNavigation} from "@react-navigation/native";
-import { MaterialCommunityIcons} from "@expo/vector-icons";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
 import { auth } from "../../firebase";
 import {getFirestore, setDoc, doc} from 'firebase/firestore';
@@ -188,8 +188,8 @@ const RegisterScreen = () => {
                         style = {styles.input}
                         secureTextEntry={passwordVisibility}
                     />
-                    <Pressable onPress={handlePasswordVisibility} style={{left:5, top:5}}>
-                        <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
+                    <Pressable onPress={handlePasswordVisibility} style={{right:30,top:5}}>
+                        <Ionicons name={rightIcon} size={24} color="grey" />
                     </Pressable>
                 </View>
                 <Text style =  {emptyPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
@@ -206,6 +206,7 @@ const RegisterScreen = () => {
                 onPress={handleSignUp}
             >
                 <Text style = {styles.buttonText}>Registrar cuenta</Text>
+                <Ionicons name="chevron-forward" size={24} color="white" />
             </TouchableOpacity>
 
             <View  style={styles.registerText}>
@@ -227,19 +228,21 @@ export default RegisterScreen
 
 const styles = StyleSheet.create({
     button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 40,
-        backgroundColor:'#914FFC',
+        display:'flex',
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginTop: '10%',
+        backgroundColor:'#672BF5',
         width: '80%',
         padding: 15,
         borderRadius: 10,
-        elevation:10
+        elevation: 10,
     },
     buttonText: {
         color: 'white',
         fontWeight: '700',
-        fontSize: 16
+        fontSize: 18
     },
     headerText:{
         fontWeight: 'bold',
@@ -251,20 +254,19 @@ const styles = StyleSheet.create({
     input: {
         paddingHorizontal: 10,
         paddingVertical: 10,
-        borderRadius: 10,
         marginTop: 10,
         height: 40,
         width:"100%",
-        borderWidth: 1,
-        borderColor: '#CFCFCF'
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#672BF5'
     },
     inputContainer: {
-        width: '80%',
+        width: '80%'
     },
     logo: {
         width: 230,
         height: 230,
-        marginTop: '10%',
+        marginTop: '20%',
         marginBottom: 30
     },
     passwordContainer:{
@@ -295,7 +297,8 @@ const styles = StyleSheet.create({
     text: {
         fontWeight: 'bold',
         fontSize: 15,
-        marginTop: 10,
+        marginTop: 15,
+        marginBottom: 5
 
     },
     whiteBox:{

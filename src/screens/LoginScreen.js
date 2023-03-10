@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import React, {useEffect, useState} from "react";
+import { Ionicons } from '@expo/vector-icons'; 
+import React, { useState} from "react";
 import {
     KeyboardAvoidingView,
     StyleSheet,
@@ -12,7 +13,6 @@ import {
     View
 } from "react-native";
 import { auth } from "../../firebase";
-import {MaterialCommunityIcons} from "@expo/vector-icons";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
 import AsyncStorage from '@react-native-async-storage/async-storage';
 
@@ -33,25 +33,9 @@ const LoginScreen = () => {
     const [anErrorOccurs, setError] = useState(false)
     const navigation = useNavigation()
 
-    // useEffect(() => {
-    //      const unsubscribe = auth.onAuthStateChanged(user => {
-    //         setError(false)
-    //         if (user) {
-    //             navigation.replace("Tabs")
-
-    //         }
-    //     });
-    //     getData("userCredentials").then((res) => {
-    //         if (!res) return;
-    //         handleLogin(res.email, res.password);
-    //         setError(false)
-    //     });
-    //     return unsubscribe
-    // }, [])
-
     const handleLogin = (email, password) => {
         auth
-        .signInWithEmailAndPassword(email, password)
+        .signInWithEmailAndPassword(email.toLowerCase(), password)
         .then(userCredentials => {
             setError(false);
             userCredentials.user;
@@ -63,8 +47,6 @@ const LoginScreen = () => {
               }
            })
     }
-
-    
 
     return(
             <KeyboardAvoidingView
@@ -100,9 +82,8 @@ const LoginScreen = () => {
                         style = {styles.input}
                         secureTextEntry={passwordVisibility}
                     />
-                    <Pressable onPress={handlePasswordVisibility} style={{left:'102%', top: -30}}>
-
-                        <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
+                    <Pressable onPress={handlePasswordVisibility} style={{left:'90%', top: -35}}>
+                        <Ionicons name={rightIcon} size={24} color="grey" />
                     </Pressable>
                 </View>
 
@@ -111,6 +92,7 @@ const LoginScreen = () => {
                     style = {styles.button}
                 >
                     <Text style = {styles.buttonText}>Iniciar Sesión</Text>
+                    <Ionicons name="chevron-forward" size={24} color="white" />
                 </TouchableOpacity>
 
                 <Text style =  {anErrorOccurs? styles.errorText: {display: 'none'}}> Contraseña o correo incorrectos. </Text>
@@ -125,8 +107,6 @@ const LoginScreen = () => {
                 </View>
             </ScrollView> 
             </KeyboardAvoidingView>               
-
-        
     )
 }
 
@@ -134,19 +114,21 @@ export default LoginScreen
 
 const styles = StyleSheet.create({
     button: {
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 20,
-        backgroundColor:'#914FFC',
+        display:'flex',
+        flexDirection:'row',
+        justifyContent: 'space-between',
+        alignItems: 'flex-start',
+        marginTop: '10%',
+        backgroundColor:'#672BF5',
         width: '80%',
         padding: 15,
         borderRadius: 10,
-        elevation: 10
+        elevation: 10,
     },
     buttonText: {
         color: 'white',
         fontWeight: '700',
-        fontSize: 16
+        fontSize: 18
     },
     container: {
         flex:1,
@@ -166,21 +148,21 @@ const styles = StyleSheet.create({
     input: {
         paddingHorizontal: 10,
         paddingVertical: 10,
-        borderRadius: 10,
         marginTop: 10,
         height: 45,
         width:'100%',
-        borderWidth: 1,
-        borderColor: '#CFCFCF'
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#672BF5'
     },
     inputContainer: {
-        width: '80%'
+        width: '80%',
+        marginLeft: -10,
+        marginBottom: '5%'
     },
     logo: {
         width: 230,
         height: 230,
-        marginTop: '10%',
-        marginBottom: 30
+        marginTop: '20%',
     },
     passwordContainer:{
         flexDirection: 'row',
@@ -201,7 +183,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 15,
         marginTop: 10,
-
     },
     whiteBox:{
         flex: 1,

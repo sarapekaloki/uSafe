@@ -2,14 +2,14 @@ import {useState} from "react";
 
 export const useTogglePasswordVisibility = () => {
     const [passwordVisibility, setPasswordVisibility] = useState(true);
-    const [rightIcon, setRightIcon] = useState('eye-off');
+    const [rightIcon, setRightIcon] = useState('ios-eye-off-outline');
 
     const handlePasswordVisibility = () => {
-        if(rightIcon === 'eye'){
-            setRightIcon('eye-off');
+        if(rightIcon === 'ios-eye-outline'){
+            setRightIcon('ios-eye-off-outline');
             setPasswordVisibility(!passwordVisibility);
-        } else if(rightIcon === 'eye-off'){
-            setRightIcon('eye');
+        } else if(rightIcon === 'ios-eye-off-outline'){
+            setRightIcon('ios-eye-outline');
             setPasswordVisibility(!passwordVisibility);
         }
     };
