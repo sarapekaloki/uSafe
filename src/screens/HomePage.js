@@ -25,12 +25,12 @@ const styles = StyleSheet.create({
     container:{
         width: '100%',
         height: '100%',
-        backgroundColor: '#D4B2EF',
+        backgroundColor: '#000000',
         justifyContent: 'center',
         alignItems: 'center',
     },
     logo:{
-        width: 300,
-        height: 300,
+        width: 250,
+        height: 250,
     }   
 })

@@ -48,7 +48,7 @@ const Tabs = () => {
     useEffect(()=>{
         const interval = setInterval(()=>{
             if(currentUser){
-                updateUserLocation(currentUser).then();
+                // updateUserLocation(currentUser).then();
             }
         },6000)
         return () => clearInterval(interval);
