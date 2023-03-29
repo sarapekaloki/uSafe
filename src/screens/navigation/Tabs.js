@@ -11,7 +11,10 @@ import {auth, firebaseConfig} from "../../../firebase";
 import OutOfRangeScreen from "../OutOfRangeScreen";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import {updateUserLocation} from "../../hooks/updateUserLocation";
-
+import {
+    useFonts,
+    Spartan_600SemiBold
+  } from '@expo-google-fonts/spartan';
 const Tab = createBottomTabNavigator()
 
 
@@ -25,6 +28,10 @@ const Tabs = () => {
     const fontColor = !alertMode ? '#000' : '#fff'
 
     const [currentUser, setCurrentUser] = useState(null);
+   
+    useFonts({
+        Spartan_600SemiBold,
+    });
 
     useEffect(() => {
         if(!gotInfo || !currentUser){
@@ -110,13 +117,14 @@ const Tabs = () => {
                     />
           ),
           headerStyle:{
-            backgroundColor: backgroundColor,
+            backgroundColor: '#4C11CB',
+            shadowColor: 'transparent', 
+            elevation: 0,
           },
           headerTitleStyle:{
-            fontWeight: 'bold',
-            fontSize: 25,
-            right: Platform.OS == 'ios'? '225%': 0,
-            color: fontColor
+            fontFamily: 'Spartan_600SemiBold',
+            fontSize: 22,
+            color: '#FFFFFF'
           }
         }}
         />
