@@ -248,7 +248,6 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 26,
         marginBottom: 10,
-        color: '#28194C',
         justifyContent: 'center'
     },
     input: {

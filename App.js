@@ -51,17 +51,16 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
-          <Stack.Screen options={{ headerShown: false, presentation:'modal' }} name="AlertScreen" component={AlertScreen} />
-       <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Delete Account" component={DeleteAccount} />
+        <Stack.Screen options={{ headerShown: false, presentation:'modal' }} name="AlertScreen" component={AlertScreen} />
+        <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Delete Account" component={DeleteAccount} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Password" component={UpdatePassword} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Username" component={UpdateUsername} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Profile Picture" component={UpdateProfilePicture} />
-          <Stack.Screen
+        <Stack.Screen
               name="Tabs"
               component={Tabs}
               options={{ headerShown: false }}
-          />
-
+        />
       </Stack.Navigator>
     </NavigationContainer>
   );

@@ -12,9 +12,23 @@ import {
     Pressable,
     View
 } from "react-native";
+// import {
+//     useFonts,
+//     Spartan_100Thin,
+//     Spartan_200ExtraLight,
+//     Spartan_300Light,
+//     Spartan_400Regular,
+//     Spartan_500Medium,
+//     Spartan_600SemiBold,
+//     Spartan_700Bold,
+//     Spartan_800ExtraBold,
+//     Spartan_900Black,
+//   } from '@expo-google-fonts/spartan';
+  
 import { auth } from "../../firebase";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
 import AsyncStorage from '@react-native-async-storage/async-storage';
+
 
 export const setData = async (key, value) => {
     value = JSON.stringify(value);
@@ -32,6 +46,18 @@ const LoginScreen = () => {
     const [password, setPassword] = useState('')
     const [anErrorOccurs, setError] = useState(false)
     const navigation = useNavigation()
+
+    // useFonts({
+    //     Spartan_100Thin,
+    //     Spartan_200ExtraLight,
+    //     Spartan_300Light,
+    //     Spartan_400Regular,
+    //     Spartan_500Medium,
+    //     Spartan_600SemiBold,
+    //     Spartan_700Bold,
+    //     Spartan_800ExtraBold,
+    //     Spartan_900Black,
+    // });
 
     const handleLogin = (email, password) => {
         auth
@@ -142,8 +168,7 @@ const styles = StyleSheet.create({
     headerText:{
         fontWeight: 'bold',
         fontSize: 26,
-        marginBottom: 5,
-        color: '#28194C',
+        marginBottom: 5
     },
     input: {
         paddingHorizontal: 10,
