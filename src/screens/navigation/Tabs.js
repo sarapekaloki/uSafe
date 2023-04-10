@@ -91,7 +91,7 @@ const Tabs = () => {
 
             )
         }}/>
-        <Tab.Screen name="Configuración" component={Settings} options={{
+        <Tab.Screen name="Configuración" component={OwnProfile} options={{
             tabBarIcon: ({ focused }) => (
                 <Image 
                     source={focused ? (alertMode ? require( `../../../assets/icons/dark-settings-selected.png`) :  require( `../../../assets/icons/light-settings-selected.png`) ): alertMode ? require( `../../../assets/icons/dark-settings-unselected.png`) : require( `../../../assets/icons/light-settings-unselected.png`) }

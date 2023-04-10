@@ -71,7 +71,7 @@ const OwnProfile = () => {
             <View style={styles.profileDetails}>
                 <View style={styles.pdFirstRow}>
                     <Text style={styles.userNameText}> {currentUsername}</Text>
-                    <TouchableOpacity>
+                    <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
                         <Feather name="edit" size={24} color="#8F8F8F" />
                     </TouchableOpacity>
                 </View>

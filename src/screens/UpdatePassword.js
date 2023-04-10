@@ -3,8 +3,15 @@ import { useNavigation } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TextInput, Pressable, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
 import { auth } from "../../firebase";
 import {EmailAuthProvider} from 'firebase/auth';
-import {MaterialCommunityIcons} from "@expo/vector-icons";
+import { Entypo } from '@expo/vector-icons';
+import { Ionicons } from '@expo/vector-icons'; 
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
+import {
+    useFonts,
+    OpenSans_400Regular,
+    OpenSans_500Medium,
+    OpenSans_600SemiBold
+  } from '@expo-google-fonts/open-sans';
 
 
 const UpdatePassword = () => {
@@ -23,6 +30,11 @@ const UpdatePassword = () => {
     const [passwordUpperLowerCaseError, setPasswordUpperLowerCaseError] = useState(false);
     const [disableButton, setDisableButton] = useState(false);
 
+    let [fontsLoaded] = useFonts({
+        OpenSans_400Regular,
+        OpenSans_500Medium,
+        OpenSans_600SemiBold
+      });
 
     const updatePassword = () => {
         const credentials = EmailAuthProvider.credential(currentEmail, currentPassword);
@@ -123,55 +135,53 @@ const UpdatePassword = () => {
          return /\d/.test(str);
        }
 
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return(
-        <KeyboardAvoidingView style={styles.usernameModalContainer}>
-            
-            <View style={styles.modalHeader}>
-                <Image style={styles.modalLogo} source={require('../../assets/img/longLogoPurple.png')}></Image>
+        <KeyboardAvoidingView style={styles.container}>
+            <View style = {styles.header}>
+                <Image style = {styles.headerImg} source={require('../../assets/img/clearLogo.png')}></Image>
             </View>
-            
-            <View style={styles.modalContentsContainer}>
-            <TouchableOpacity onPress={() => {setNewPasswordError(false); setPasswordEmptyError(false); setCurrentPasswordError(false); setCurrentPassword('');
-            setNewPassword(''); navigation.navigate('Tabs', { screen: 'Configuracion' })} }>
-                <Image style={styles.leftArrow} source={require('../../assets/icons/leftArrow.png')}></Image>
-            </TouchableOpacity>
-                
-                <Text style = {styles.modalPasswordText} >Cambiar contraseña</Text>
+            <View style={styles.sectionTitle}>
+                <TouchableOpacity  onPress={() => {setNewPasswordError(false); setPasswordEmptyError(false); setCurrentPasswordError(false); setCurrentPassword('');
+                    setNewPassword(''); navigation.goBack()} }>
+                    <Entypo name="chevron-left" size={28} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.sectionTitleText}>CAMBIAR CONTRASEÑA</Text>
             </View>
-            <View style= {styles.dividerModal}></View>
+            <View style={styles.inputContainer}>
+                <Text style={styles.inputHeader}>Ingresa tu contraseña actual</Text>
+                <TextInput
+                        placeholder="Ingresar contraseña"
+                        value={currentPassword}
+                        onChangeText={text => setCurrentPassword(text)}
+                        style = {styles.input}
+                        secureTextEntry={true}
+                />
+            </View>
+            <Text style =  {currentPasswordError? styles.errorText2: {display: 'none'}}> Contraseña actual incorrecta. </Text>
 
-            
-            <View  style = {styles.inputContainer}>
-                <Text style = {styles.inputText}> Ingresa tu contraseña actual</Text>
-                    <TextInput
-                            placeholder="Ingresar contraseña"
-                            value={currentPassword}
-                            onChangeText={text => setCurrentPassword(text)}
-                            style = {styles.input}
-                            secureTextEntry={true}
-                    />
-                <Text style =  {currentPasswordError? styles.errorText2: {display: 'none'}}> Contraseña actual incorrecta. </Text>
-
-                 
-                <Text style = {styles.inputText2}> Ingresa tu nueva contraseña</Text>
-                    <TextInput
+            <View style={styles.inputContainer}>
+                <Text style={styles.inputHeader}>Ingresa tu nueva conntraseña</Text>
+                <TextInput
                         placeholder="Ingresar nueva contraseña"
                         onChangeText={text => setNewPassword(text)}
                         style = {styles.input}
                         secureTextEntry={passwordVisibility}
-                    />
-                <Pressable onPress={handlePasswordVisibility} style={{left:'97%', top: -35}}>
-                        <MaterialCommunityIcons name={rightIcon} size={22} color="#232323"/>
-                    </Pressable>
-                <Text style={passwordEmptyError? styles.emptyErrorText: {display:'none'}}>Este campo no puede estar vacío</Text>
-                <View style = {newPasswordError? styles.errorContainer: {display: 'none'}}>
-                    <Text style =  {passwordLenghtError? styles.errorText: styles.noErrorText}>1. Longitud de mínimo 8 caracteres </Text>
-                    <Text style =  {passwordUpperLowerCaseError? styles.errorText: styles.noErrorText}>2. Contener mínimo una mayúscula y una minúscula </Text>
-                    <Text style =  {passwordNumberError? styles.errorText: styles.noErrorText}>3. Contener por lo menos un número </Text>
-                </View>
+                />
+                <Pressable onPress={handlePasswordVisibility} style={{left:'90%', top: -35}}>
+                        <Ionicons name={rightIcon} size={24} color="grey" />
+                </Pressable>
             </View>
-            <TouchableOpacity style = {disableButton? styles.disabledButton: styles.confirmButton} onPress={updatePassword} disabled={disableButton}>
+
+            <View style = {newPasswordError? styles.errorContainer: {display: 'none'}}>
+                <Text style =  {passwordLenghtError? styles.errorText: styles.noErrorText}>1. Longitud de mínimo 8 caracteres </Text>
+                <Text style =  {passwordUpperLowerCaseError? styles.errorText: styles.noErrorText}>2. Contener mínimo una mayúscula y una minúscula </Text>
+                <Text style =  {passwordNumberError? styles.errorText: styles.noErrorText}>3. Contener por lo menos un número </Text>
+            </View>
+            <TouchableOpacity style = {newPassword.trim() == "" || currentPassword.trim() == "" ? styles.disabledButton: styles.confirmButton} onPress={updatePassword} disabled={newPassword.trim() == "" || currentPassword.trim() == "" ? true : false}>
                 <Text style={styles.buttonText}>Confirmar</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
@@ -181,118 +191,93 @@ const UpdatePassword = () => {
 export default UpdatePassword
 
 const styles = StyleSheet.create({
-    usernameModalContainer: {
-        alignItems: 'center',
+    container: {
+        flex: 1,
         backgroundColor: '#FFF',
-        height: '100%'
-        // justifyContent: 'center'
-    },
-    modalHeader: {
-        backgroundColor: '#D4B2EF',
-        height: '12%',
-        justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        shadowOffset: {width: -2, height: 4},  
-        shadowColor: '#171717',  
-        shadowOpacity: 0.2,  
-        shadowRadius: 3,  
     },
-    modalLogo: {
-        marginTop:25,
-        width: 180,
-        height: 55
-        
+    header: {
+        width: '20%',
+        marginTop: '10%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    modalContentsContainer: {
+    headerImg: {
+        width:150,
+        height: 60
+    },
+    sectionTitle: {
         flexDirection: "row",
-        marginTop: 15,
-        width:"100%",
-        justifyContent:"flex-start"
-    },
-    leftArrow: {
-        width:20,
-        height:20,
-        left: 10,
-    },
-    modalPasswordText: {
-        fontWeight: '500',
-        fontSize: 20,
-        marginLeft: 80
+        alignItems: "center",
+        justifyContent: "flex-start",
+        width:'100%',
+        marginTop: 20
+    },  
+    sectionTitleText: {
+        marginLeft: 10,
+        fontFamily:'OpenSans_500Medium',
+        fontSize: 15,
+    }, 
 
-    },
-    dividerModal: {
-        width: '70%',
-        height: '0.15%',
-        backgroundColor: '#d4d2d2',
-        marginTop: 10
-    },
     inputContainer: {
         width: '90%',
-        marginTop: 20,
+        marginTop: 20
     },
-    inputText: {
-        fontWeight: '450',
-        fontSize: 17,
-        // right: 45
-
-    },
-    inputText2: {
-        fontWeight: '450',
-        fontSize: 17,
-        marginTop: 15
-        // right: 45
-
+    inputHeader:{
+        fontFamily:'OpenSans_400Regular',
+        fontSize: 15,
     },
     input: {
-        backgroundColor: '#EDEDED',
         paddingHorizontal: 10,
         paddingVertical: 10,
-        borderRadius: 10,
+        height: 50,
+        width:'100%',
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#672BF5'
+    },
+    disabledButton:{
         marginTop: 10,
+        width:'60%',
         height: 45,
-        width:'95%',
-
-
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#CACACA'
+        
+    },
+    confirmButton:{
+        marginTop: 10,
+        width:'60%',
+        height: 45,
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#4C11CB'
+        
+    },
+    buttonText: {
+        fontFamily:'OpenSans_400Regular',
+        fontSize: 15,
+        color: 'white' 
     },
     errorText2: {
+        fontFamily:'OpenSans_400Regular',
         color: 'red',
-        top: 8
+        alignSelf:'flex-start',
+        marginLeft: 20,
+        marginTop: 10
     },
-    errorText: {
+    errorContainer: {
+        alignSelf:'flex-start',
+        marginLeft: 20,
+        bottom: 10
+    },
+    errorText:{
+        fontFamily:'OpenSans_400Regular',
         color: 'red',
-        top:-15,
-    },
-    confirmButton: {
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#28194C',
-        width: '90%',
-        borderRadius: 10,
-    },
-    buttonText:{
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-     
-    },
+    }, 
     noErrorText:{
-        color:'green',
-        top: -15
-    },
-    emptyErrorText:{
-        top:-12,
-        color: 'red'
-    },
-    disabledButton: {
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#b8b8b8',
-        width: '90%',
-        borderRadius: 10,
-    },
+        fontFamily:'OpenSans_400Regular',
+        color: 'green',
+    }
 })

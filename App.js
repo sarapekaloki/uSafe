@@ -4,6 +4,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import * as Notifications from 'expo-notifications';
 import LoginScreen from './src/screens/LoginScreen';
+import Settings from './src/screens/Settings';
 import HomePage from './src/screens/HomePage'
 import RegisterScreen from './src/screens/RegisterScreen';
 import DeleteAccount from './src/screens/DeleteAccount';
@@ -52,6 +53,7 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
         <Stack.Screen options={{ headerShown: false, presentation:'modal' }} name="AlertScreen" component={AlertScreen} />
+        <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Settings" component={Settings} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Delete Account" component={DeleteAccount} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Password" component={UpdatePassword} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Username" component={UpdateUsername} />
