@@ -2,10 +2,18 @@ import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { uploadBytesResumable, ref, getDownloadURL, getStorage, deleteObject } from "firebase/storage";
 import {getFirestore, doc, updateDoc} from 'firebase/firestore';
-import { Image, StyleSheet, Text, TextInput, Pressable, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
+import { Image, StyleSheet, Text, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
 import { auth } from "../../firebase";
 import * as ImagePicker from 'expo-image-picker';
+import { Entypo } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 
+import {
+    useFonts,
+    OpenSans_400Regular,
+    OpenSans_500Medium,
+    OpenSans_600SemiBold
+  } from '@expo-google-fonts/open-sans';
 
 
 const UpdateProfilePicture = () => {
@@ -14,12 +22,15 @@ const UpdateProfilePicture = () => {
     const route = useRoute();
     const storage = getStorage();
     const currentEmail = auth.currentUser.email;
-    const currentUser = auth.currentUser;
-    const [pickerResponse, setPickerResponse] = useState(null);
     const [image, setImage] = useState(null);
     const userData = route.params.userData;
     const [disableButton, setDisableButton] = useState(true);
 
+    let [fontsLoaded] = useFonts({
+        OpenSans_400Regular,
+        OpenSans_500Medium,
+        OpenSans_600SemiBold
+      });
 
 //Change profile picture
  const changeProfilePic = async() =>  {
@@ -54,7 +65,7 @@ const UpdateProfilePicture = () => {
                 
                     const docRef = doc(firestore, "users2", currentEmail);
                     updateDoc(docRef, newDoc).then(() => {
-                        navigation.navigate('Tabs', { screen: 'Configuracion' })                    
+                        navigation.goBack()                    
                     });       
                     }
                 );
@@ -111,44 +122,44 @@ const UpdateProfilePicture = () => {
     
       }
 
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return( 
-    <KeyboardAvoidingView style={styles.usernameModalContainer}>
-        
-        <View style={styles.modalHeader}>
-            <Image style={styles.modalLogo} source={require('../../assets/img/longLogoPurple.png')}></Image>
+    <KeyboardAvoidingView style={styles.container}>
+         <View style = {styles.header}>
+                <Image style = {styles.headerImg} source={require('../../assets/img/clearLogo.png')}></Image>
+        </View>
+
+       
+        <View style={styles.sectionTitle}>
+                <TouchableOpacity  onPress={() => {navigation.goBack()} }>
+                    <Entypo name="chevron-left" size={28} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.sectionTitleText}>CAMBIAR CONTRASEÑA</Text>
         </View>
         
-        <View style={styles.modalContentsContainer}>
-        <TouchableOpacity onPress={() =>navigation.navigate('Tabs', { screen: 'Configuracion' })}>
-            <Image style={styles.leftArrow} source={require('../../assets/icons/leftArrow.png')}></Image>
-        </TouchableOpacity>
-            
-            <Text style = {styles.modalPasswordText} >Cambiar foto de perfil</Text>
-        </View>
-        <View style= {styles.dividerModal}></View>
+  
 
 
-        <Image style={styles.previewImage} source={image? {uri: image} : require('../../assets/img/initial-profile-picture.jpeg')}></Image>
+        <Image style={styles.previewImage} source={image? {uri: image} :  require('../../assets/img/initial-profile-picture.jpeg')}></Image>
         <Text style={styles.previewImageText}> Vista previa</Text>
 
         <View style = {styles.buttonSectionImageModal}>
             <TouchableOpacity style = {styles.button} onPress={onImageLibraryPress}>
                 <Text style={styles.buttonImageText} >Desde el carrete</Text>
-                <Image style={styles.icon} source={require('../../assets/icons/photo-icon.png')}></Image>
+                <Feather style = {styles.icon}name="image" size={20} color="grey" />
             </TouchableOpacity>
             <View style= {styles.divider}></View>
             <TouchableOpacity style = {styles.button} onPress={onCameraPress}>
                 <Text style={styles.buttonImageText} >Desde la cámara</Text>
-                <Image style={styles.icon} source={require('../../assets/icons/camera-icon.png')}></Image>
+                <Feather style = {styles.icon} name="camera" size={20} color="grey" />
             </TouchableOpacity>
         </View>
-        <View style = {styles.infoContainer}>
-                <Image style={styles.infoIcon} source={require('../../assets/icons/infoIcon.png')}></Image>
-                <Text style ={styles.reminderMessage}>Recuerda que será visible para todos los usuarios</Text>
-            </View>
+      
         <TouchableOpacity style = {image && disableButton? styles.confirmButton: styles.disabledButton} onPress={changeProfilePic} disabled={image&& disableButton? false: true}>
-            <Text style={styles.deleteText} >Confirmar</Text>
+            <Text style={styles.buttonText} >Confirmar</Text>
         </TouchableOpacity>
     </KeyboardAvoidingView>
     )
@@ -157,55 +168,39 @@ const UpdateProfilePicture = () => {
 export default UpdateProfilePicture
 
 const styles = StyleSheet.create({
-    usernameModalContainer: {
-        alignItems: 'center',
+    container: {
+        flex: 1,
         backgroundColor: '#FFF',
-        height: '100%'
-    },
-    modalHeader: {
-        backgroundColor: '#D4B2EF',
-        height: '12%',
-        justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        shadowOffset: {width: -2, height: 4},  
-        shadowColor: '#171717',  
-        shadowOpacity: 0.2,  
-        shadowRadius: 3,  
     },
-    modalLogo: {
-        marginTop:25,
-        width: 180,
-        height: 55
+    header: {
+        width: '20%',
+        marginTop: '10%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    modalContentsContainer: {
+    headerImg: {
+        width:150,
+        height: 60
+    },
+    sectionTitle: {
         flexDirection: "row",
-        marginTop: 15,
-        width:"100%",
-        justifyContent:"flex-start"
-    },
-    leftArrow: {
-        width:20,
-        height:20,
-        left: 10,
-    },
-    modalPasswordText: {
-        fontWeight: '500',
-        fontSize: 20,
-        marginLeft: 80
-
-    },
-    dividerModal: {
-        width: '70%',
-        height: '0.15%',
-        backgroundColor: '#d4d2d2',
-        marginTop: 10
-    },
+        alignItems: "center",
+        justifyContent: "flex-start",
+        width:'100%',
+        marginTop: 20
+    },  
+    sectionTitleText: {
+        marginLeft: 10,
+        fontFamily:'OpenSans_500Medium',
+        fontSize: 15,
+    }, 
+  
     previewImage: {
         width: 150,
         height: 150,
         marginTop: 10,
-        borderRadius: 60
+        borderRadius: 100
     },
       buttonSectionImageModal: {
         width: '90%',
@@ -226,13 +221,11 @@ const styles = StyleSheet.create({
        
     },
     buttonImageText: {
+        fontFamily: 'OpenSans_500Medium',
         fontSize: 16,
-        fontWeight: '500',
         paddingLeft: 20,
     },
     icon: {
-        width:20,
-        height:20,
         right: 20
     },
     divider: {
@@ -240,43 +233,30 @@ const styles = StyleSheet.create({
         height: '1%',
         backgroundColor: '#d4d2d2',
     },
-    infoContainer: {
-        flexDirection: "row",
-        marginTop: 10
+    disabledButton:{
+        marginTop: 10,
+        width:'60%',
+        height: 45,
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#CACACA'
+        
     },
-    infoIcon: {
-        width:15,
-        height:15,
-        right: 30
+    confirmButton:{
+        marginTop: 10,
+        width:'60%',
+        height: 45,
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#4C11CB'
+        
     },
-    reminderMessage: {
-        fontWeight: '300',
-        fontSize: 12,
-        color:'#A5A5A5',
-        right:25
+    buttonText: {
+        fontFamily:'OpenSans_400Regular',
+        fontSize: 15,
+        color: 'white' 
     },
 
-    confirmButton: {
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#28194C',
-        width: '90%',
-        borderRadius: 10,
-    },
-    disabledButton: {
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#b8b8b8',
-        width: '90%',
-        borderRadius: 10,
-    },
-    deleteText:{
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-    },
 })

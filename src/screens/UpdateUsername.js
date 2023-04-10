@@ -1,9 +1,15 @@
 import React, { useState } from "react";
+import { Entypo } from '@expo/vector-icons';
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
 import { auth } from "../../firebase";
 import {getFirestore, doc, updateDoc} from 'firebase/firestore';
-
+import {
+    useFonts,
+    OpenSans_400Regular,
+    OpenSans_500Medium,
+    OpenSans_600SemiBold
+  } from '@expo-google-fonts/open-sans';
 
 const UpdateUsername = () => {
     const navigation = useNavigation();
@@ -14,6 +20,11 @@ const UpdateUsername = () => {
     const userData = route.params.userData;
     const [updatedUsername, setUpdatedUsername] = useState('');
 
+    let [fontsLoaded] = useFonts({
+        OpenSans_400Regular,
+        OpenSans_500Medium,
+        OpenSans_600SemiBold
+      });
     const updateUsername = () => {
         const newDoc = {
             coordinates: userData.coordinates,
@@ -27,48 +38,40 @@ const UpdateUsername = () => {
         if(updatedUsername != ""){
             const docRef = doc(firestore, "users2", currentEmail);
             updateDoc(docRef, newDoc).then(() => {
-                navigation.navigate('Tabs', { screen: 'Configuracion' });
+                navigation.goBack();
                 setUpdatedUsername("");      
             });       
         }
     };
-
+    
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return(
         <KeyboardAvoidingView style={styles.usernameModalContainer}>
-            
-            <View style={styles.modalHeader}>
-                <Image style={styles.modalLogo} source={require('../../assets/img/longLogoPurple.png')}></Image>
+            <View style = {styles.header}>
+                <Image style = {styles.headerImg} source={require('../../assets/img/clearLogo.png')}></Image>
             </View>
-            
-            <View style={styles.modalContentsContainer}>
-                <TouchableOpacity onPress={() => navigation.navigate('Tabs', { screen: 'Configuracion' })}>
-                    <Image style={styles.leftArrow} source={require('../../assets/icons/leftArrow.png')}></Image>
-                </TouchableOpacity>
-                    
-                <Text style = {styles.modalUsernameText} >Cambiar nombre de usuario</Text>
+            <View style={styles.sectionTitle}>
+                    <Entypo name="chevron-left" size={28} color="black" />
+                <Text style={styles.sectionTitleText}>CAMBIAR NOMBRE DE USUARIO</Text>
             </View>
-            <View style= {styles.dividerModal}></View>
-
-            <View  style = {styles.inputContainer}>
-                <Text style = {styles.inputText}> Ingresar un nuevo nombre de usuario</Text>
-                    <TextInput
+            <View style={styles.inputContainer}>
+                <Text style={styles.inputHeader}>Ingresa un nuevo nombre de usuario</Text>
+                <TextInput
                         placeholder={userData.username}
-                        onChangeText = {text => setUpdatedUsername(text)}
+                        onChangeText={text => setUpdatedUsername(text)}
                         style = {styles.input}
-                        maxLength={15}
-                    />
-                <View style = {styles.infoContainer}>
-                    <Image style={styles.infoIcon} source={require('../../assets/icons/infoIcon.png')}></Image>
-                    <Text style ={styles.reminderMessage}>Recuerda que será visible para todos los usuarios</Text>
-                </View>
+                        maxLength = {15}
+                />
             </View>
             <TouchableOpacity 
-                style = {updatedUsername.trim() == ""? styles.disabledButton :styles.confirmButton} 
-                disabled={updatedUsername.trim() == ""? true: false}
-                onPress={updateUsername}>
-                <Text style={styles.deleteText} >Confirmar</Text>
-            </TouchableOpacity>
+                    style = {updatedUsername.trim() == ""? styles.disabledButton :styles.confirmButton} 
+                    disabled={updatedUsername.trim() == ""? true: false}
+                    onPress={updateUsername}>
+                    <Text style={styles.buttonText} >Confirmar</Text>
+                </TouchableOpacity>
         </KeyboardAvoidingView>
 
     )
@@ -78,111 +81,71 @@ export default UpdateUsername
 
 const styles = StyleSheet.create({
     usernameModalContainer: {
-        alignItems: 'center',
+        flex: 1,
         backgroundColor: '#FFF',
-        height: '100%'
-        // justifyContent: 'center'
-    },
-    modalHeader: {
-        backgroundColor: '#D4B2EF',
-        height: '12%',
-        justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        shadowOffset: {width: -2, height: 4},  
-        shadowColor: '#171717',  
-        shadowOpacity: 0.2,  
-        shadowRadius: 3,  
     },
-    modalLogo: {
-        marginTop:25,
-        width: 180,
-        height: 55
-        
+    header: {
+        width: '20%',
+        marginTop: '10%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    modalContentsContainer: {
+    headerImg: {
+        width:150,
+        height: 60
+    },
+    sectionTitle: {
         flexDirection: "row",
-        marginTop: 15,
-        width:"100%",
-        justifyContent:"flex-start"
-    },
-    leftArrow: {
-        width:20,
-        height:20,
-        left: 10,
-    },
-    modalUsernameText: {
-        fontWeight: '500',
-        fontSize: 20,
-        marginLeft: 50
-
-    },
-    dividerModal: {
-        width: '70%',
-        height: '0.15%',
-        backgroundColor: '#d4d2d2',
-        marginTop: 10
-    },
+        alignItems: "center",
+        justifyContent: "flex-start",
+        width:'100%',
+        marginTop: 20
+    },  
+    sectionTitleText: {
+        marginLeft: 10,
+        fontFamily:'OpenSans_500Medium',
+        fontSize: 15,
+    }, 
     inputContainer: {
         width: '90%',
-        marginTop: 20,
+        marginTop: 20
     },
-    inputText: {
-        fontWeight: '450',
-        fontSize: 17
-        // right: 45
-
+    inputHeader:{
+        fontFamily:'OpenSans_400Regular',
+        fontSize: 15,
     },
     input: {
-        backgroundColor: '#EDEDED',
         paddingHorizontal: 10,
         paddingVertical: 10,
-        borderRadius: 10,
-        marginTop: 10,
+        height: 50,
+        width:'100%',
+        borderBottomWidth: 1.5,
+        borderBottomColor: '#672BF5'
+    },
+    disabledButton:{
+        marginTop: 20,
+        width:'60%',
         height: 45,
-        width:'95%',
-
-
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#CACACA'
+        
     },
-    infoContainer: {
-        flexDirection: "row",
-        marginTop: 10,
-        marginLeft: 30
-    },
-    infoIcon: {
-        width:15,
-        height:15,
-        right: 30
-    },
-    reminderMessage: {
-        fontWeight: '300',
-        fontSize: 12,
-        color:'#A5A5A5',
-        right:25
-    },
-    confirmButton: {
+    confirmButton:{
+        marginTop: 20,
+        width:'60%',
         height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#28194C',
-        width: '90%',
-        borderRadius: 10,
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#4C11CB'
+        
     },
-    deleteText:{
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-     
-    },
-    disabledButton: {
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#b8b8b8',
-        width: '90%',
-        borderRadius: 10,
-    },
-   
+    buttonText: {
+        fontFamily:'OpenSans_400Regular',
+        fontSize: 15,
+        color: 'white' 
+    }
 })

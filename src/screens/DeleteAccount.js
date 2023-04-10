@@ -3,7 +3,17 @@ import { useNavigation } from "@react-navigation/native";
 import { ref, getStorage, deleteObject } from "firebase/storage";
 import { Image, StyleSheet, Text, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
 import { auth } from "../../firebase";
+import { Entypo } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons'; 
 import {getFirestore, doc, deleteDoc, query, onSnapshot, where, collection} from 'firebase/firestore';
+
+import {
+    useFonts,
+    OpenSans_400Regular,
+    OpenSans_500Medium,
+    OpenSans_600SemiBold
+  } from '@expo-google-fonts/open-sans';
+
 
 const DeleteAccount = () => {
     const navigation = useNavigation();
@@ -15,6 +25,13 @@ const DeleteAccount = () => {
     const [ gotInfo, set_gotInfo ] = useState(false);
     const [ disabledButton , setDisabledButton ] = useState(false);
   
+
+    let [fontsLoaded] = useFonts({
+        OpenSans_400Regular,
+        OpenSans_500Medium,
+        OpenSans_600SemiBold
+      });
+
     useEffect(() => {
         if(!gotInfo){
             setDisabledButton(false)
@@ -60,31 +77,33 @@ const DeleteAccount = () => {
         })
     }
 
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return(
-        <KeyboardAvoidingView style={styles.usernameModalContainer}>
-                    
-        <View style={styles.modalHeader}>
-            <Image style={styles.modalLogo} source={require('../../assets/img/longLogoPurple.png')}></Image>
-        </View>
-        
-        <View style={styles.modalContentsContainer}>
-        <TouchableOpacity onPress={() => navigation.navigate('Tabs', { screen: 'Configuracion' })}>
-            <Image style={styles.leftArrow} source={require('../../assets/icons/leftArrow.png')}></Image>
-        </TouchableOpacity>
-        
-            <Text style = {styles.modalDeleteText} >Eliminar cuenta</Text>
-        </View>
-        <View style= {styles.dividerModal}></View>
-
-        <View style= {styles.deleteContainer}>
-                <Image style={styles.infoDeleteIcon} source={require('../../assets/icons/infoIcon.png')}></Image>
-                <Text style ={styles.deleteMessage}>Estas a punto de eliminar tu cuenta, esta acción es irreversible. Si estas seguro, presiona el botón de eliminar cuenta. </Text>
-        </View>
-
-        <TouchableOpacity style = {disabledButton? styles.disabledButton: styles.confirmButton} onPress = {deleteUser} disabled = {disabledButton}>
-            <Text style={styles.deleteText} >Eliminar cuenta</Text>
-        </TouchableOpacity>
+        <KeyboardAvoidingView style={styles.container}>
+            <View style = {styles.header}>
+                <Image style = {styles.headerImg} source={require('../../assets/img/clearLogo.png')}></Image>
+            </View>
+            <View style={styles.sectionTitle}>
+                <TouchableOpacity  onPress={() => {setNewPasswordError(false); setPasswordEmptyError(false); setCurrentPasswordError(false); setCurrentPassword('');
+                    setNewPassword(''); navigation.goBack()} }>
+                    <Entypo name="chevron-left" size={28} color="black" />
+                </TouchableOpacity>
+                <Text style={styles.sectionTitleText}>BORRAR CUENTA</Text>
+            </View>
+            <View style ={styles.deleteMessage}>
+                <Feather name="info" size={20} color="#4C11CB" />
+                <Text style = {styles.deleteText}>
+                    Estas a punto de eliminar tu cuenta, esta acción es irreversible. Si estas seguro, presiona el botón de eliminar cuenta.
+                </Text>
+            </View>
+            
+            <TouchableOpacity styles = {disabledButton? styles.disabledButton: styles.confirmButton} onPress = {deleteUser}>
+                <Text style={styles.buttonText} >Eliminar cuenta</Text>
+            </TouchableOpacity> 
+      
     </KeyboardAvoidingView>
     )
 }
@@ -92,89 +111,68 @@ const DeleteAccount = () => {
 export default DeleteAccount
 
 const styles = StyleSheet.create({
-    usernameModalContainer: {
-        alignItems: 'center',
+
+    container: {
+        flex: 1,
         backgroundColor: '#FFF',
-        height: '100%'
-        // justifyContent: 'center'
-    },
-    modalHeader: {
-        backgroundColor: '#D4B2EF',
-        height: '12%',
-        justifyContent: 'center',
         alignItems: 'center',
-        width: '100%',
-        shadowOffset: {width: -2, height: 4},  
-        shadowColor: '#171717',  
-        shadowOpacity: 0.2,  
-        shadowRadius: 3,  
     },
-    modalLogo: {
-        marginTop:25,
-        width: 180,
-        height: 55
-        
+    header: {
+        width: '20%',
+        marginTop: '10%',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
-    modalContentsContainer: {
+    headerImg: {
+        width:150,
+        height: 60
+    },
+    sectionTitle: {
         flexDirection: "row",
-        marginTop: 15,
-        width:"100%",
-        justifyContent:"flex-start"
-    },
-    leftArrow: {
-        width:20,
-        height:20,
-        left: 10,
-    },
-    modalDeleteText: {
-        fontWeight: '500',
-        fontSize: 20,
-        marginLeft: 110
-    },
-    dividerModal: {
-        width: '70%',
-        height: '0.15%',
-        backgroundColor: '#d4d2d2',
-        marginTop: 10
-    },
-    deleteContainer: {
-        flexDirection: "row",
-        justifyContent:"center",
-        width: "80%",
-        marginTop: 10,
-        marginBottom: 15
-    },
-    infoDeleteIcon: {
-        width:20,
-        height:20,
-        marginRight: 10
+        alignItems: "center",
+        justifyContent: "flex-start",
+        width:'100%',
+        marginTop: 20
+    },  
+    sectionTitleText: {
+        marginLeft: 10,
+        fontFamily:'OpenSans_500Medium',
+        fontSize: 15,
     },
     deleteMessage: {
-        textAlign: "justify"
-
-    },
-    confirmButton: {
-        height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#28194C',
-        width: '90%',
-        borderRadius: 10,
+        flexDirection: 'row',
+        marginTop: 20,
+         marginBottom: 20,
+         marginHorizontal: 20
     },
     deleteText:{
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-     
+        fontFamily:'OpenSans_400Regular',
+        marginLeft: 10,
+        fontSize: 14
     },
-    disabledButton: {
+    confirmButton:{
+        marginTop: 10,
+        width:'60%',
         height: 45,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#b8b8b8',
-        width: '90%',
-        borderRadius: 10,
-    }
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#4C11CB'
+        
+    },
+    disabledButton:{
+        marginTop: 10,
+        width:'60%',
+        height: 45,
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#CACACA'
+        
+    },
+    buttonText: {
+        fontFamily:'OpenSans_400Regular',
+        fontSize: 15,
+        color: 'white' 
+    },
 })

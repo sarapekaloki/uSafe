@@ -1,5 +1,11 @@
 import React, {useState, useEffect} from "react";
 import { useNavigation } from "@react-navigation/native";
+import { Feather } from '@expo/vector-icons'; 
+import { MaterialIcons } from '@expo/vector-icons'; 
+import { FontAwesome } from '@expo/vector-icons'; 
+import { Entypo } from '@expo/vector-icons'; 
+import { FontAwesome5 } from '@expo/vector-icons'; 
+import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import {
     Image,
     StyleSheet,
@@ -10,6 +16,12 @@ import {
 } from "react-native";
 import { auth } from "../../firebase";
 import {getFirestore, doc, onSnapshot} from 'firebase/firestore';
+import {
+    useFonts,
+    OpenSans_400Regular,
+    OpenSans_500Medium,
+    OpenSans_600SemiBold
+  } from '@expo-google-fonts/open-sans';
 
 const Settings = () => {
     const navigation = useNavigation();
@@ -21,6 +33,12 @@ const Settings = () => {
     const [helpResponses, setHelpResponses] = useState('');
     const [token, setToken] = useState('');
     const [gotInfo, setGotInfo] = useState(false);
+
+    let [fontsLoaded] = useFonts({
+        OpenSans_400Regular,
+        OpenSans_500Medium,
+        OpenSans_600SemiBold
+      });
 
     useEffect(() => {
         if(!gotInfo){
@@ -37,22 +55,26 @@ const Settings = () => {
         }});
       
  
-    
+    if (!fontsLoaded) {
+        return null;
+    }
+
     return(
        
         <View style = {styles.container}>
-            <View style = {styles.profileInfo}>
-            <Image style={styles.image} source={currentProfilePicture != ""? {uri: currentProfilePicture} :require('../../assets/img/initial-profile-picture.jpeg')}></Image>
-                <View>
-                    <Text style = {styles.usernameText}>{currentUsername}</Text>
-                    <Text style = {styles.emailText}> {currentEmail}</Text>
-                    <Text style = {styles.helpResponsesText}>Respuestas de ayuda: {helpResponses}</Text>
-                </View>
+            <View style = {styles.header}>
+                <Image style = {styles.headerImg} source={require('../../assets/img/clearLogo.png')}></Image>
             </View>
-
-            <View style = {styles.changeSection}>
-                <TouchableOpacity style = {styles.button} onPress = {() => navigation.navigate("Update Profile Picture", 
-                {userData:{
+            <View style = {styles.settingsBlock}>
+                <View style = {styles.goBack}>
+                    <TouchableOpacity  onPress={() => {navigation.goBack()} }>
+                        <Entypo style = {styles.icon} name="chevron-left" size={28} color="black" />
+                    </TouchableOpacity>
+                    <Text style = {styles.settingsBlockTitle}>CONFIGURACIÓN DEL PERFIL</Text>
+                </View>
+           
+                <TouchableOpacity style = {styles.configOption}  onPress = {() => navigation.navigate("Update Profile Picture", 
+                    {userData:{
                         username: currentUsername,
                         email: currentEmail, 
                         coordinates: currentCoordinates,
@@ -60,11 +82,15 @@ const Settings = () => {
                         pictureUrl: currentProfilePicture,
                         token:token
                     }})}>
-                    <Text style={styles.buttonText} >Cambiar foto de perfil</Text>
-                    <Image style={styles.rightArrow} source={require('../../assets/icons/rightArrow.png')}></Image>
+                     <View style={styles.leftSide}>
+                        <MaterialIcons name="photo" size={24} color="#5C5C5C" />
+                        <Text style = {styles.configOptionText}>Foto de perfil</Text>
+                    </View>
+
+                    <Entypo name="chevron-right" size={24} color="#5C5C5C" />
                 </TouchableOpacity>
-                <View style= {styles.divider}></View>
-                <TouchableOpacity style = {styles.button} onPress={() => navigation.navigate("Update Username", 
+
+                <TouchableOpacity style = {styles.configOption} onPress={() => navigation.navigate("Update Username", 
                     {userData:{
                         username: currentUsername,
                         email: currentEmail, 
@@ -73,19 +99,41 @@ const Settings = () => {
                         pictureUrl: currentProfilePicture,
                         token: token
                     }})}>
-                    <Text style={styles.buttonText} >Cambiar nombre de usuario</Text>
-                    <Image style={styles.rightArrow} source={require('../../assets/icons/rightArrow.png')}></Image>
+                    <View style={styles.leftSide}>
+                    <FontAwesome5 name="user-edit" size={20} color="#5C5C5C" />
+                    <Text style = {styles.configOptionText}>Nombre de usuario</Text>
+                    </View>
+                    <Entypo name="chevron-right" size={24} color="#5C5C5C" />
                 </TouchableOpacity>
-                <View style= {styles.divider}></View>
-                <TouchableOpacity style = {styles.button} onPress={() => navigation.navigate("Update Password")}>
-                    <Text style={styles.buttonText}>Cambiar contraseña</Text>
-                    <Image style={styles.rightArrow} source={require('../../assets/icons/rightArrow.png')}></Image>
+
+                <TouchableOpacity style = {styles.configOption}>
+                    <View style={styles.leftSide}>
+                    <MaterialCommunityIcons name="radar" size={24} color="#5C5C5C" />                    
+                    <Text style = {styles.configOptionText}>Radar de ayuda</Text>
+                    </View>
+                    <Entypo name="chevron-right" size={24} color="#5C5C5C" />
                 </TouchableOpacity>
             </View>
+            <View style = {styles.settingsBlock}>
+                <Text style = {styles.settingsBlockTitle}>CONFIGURACIÓN DE SEGURIDAD</Text>
+                <TouchableOpacity style = {styles.configOption} onPress={() => navigation.navigate("Update Password")}>
+                     <View style={styles.leftSide}>
+                        <Feather name="lock" size={24} color="#5C5C5C" />
+                        <Text style = {styles.configOptionText}>Contraseña</Text>
+                    </View>
 
-            <TouchableOpacity style = {styles.deleteSection}  onPress={() => navigation.navigate("Delete Account")}>
-                    <Text style={styles.deleteText} >Borrar cuenta</Text>
-            </TouchableOpacity> 
+                    <Entypo name="chevron-right" size={24} color="#5C5C5C" />
+                </TouchableOpacity>
+
+                <TouchableOpacity style = {styles.configOption}  onPress={() => navigation.navigate("Delete Account")}>
+                    <View style={styles.leftSide}>
+                    <Feather name="user-x" size={24} color="#5C5C5C" />
+                    <Text style = {styles.configOptionText}>Borrar cuenta</Text>
+                    </View>
+                    <Entypo name="chevron-right" size={24} color="#5C5C5C" />
+                </TouchableOpacity>
+
+            </View>
         </View>
     )
 }
@@ -95,123 +143,56 @@ export default Settings
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#F5F5F5',
+        backgroundColor: '#FFF',
         alignItems: 'center',
     },
-    profileInfo: {
-        flexDirection: "row",
-        width: '90%',
-        height: 140,
-        backgroundColor: '#fff',
-        marginTop: '5%',
-        marginBottom: 30,
-        borderRadius: 15,
+    header: {
+        width: '20%',
+        marginTop: '10%',
+        alignItems: 'center',
         justifyContent: 'center',
-        alignItems: 'center'
     },
-    image:{
-        width: '25%',
-        height: '60%',
-        marginTop: 15,
-        borderRadius: 60,
-        marginRight: 15,
-        marginLeft: -50
+    headerImg: {
+        width:150,
+        height: 60
     },
-    usernameText:{
-        fontSize: 20,
-        fontWeight: '600',
-    },
-    emailText:{
-        marginTop:5,
-        color: '#A5A5A5'
-    },
-    helpResponsesText:{
-        color: '#A5A5A5',
-        paddingLeft: 3
-
-    },
-    changeSection: {
+    settingsBlock: {
         width: '90%',
-        height: 180,
-        backgroundColor: '#fff',
-        borderRadius: 15,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginBottom: 15
-    },
-    deleteSection: {
-        height: 55,
-        justifyContent: 'center',
-        alignItems: 'center',
-        marginTop: 15,
-        backgroundColor:'#D4B2EF',
-        width: '90%',
-        padding: 10,
-        borderRadius: 10,
-    },
-    
-    button: {
-        flexDirection: "row",
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        width: '100%',
-        height: '33.3%',
-       
-    },
-    divider: {
-        width: '90%',
-        height: '0.5%',
-        backgroundColor: '#d4d2d2',
-    },
-    buttonText: {
-        fontSize: 16,
-        fontWeight: '500',
-        paddingLeft: 20,
-    },
-    rightArrow:{
-        width:15,
-        height:15,
-        right: 20
-
+        alignItems:'flex-start',
+        marginTop: 20,
+        marginBottom:20
+    },  
+    settingsBlockTitle: {
+        fontFamily:'OpenSans_600SemiBold',
+        fontSize: 15,
+        marginBottom: 20,
+        top: 3
     },
     icon: {
-        width:20,
-        height:20,
-        right: 20
+        marginRight: 5
     },
-    deleteText:{
-        color: 'white',
-        fontWeight: '700',
-        fontSize: 16
-     
+    goBack:{
+        flexDirection: 'row',
+        justifyContent: 'center'
     },
-    input: {
-        backgroundColor: '#EDEDED',
+    configOption:{
+        flexDirection:'row',
+        width: '100%',
+        borderBottomColor: '#E9E8EA',
+        borderBottomWidth: 1,
+        justifyContent: 'space-between',
+        alignItems:'center',
         paddingHorizontal: 10,
-        paddingVertical: 10,
-        borderRadius: 10,
-        marginTop: 10,
-        height: 45,
-        width:'95%',
-
+        height: 60
 
     },
-    inputContainer: {
-        width: '90%',
-        marginTop: 20,
-    },
-    inputText: {
-        fontWeight: '450',
-        fontSize: 15
-        // right: 45
-
-    },
-
-    modalUsernameText: {
-        fontWeight: '500',
-        fontSize: 20,
-        marginLeft: 50
-
-    },
+    leftSide:{
+        flexDirection:'row'
+    },  
+    configOptionText: {
+        fontFamily:'OpenSans_500Medium',
+        fontSize: 17,
+        marginLeft:10
+    }
   
 })
