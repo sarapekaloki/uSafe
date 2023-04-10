@@ -1,8 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect } from 'react';
 import OwnProfile from "../OwnProfile";
-import { Platform, StyleSheet, Image } from "react-native";
-import Settings from "../Settings"
+import Notifications from "../Notifications";
+import Messages from "../Messages";
+import { Platform, StyleSheet, Image, TouchableOpacity } from "react-native";
+import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
 import {collection, getFirestore, onSnapshot, query, where} from "firebase/firestore";
@@ -10,21 +12,24 @@ import firebase from "firebase/compat";
 import {auth, firebaseConfig} from "../../../firebase";
 import OutOfRangeScreen from "../OutOfRangeScreen";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
-import {updateUserLocation} from "../../hooks/updateUserLocation";
 import {
     useFonts,
     Spartan_600SemiBold
   } from '@expo-google-fonts/spartan';
 const Tab = createBottomTabNavigator()
 
-
+{/* <Feather name="user" size={24} color="black" /> */}
+{/* <Feather name="map-pin" size={24} color="black" /> */}
+{/* <Feather name="message-square" size={24} color="black" /> */}
+{/* <Feather name="alert-circle" size={24} color="black" /> */}
+{/* <Feather name="bell" size={24} color="black" /> */}
 const Tabs = () => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
     const [ alertMode , set_alertMode ] = useState(false);
     const [ gotInfo, setGotInfo ] = useState(false);
 
-    const backgroundColor = !alertMode ? '#fff' : '#28194C'
+    const backgroundColor = !alertMode ? '#fff' : '#000'
     const fontColor = !alertMode ? '#000' : '#fff'
 
     const [currentUser, setCurrentUser] = useState(null);
@@ -79,24 +84,25 @@ const Tabs = () => {
             ...styles.shadow
         }
             }}>
-        <Tab.Screen name="Alarma"  component={AlertScreen}  listeners={({ navigation }) => ({
-            tabPress: (e) => {
-                e.preventDefault()
-                navigation.navigate("AlertScreen")
-            },
-        })} options={{
-            tabBarIcon: ({focused}) => (
-                <Image source={focused? require( '../../../assets/icons/selected-alarm-icon.png') : require( '../../../assets/icons/unselected-alarm-icon.png') } 
-                        style={styles.alarm}/>
 
-            )
-        }}/>
-        <Tab.Screen name="Configuración" component={OwnProfile} options={{
+        <Tab.Screen name="Mapa" component={userIsInZone() ? MapScreen : OutOfRangeScreen} options={{
             tabBarIcon: ({ focused }) => (
-                <Image 
-                    source={focused ? (alertMode ? require( `../../../assets/icons/dark-settings-selected.png`) :  require( `../../../assets/icons/light-settings-selected.png`) ): alertMode ? require( `../../../assets/icons/dark-settings-unselected.png`) : require( `../../../assets/icons/light-settings-unselected.png`) }
-                    style={styles.icons}
-                    />
+                <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
+          ),
+          headerStyle:{
+            backgroundColor: backgroundColor,
+          },
+          headerTitleStyle:{
+            fontWeight: 'bold',
+            fontSize: 25,
+            right: Platform.OS == 'ios'? '210%': 0,
+            color: fontColor
+          }
+        }}
+        />
+        <Tab.Screen name="Notificaciones" component={Notifications} options={{
+            tabBarIcon: ({ focused }) => (
+                <Feather name="bell" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
           ),
           headerStyle:{
             backgroundColor: backgroundColor,
@@ -109,12 +115,25 @@ const Tabs = () => {
           }
         }}
         />
+        <Tab.Screen name="Alarma"  component={AlertScreen}  listeners={({ navigation }) => ({
+            tabPress: (e) => {
+                e.preventDefault()
+                navigation.navigate("AlertScreen")
+            },
+        })} options={{
+            tabBarIcon: ({focused}) => (
+                // <Feather name="alert-circle" size={24} color="black" style ={styles.alarm}/>
+                <Image source={require( '../../../assets/icons/selected-alarm-icon.png') } 
+                    style={styles.alarm}/>
+             
+
+            )
+        }}/>
+      
         <Tab.Screen name="Perfil" component={OwnProfile} options={{
             tabBarIcon: ({ focused }) => (
-                <Image 
-                    source={focused? (alertMode ? require( `../../../assets/icons/dark-profile-selected.png`): require( `../../../assets/icons/light-profile-selected.png`)) : (alertMode ? require( `../../../assets/icons/dark-profile-unselected.png`) : require( `../../../assets/icons/light-profile-unselected.png`)) }
-                    style={styles.icons}
-                    />
+                <Feather name="user" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
+               
           ),
           headerStyle:{
             backgroundColor: '#4C11CB',
@@ -128,13 +147,9 @@ const Tabs = () => {
           }
         }}
         />
-
-        <Tab.Screen name="Mapa" component={userIsInZone() ? MapScreen : OutOfRangeScreen} options={{
+          <Tab.Screen name="Mensajes" component={Messages} options={{
             tabBarIcon: ({ focused }) => (
-                <Image 
-                    source={focused? (alertMode ? require( `../../../assets/icons/dark-map-selected.png`) : require( `../../../assets/icons/light-map-selected.png`)):(alertMode ? require( `../../../assets/icons/dark-map-unselected.png`) :  require( `../../../assets/icons/light-map-unselected.png`))}
-                    style={styles.icons}
-                    />
+                <Feather name="message-square" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
           ),
           headerStyle:{
             backgroundColor: backgroundColor,
@@ -142,12 +157,10 @@ const Tabs = () => {
           headerTitleStyle:{
             fontWeight: 'bold',
             fontSize: 25,
-            right: Platform.OS == 'ios'? '210%': 0,
             color: fontColor
           }
         }}
         />
-
         </Tab.Navigator>
     );
 }
@@ -169,10 +182,8 @@ const styles = StyleSheet.create({
         height: 25
     },
     alarm: {
-       width: 90,
-       height: 90,
-       bottom: 10,
-       left: 10,
+       width: 70,
+       height: 70,
        borderRadius: 50,
     }
 })
