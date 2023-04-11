@@ -85,7 +85,7 @@ const Tabs = () => {
         }
             }}>
 
-        <Tab.Screen name="Mapa" component={userIsInZone() ? MapScreen : OutOfRangeScreen} options={{
+        <Tab.Screen name="Mapa" component={MapScreen} options={{
             tabBarIcon: ({ focused }) => (
                 <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
           ),

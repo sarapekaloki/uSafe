@@ -168,7 +168,7 @@ const AlertScreen = () =>{
                 style={styles.button2}
                 onPress={() => changeAlert()}
             >
-                <Image source={userIsInZone() ? (mode ? image2 : image1) : image3} style={styles.buttonImage}/>
+                <Image source={mode ? image2 : image1} style={styles.buttonImage}/>
             </TouchableOpacity>
             <Text style={styles.message}>
                 {mode ? modoAlerta : modoNoAlerta}
