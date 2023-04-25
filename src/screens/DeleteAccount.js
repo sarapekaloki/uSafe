@@ -99,8 +99,8 @@ const DeleteAccount = () => {
                     Estas a punto de eliminar tu cuenta, esta acción es irreversible. Si estas seguro, presiona el botón de eliminar cuenta.
                 </Text>
             </View>
-            
-            <TouchableOpacity styles = {disabledButton? styles.disabledButton: styles.confirmButton} onPress = {deleteUser}>
+                
+            <TouchableOpacity style={ disabledButton? styles.disabledButton: styles.confirmButton} disabled={disabledButton} onPress = {deleteUser}>
                 <Text style={styles.buttonText} >Eliminar cuenta</Text>
             </TouchableOpacity> 
       
@@ -150,16 +150,6 @@ const styles = StyleSheet.create({
         marginLeft: 10,
         fontSize: 14
     },
-    confirmButton:{
-        marginTop: 10,
-        width:'60%',
-        height: 45,
-        borderRadius:20,
-        justifyContent: "center",
-        alignItems:'center',
-        backgroundColor:'#4C11CB'
-        
-    },
     disabledButton:{
         marginTop: 10,
         width:'60%',
@@ -170,9 +160,19 @@ const styles = StyleSheet.create({
         backgroundColor:'#CACACA'
         
     },
+    confirmButton:{
+        marginTop: 10,
+        width:'60%',
+        height: 45,
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#4C11CB'
+        
+    },
     buttonText: {
         fontFamily:'OpenSans_400Regular',
         fontSize: 15,
         color: 'white' 
-    },
+    }
 })

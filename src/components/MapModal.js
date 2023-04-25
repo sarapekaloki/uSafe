@@ -4,6 +4,7 @@ import {Modal} from "./Modal";
 import {Button} from "./Button";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {getPreciseDistance} from "geolib";
+import { Entypo } from '@expo/vector-icons';
 
 
 export const MapModal = ({
@@ -18,7 +19,7 @@ export const MapModal = ({
         <Modal isVisible={isVisible}>
             <Modal.Container>
 
-                <Modal.Header title={user.username+" necesita tu ayuda!"}
+                <Modal.Header title={"¡"+user.username+" necesita tu ayuda!"}
                               handleModal={handleModalRejection}
                               user={user}/>
                 <Modal.Body>
@@ -26,15 +27,14 @@ export const MapModal = ({
                         <View style={styles.userAttribute}>
                             <Ionicons name={'checkmark-circle-outline'}
                                       size={22}
-                                      color={'#3b1945'}
+                                      color={'black'}
                                       style={{marginTop: '-1%'}}/>
 
-                            <Text style={styles.text}>{user.helpResponses} responses</Text>
+                            <Text style={styles.text}>Respuestas de ayuda: {user.helpResponses}</Text>
                         </View>
                         <View style={[styles.userAttribute,
                             {marginTop: '4%'}]}>
-                            <Image source={require( '../../assets/icons/light-map-selected.png')}
-                                   style={styles.icons}/>
+                            <Entypo name="location-pin" size={24} color="black" style={styles.icons} />
                             <Text style={styles.text}>
                                 {loggedUser && user.coordinates ?
                                     getPreciseDistance(
@@ -53,8 +53,8 @@ export const MapModal = ({
                         marginTop:'-10%',
                         bottom:'30%'
                     }}>
-                        <Button title="ACCEPT" color='#70C053' onPress={handleModalAcceptance} width="40%"/>
-                        <Button title="DECLINE" color='#EC4747' onPress={handleModalRejection} width="40%" />
+                        <Button title="ACEPTAR" color='#70C053' onPress={handleModalAcceptance} width="40%"/>
+                        <Button title="DECLINAR" color='#EC4747' onPress={handleModalRejection} width="40%" />
                     </View>
 
                 </Modal.Footer>
@@ -83,6 +83,5 @@ const styles = StyleSheet.create({
         width: 23,
         height: 23,
         marginTop:"-2%",
-        // marginLeft:'-1%'
     },
 });
