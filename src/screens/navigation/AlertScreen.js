@@ -31,8 +31,7 @@ const AlertScreen = () =>{
     const [ currentUser , set_currentUser] = useState({})
     const [ helping, set_helping ] = useState(false)
     const [allUsers, SetAllUsers] = useState([])
-    const tabColor = Platform.OS =='ios'? '#c9c9c9': userIsInZone()?'#D4B2EF': '#a3a3a3'
-    const backgroundColor = userIsInZone() ? '#D4B2EF' : '#a3a3a3';
+    const tabColor = Platform.OS =='ios'? '#c9c9c9':'#a3a3a3';
 
     useEffect( () => {
         if(!gotInfo){
@@ -64,40 +63,28 @@ const AlertScreen = () =>{
     useEffect( () => {
     }, [mode,helping,currentUser] )
 
-    function userIsInZone(){
-        if(currentUser && currentUser.coordinates && currentUser.coordinates.latitude && currentUser.coordinates.longitude){
-            return ((currentUser.coordinates.longitude > -116.925793) && (currentUser.coordinates.longitude < -116.922382))
-                && currentUser.coordinates.latitude < 32.508180 && currentUser.coordinates.latitude > 32.505300;
-        }
-        return false;
-    }
 
     async function sendAlarm() {
-        if(userIsInZone()){
-            if(!helping){
-                Vibration.vibrate(2000);
-                const docRef = doc(db, "alarms", auth.currentUser.email);
-                const data = {
-                    alarmingUser:auth.currentUser.email,
-                    users:[]
-                };
-                await setDoc(docRef, data);
-                allUsers.forEach(user => {
-                    if((user.email != currentUser.email) && user.token != ""){
-                        if(user.token != currentUser.token){
-                            sendNotification(user.token);
-                        }
+        if(!helping){
+            Vibration.vibrate(2000);
+            const docRef = doc(db, "alarms", auth.currentUser.email);
+            const data = {
+                alarmingUser:auth.currentUser.email,
+                users:[]
+            };
+            await setDoc(docRef, data);
+            allUsers.forEach(user => {
+                if((user.email != currentUser.email) && user.token != ""){
+                    if(user.token != currentUser.token){
+                        sendNotification(user.token);
                     }
-                })
-            }
-            else{
-                alert("¡No puedes entrar en modo alerta mientras ayudas a alguien!")
-            }
+                }
+            })
         }
         else{
-            alert("¡No puedes entrar en modo alerta fuera de CETYS!")
+            alert("¡No puedes entrar en modo alerta mientras ayudas a alguien!")
         }
-
+    
     }
 
     const sendNotification = async (userToken) => {
@@ -159,7 +146,7 @@ const AlertScreen = () =>{
 
     return(
         <View style={{
-            backgroundColor: userIsInZone() ? '#D4B2EF' : '#a3a3a3',
+            backgroundColor:'black',
             flex: 1
         }}>
             <View style={[styles.pullTab, {backgroundColor: tabColor}]}>
@@ -179,7 +166,7 @@ const AlertScreen = () =>{
 
 const styles = StyleSheet.create({
     message:{
-        color: "#28194C",
+        color: "white",
         fontSize: 30,
         fontWeight: "bold",
         top: 110,
