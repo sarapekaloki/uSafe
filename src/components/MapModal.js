@@ -49,11 +49,11 @@ export const MapModal = ({
                 <Modal.Footer>
                     <View style={{flexDirection:'row',
                         justifyContent:'space-between',
-                        width:'70%',
+                        width:'85%',
                         marginTop:'-10%',
                         bottom:'30%'
                     }}>
-                        <Button title="ACEPTAR" color='#70C053' onPress={handleModalAcceptance} width="40%"/>
+                        <Button title="ACEPTAR" color='#75D5A7' onPress={handleModalAcceptance} width="40%"/>
                         <Button title="DECLINAR" color='#EC4747' onPress={handleModalRejection} width="40%" />
                     </View>
 
