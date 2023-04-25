@@ -1,10 +1,10 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { useState, useEffect } from 'react';
+import {useState, useEffect, useRef} from 'react';
 import OwnProfile from "../OwnProfile";
 import Notifications from "../Notifications";
 import { updateUserLocation } from "../../hooks/updateUserLocation";
 import Messages from "../Messages";
-import { Platform, StyleSheet, Image, TouchableOpacity } from "react-native";
+import {Platform, StyleSheet, Image, TouchableOpacity, Animated, View} from "react-native";
 import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
@@ -18,6 +18,7 @@ import {
     Spartan_700Bold,
     Spartan_600SemiBold
   } from '@expo-google-fonts/spartan';
+import {opacity} from "react-native-reanimated/lib/types/lib";
 const Tab = createBottomTabNavigator()
 
 
@@ -35,8 +36,25 @@ const Tabs = () => {
     let [fontsLoaded] = useFonts({
         Spartan_700Bold,
         Spartan_600SemiBold
+
     });
 
+    const [tabBarVisible, setTabBarVisible] = useState(false);
+
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+   
+    useFonts({
+        Spartan_600SemiBold,
+    });
+
+    useEffect(()=>{
+        console.log(tabBarVisible);
+        Animated.timing(fadeAnim, {
+            toValue: tabBarVisible ? 1 : 0,
+            duration: 10000,
+            useNativeDriver: true,
+        }).start();
+    },[tabBarVisible]);
     useEffect(() => {
         if(!gotInfo || !currentUser){
             getCurrentUser(setCurrentUser).then();
@@ -65,6 +83,18 @@ const Tabs = () => {
         return () => clearInterval(interval);
     });
 
+    const toggleVisibility = () => {
+        setTabBarVisible(!tabBarVisible);
+        Animated.timing(
+            fadeAnim,
+            {
+                toValue: tabBarVisible ? 0 : 1,
+                duration: 500,
+                useNativeDriver: true,
+            }
+        ).start();
+    };
+
     function userIsInZone(){
         if(currentUser){
             return ((currentUser.coordinates.longitude > -116.925975) && (currentUser.coordinates.longitude < -116.922080))
@@ -82,30 +112,37 @@ const Tabs = () => {
         <Tab.Navigator initialRouteName="Mapa" screenOptions={{tabBarShowLabel: false,tabBarStyle:{
             elevation: 0,
             backgroundColor: backgroundColor,
-            height: '11%',
+            height: tabBarVisible ? '11%' : 0,
             position: 'absolute',
             ...styles.shadow
         }
             }}>
-
-        <Tab.Screen name="Mapa" component={MapScreen} options={{
-            tabBarIcon: ({ focused }) => (
-                <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
-          ),
-          headerStyle:{
-            backgroundColor: backgroundColor,
-          },
-          headerTitleStyle:{
-            fontFamily: 'Spartan_700Bold',
-            fontSize: 20,
-            right: Platform.OS == 'ios'? '215%': 0,
-            color: fontColor
-          }
-        }}
-        />
+            <Tab.Screen name="Mapa" children={
+                ()=> <MapScreen setVisible={setTabBarVisible} visible={tabBarVisible}/>
+            }
+                options={{
+                tabBarIcon: ({ focused }) => (
+                    // tabBarVisible &&
+                    <View>
+                        <Animated.View style={{opacity: .5}}>
+                            <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
+                        </Animated.View>
+                    </View>
+                ),
+                headerStyle:{
+                    backgroundColor: backgroundColor,
+                },
+                headerTitleStyle:{
+                    fontWeight: 'bold',
+                    fontSize: 25,
+                    right: Platform.OS == 'ios'? '210%': 0,
+                    color: fontColor
+                }
+            }}
+            />
         <Tab.Screen name="Notificaciones" component={Notifications} options={{
             tabBarIcon: ({ focused }) => (
-                <Feather name="bell" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
+                tabBarVisible && <Feather name="bell" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
           ),
           headerStyle:{
             backgroundColor: backgroundColor,
@@ -126,21 +163,21 @@ const Tabs = () => {
         })} options={{
             tabBarIcon: ({focused}) => (
                 // <Feather name="alert-circle" size={24} color="black" style ={styles.alarm}/>
-                <Image source={require( '../../../assets/icons/selected-alarm-icon.png') } 
+                tabBarVisible && <Image source={require( '../../../assets/icons/selected-alarm-icon.png') }
                     style={styles.alarm}/>
-             
+
 
             )
         }}/>
-      
+
         <Tab.Screen name="Perfil" component={OwnProfile} options={{
             tabBarIcon: ({ focused }) => (
                 <Feather name="user" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
-               
+
           ),
           headerStyle:{
             backgroundColor: '#4C11CB',
-            shadowColor: 'transparent', 
+            shadowColor: 'transparent',
             elevation: 0,
           },
           headerTitleStyle:{
