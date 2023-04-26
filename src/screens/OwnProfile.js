@@ -191,7 +191,6 @@ const styles = StyleSheet.create({
         marginTop:'55%',
         marginLeft: '43%'
     },
-    
     buttonText: {
         color: 'black',
         fontFamily: 'Spartan_600SemiBold',
