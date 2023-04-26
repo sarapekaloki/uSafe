@@ -12,18 +12,11 @@ import {
     Pressable,
     View
 } from "react-native";
-// import {
-//     useFonts,
-//     Spartan_100Thin,
-//     Spartan_200ExtraLight,
-//     Spartan_300Light,
-//     Spartan_400Regular,
-//     Spartan_500Medium,
-//     Spartan_600SemiBold,
-//     Spartan_700Bold,
-//     Spartan_800ExtraBold,
-//     Spartan_900Black,
-//   } from '@expo-google-fonts/spartan';
+import {
+    useFonts,
+    Roboto_700Bold,
+    Roboto_400Regular
+  } from '@expo-google-fonts/roboto';
   
 import { auth } from "../../firebase";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
@@ -47,17 +40,10 @@ const LoginScreen = () => {
     const [anErrorOccurs, setError] = useState(false)
     const navigation = useNavigation()
 
-    // useFonts({
-    //     Spartan_100Thin,
-    //     Spartan_200ExtraLight,
-    //     Spartan_300Light,
-    //     Spartan_400Regular,
-    //     Spartan_500Medium,
-    //     Spartan_600SemiBold,
-    //     Spartan_700Bold,
-    //     Spartan_800ExtraBold,
-    //     Spartan_900Black,
-    // });
+    let [fontsLoaded] = useFonts({
+        Roboto_700Bold,
+        Roboto_400Regular
+    });
 
     const handleLogin = (email, password) => {
         auth
@@ -72,6 +58,10 @@ const LoginScreen = () => {
                 setError(true);
               }
            })
+    }
+
+    if (!fontsLoaded) {
+        return null;
     }
 
     return(
@@ -153,7 +143,7 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontWeight: '700',
+        fontFamily: 'Roboto_700Bold',
         fontSize: 18
     },
     container: {
@@ -166,7 +156,7 @@ const styles = StyleSheet.create({
         color: 'red',
     },
     headerText:{
-        fontWeight: 'bold',
+        fontFamily: 'Roboto_700Bold',
         fontSize: 26,
         marginBottom: 5
     },
@@ -195,6 +185,7 @@ const styles = StyleSheet.create({
     },
     registerText: {
         flex: 1,
+        fontFamily: 'Roboto_400Regular',
         flexDirection: 'row',
         padding: 10
 
@@ -205,7 +196,8 @@ const styles = StyleSheet.create({
     
     },
     text: {
-        fontWeight: 'bold',
+        fontFamily: 'Roboto_700Bold',
+        color: "black",
         fontSize: 15,
         marginTop: 10,
     },

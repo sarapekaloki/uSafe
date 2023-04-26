@@ -16,6 +16,8 @@ import { setData } from "./LoginScreen";
 import {
     useFonts,
     Spartan_500Medium,
+    Spartan_400Regular,
+    Spartan_600SemiBold
   } from '@expo-google-fonts/spartan';
 
 const OwnProfile = () => {
@@ -36,8 +38,10 @@ const OwnProfile = () => {
         .signOut()
         .then(() => navigation.replace("Login"));
     };
-    useFonts({
+    let [fontsLoaded] = useFonts({
         Spartan_500Medium,
+        Spartan_400Regular,
+        Spartan_600SemiBold
     });
 
     useEffect(() => {
@@ -62,6 +66,11 @@ const OwnProfile = () => {
     function changeAlert(){
         Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Heavy)
         set_image(image === image1 ? image2 : image1);}
+
+
+    if (!fontsLoaded) {
+        return null;
+    }
 
     return (
        <View style= {styles.container}>
@@ -131,17 +140,18 @@ const styles = StyleSheet.create({
     },
     userNameText:{
         fontSize: 22,
-        fontWeight: 'regular',
-        letterSpacing: 2
+        fontFamily: 'Spartan_500Medium',
     },
     userEmailText:{
         color: '#8F8F8F',
+        fontFamily: 'Spartan_400Regular',
         fontSize: 16,
         marginBottom: 20
     },
     extraInfo:{
         flexDirection:'row',
         justifyContent: 'space-between',
+        fontFamily: 'Spartan_400Regular',
         paddingRight: 20,
         paddingLeft: 20,
         marginTop: '5%',
@@ -184,7 +194,7 @@ const styles = StyleSheet.create({
     
     buttonText: {
         color: 'black',
-        fontWeight: '600',
+        fontFamily: 'Spartan_600SemiBold',
         fontSize: 16
     }
 })

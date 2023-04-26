@@ -14,15 +14,12 @@ import OutOfRangeScreen from "../OutOfRangeScreen";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import {
     useFonts,
+    Spartan_700Bold,
     Spartan_600SemiBold
   } from '@expo-google-fonts/spartan';
 const Tab = createBottomTabNavigator()
 
-{/* <Feather name="user" size={24} color="black" /> */}
-{/* <Feather name="map-pin" size={24} color="black" /> */}
-{/* <Feather name="message-square" size={24} color="black" /> */}
-{/* <Feather name="alert-circle" size={24} color="black" /> */}
-{/* <Feather name="bell" size={24} color="black" /> */}
+
 const Tabs = () => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
@@ -33,9 +30,10 @@ const Tabs = () => {
     const fontColor = !alertMode ? '#000' : '#fff'
 
     const [currentUser, setCurrentUser] = useState(null);
-   
-    useFonts({
-        Spartan_600SemiBold,
+
+    let [fontsLoaded] = useFonts({
+        Spartan_700Bold,
+        Spartan_600SemiBold
     });
 
     useEffect(() => {
@@ -75,6 +73,10 @@ const Tabs = () => {
 
     }
 
+    if (!fontsLoaded) {
+        return null;
+    }
+
     return (
         <Tab.Navigator initialRouteName="Mapa" screenOptions={{tabBarShowLabel: false,tabBarStyle:{
             elevation: 0,
@@ -93,9 +95,9 @@ const Tabs = () => {
             backgroundColor: backgroundColor,
           },
           headerTitleStyle:{
-            fontWeight: 'bold',
-            fontSize: 25,
-            right: Platform.OS == 'ios'? '210%': 0,
+            fontFamily: 'Spartan_700Bold',
+            fontSize: 20,
+            right: Platform.OS == 'ios'? '215%': 0,
             color: fontColor
           }
         }}
@@ -108,9 +110,9 @@ const Tabs = () => {
             backgroundColor: backgroundColor,
           },
           headerTitleStyle:{
-            fontWeight: 'bold',
-            fontSize: 25,
-            right: Platform.OS == 'ios'? '55%': 0,
+            fontFamily: 'Spartan_700Bold',
+            fontSize: 20,
+            right: Platform.OS == 'ios'? '65%': 0,
             color: fontColor
           }
         }}
@@ -155,8 +157,9 @@ const Tabs = () => {
             backgroundColor: backgroundColor,
           },
           headerTitleStyle:{
-            fontWeight: 'bold',
-            fontSize: 25,
+            fontFamily: 'Spartan_700Bold',
+            fontSize: 20,
+            right: Platform.OS == 'ios'? '120%': 0,
             color: fontColor
           }
         }}

@@ -17,7 +17,12 @@ import {useNavigation} from "@react-navigation/native";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
 import { auth } from "../../firebase";
 import {getFirestore, setDoc, doc} from 'firebase/firestore';
-
+import {
+    useFonts,
+    Roboto_700Bold,
+    Roboto_400Regular
+  } from '@expo-google-fonts/roboto';
+  
 const RegisterScreen = () => {
 
     const {passwordVisibility, rightIcon, handlePasswordVisibility} =
@@ -38,6 +43,11 @@ const RegisterScreen = () => {
     const [lenPasswordFixOccurs, lenPasswordsetFix] = useState(false)
     const [lowerPasswordFixOccurs, lowerPasswordsetFix] = useState(false)
     const [numberPasswordFixOccurs, numberPasswordsetFix] = useState(false)
+
+    let [fontsLoaded] = useFonts({
+        Roboto_700Bold,
+        Roboto_400Regular
+    });
 
     const handleSignUp = () => {
         let numberReg = /\d/;
@@ -147,6 +157,10 @@ const RegisterScreen = () => {
         await setDoc(docRef, data);
     }
 
+    if (!fontsLoaded) {
+        return null;
+    }
+
     return(
         <KeyboardAvoidingView 
             behavior="padding"
@@ -241,11 +255,11 @@ const styles = StyleSheet.create({
     },
     buttonText: {
         color: 'white',
-        fontWeight: '700',
+        fontFamily: 'Roboto_700Bold',
         fontSize: 18
     },
     headerText:{
-        fontWeight: 'bold',
+        fontFamily: 'Roboto_700Bold',
         fontSize: 26,
         marginBottom: 10,
         justifyContent: 'center'
@@ -274,6 +288,7 @@ const styles = StyleSheet.create({
     },
     registerText: {
         flex: 1,
+        fontFamily: 'Roboto_400Regular',
         flexDirection: 'row',
         padding: 10
 
@@ -294,7 +309,7 @@ const styles = StyleSheet.create({
         borderTopRightRadius: 30,
     },
     text: {
-        fontWeight: 'bold',
+        fontFamily: 'Roboto_700Bold',
         fontSize: 15,
         marginTop: 15,
         marginBottom: 5

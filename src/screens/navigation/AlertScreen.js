@@ -4,13 +4,17 @@ import { fetchAllUsers } from '../../hooks/fetchAllUsers';
 import {View, Text, TouchableOpacity, StyleSheet, Image, Platform, Vibration} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
-import image3 from '../../../assets/img/buttonUnpressedGray.png';
 import {deleteDoc, doc, getDocs, setDoc, updateDoc} from "firebase/firestore";
 import {getFirestore, collection, query, where, onSnapshot} from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 
+import {
+    useFonts,
+    Roboto_700Bold,
+    Roboto_400Regular
+  } from '@expo-google-fonts/roboto';
 
 const sleep = (milliseconds) => {
     var start = new Date().getTime();
@@ -144,6 +148,10 @@ const AlertScreen = () =>{
         sleep(3000);
     }
 
+    let [fontsLoaded] = useFonts({
+        Roboto_700Bold,
+    });
+
     return(
         <View style={{
             backgroundColor:'black',
@@ -168,7 +176,7 @@ const styles = StyleSheet.create({
     message:{
         color: "white",
         fontSize: 30,
-        fontWeight: "bold",
+        fontFamily: 'Roboto_700Bold',
         top: 110,
         alignSelf: "center"
     },
