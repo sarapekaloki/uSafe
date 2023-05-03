@@ -13,6 +13,9 @@ import UpdateUsername from './src/screens/UpdateUsername';
 import UpdateProfilePicture from './src/screens/UpdateProfilePicture';
 import Tabs from './src/screens/navigation/Tabs';
 import AlertScreen from "./src/screens/navigation/AlertScreen";
+import Main from './src/screens/firstTimeSetUp/main';
+import HelpRadarSetUp from './src/screens/firstTimeSetUp/helpRadar';
+import LenguageSelection from './src/screens/firstTimeSetUp/lenguageSelection';
 const Stack = createNativeStackNavigator();
 global.alerta = false;
 
@@ -52,6 +55,9 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
+        <Stack.Screen options={{ headerShown: false,  gestureEnabled: false }} name="MainFirstTimeSetUp" component={Main} />
+        <Stack.Screen options={{ headerShown: false,  gestureEnabled: false  }}  name="LenguageSelection" component={LenguageSelection} />
+        <Stack.Screen options={{ headerShown: false,  gestureEnabled: false  }}  name="HelpRadarSetUp" component={HelpRadarSetUp} />
         <Stack.Screen options={{ headerShown: false, presentation:'modal' }} name="AlertScreen" component={AlertScreen} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Settings" component={Settings} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Delete Account" component={DeleteAccount} />

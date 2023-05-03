@@ -25,6 +25,7 @@ const UpdateUsername = () => {
         OpenSans_500Medium,
         OpenSans_600SemiBold
       });
+    
     const updateUsername = () => {
         const newDoc = {
             coordinates: userData.coordinates,

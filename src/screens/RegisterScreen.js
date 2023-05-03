@@ -107,7 +107,6 @@ const RegisterScreen = () => {
                     const user = userCredentials.user;
                     user.sendEmailVerification();
                     addData();
-                    navigation.replace("Login");
                 })
                 .catch(error =>{
                     if (error.code === 'auth/email-already-in-use' ) {
@@ -130,16 +129,6 @@ const RegisterScreen = () => {
         }
         token = (await Notifications.getExpoPushTokenAsync()).data;
         return token;
-        
-      
-        // if (Platform.OS === 'android') {
-        //   Notifications.setNotificationChannelAsync('default', {
-        //     name: 'default',
-        //     importance: Notifications.AndroidImportance.MAX,
-        //     vibrationPattern: [0, 250, 250, 250],
-        //     lightColor: '#FF231F7C',
-        //   });
-        // }
     }      
 
     const addData =  async() => {
@@ -152,9 +141,12 @@ const RegisterScreen = () => {
             helpResponses: 0,
             pictureUrl: "",
             username: username,
-            token: token
+            token: token,
+            helpRadar: 100,
+            len: ""
         };
         await setDoc(docRef, data);
+        navigation.navigate("MainFirstTimeSetUp", {userData: data})
     }
 
     if (!fontsLoaded) {
