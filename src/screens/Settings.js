@@ -2,7 +2,6 @@ import React, {useState, useEffect} from "react";
 import { useNavigation } from "@react-navigation/native";
 import { Feather } from '@expo/vector-icons'; 
 import { MaterialIcons } from '@expo/vector-icons'; 
-import { FontAwesome } from '@expo/vector-icons'; 
 import { Entypo } from '@expo/vector-icons'; 
 import { FontAwesome5 } from '@expo/vector-icons'; 
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
@@ -11,8 +10,7 @@ import {
     StyleSheet,
     Text,
     TouchableOpacity,
-    View,
-    Dimensions
+    View
 } from "react-native";
 import { auth } from "../../firebase";
 import {getFirestore, doc, onSnapshot} from 'firebase/firestore';
