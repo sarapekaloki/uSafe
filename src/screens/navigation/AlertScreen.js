@@ -71,16 +71,23 @@ const AlertScreen = () =>{
     async function sendAlarm() {
         if(!helping){
             Vibration.vibrate(2000);
-            const docRef = doc(db, "alarms", auth.currentUser.email);
-            const data = {
+            const alarmsRef = doc(db, "alarms", auth.currentUser.email);
+            const alarmData = {
                 alarmingUser:auth.currentUser.email,
                 users:[]
             };
-            await setDoc(docRef, data);
+            const chatRef = doc(db, "chat", auth.currentUser.email);
+            const chatData = {
+                user:auth.currentUser.email,
+                messages:[],
+                members:[],
+            };
+            await setDoc(alarmsRef, alarmData);
+            await setDoc(chatRef, chatData);
             allUsers.forEach(user => {
                 if((user.email != currentUser.email) && user.token != ""){
                     if(user.token != currentUser.token){
-                        sendNotification(user.token);
+                        // sendNotification(user.token);
                     }
                 }
             })
@@ -120,11 +127,11 @@ const AlertScreen = () =>{
                 }
             })
         })
-            const allUsers = collection(db, "users2");
+            const allUsers = collection(db, "users");
             await getDocs(allUsers).then((res) => {
                 res.forEach((document) => {
                     if(users.includes(document.data().email)){
-                        const usersRef = doc(db, "users2", document.data().email);
+                        const usersRef = doc(db, "users", document.data().email);
                         updateDoc(usersRef, {
                             coordinates:document.data().coordinates,
                             email:document.data().email,
@@ -139,6 +146,8 @@ const AlertScreen = () =>{
 
         const docRef = doc(db, "alarms", auth.currentUser.email);
         await deleteDoc(docRef);
+        const chatRef = doc(db, "chat", auth.currentUser.email);
+        await deleteDoc(chatRef);
         Vibration.vibrate(2000)
 
     }

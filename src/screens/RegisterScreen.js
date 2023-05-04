@@ -134,7 +134,7 @@ const RegisterScreen = () => {
     const addData =  async() => {
         const token = await registerForPushNotificationsAsync();
         const firestore = getFirestore();
-        const docRef = doc(firestore, "users2", email.toLowerCase());
+        const docRef = doc(firestore, "users", email.toLowerCase());
         const data = {
             coordinates: {longitude:0, latitude:0},
             email: email.toLowerCase(),

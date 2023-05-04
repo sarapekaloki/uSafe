@@ -42,7 +42,7 @@ const Settings = () => {
 
     useEffect(() => {
         if(!gotInfo){
-            onSnapshot(doc(firestore, "users2", currentEmail.toLowerCase()), (doc) => {
+            onSnapshot(doc(firestore, "users", currentEmail.toLowerCase()), (doc) => {
                 if(doc.data() === undefined) return;
                 setCurrentUsername(doc.data().username)
                 setHelpResponses(doc.data().helpResponses)

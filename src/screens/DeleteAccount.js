@@ -65,7 +65,7 @@ const DeleteAccount = () => {
 
         // TODO: que pedo con alarms
         currentUser.delete().then(() => {
-            deleteDoc(doc(firestore, "users2", currentEmail.toLowerCase()));
+            deleteDoc(doc(firestore, "users", currentEmail.toLowerCase()));
             if(storageRef){
                 deleteObject(storageRef).then(() => {
                     // File deleted successfully

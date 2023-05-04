@@ -42,7 +42,7 @@ const HelpRadarSetUp = () => {
             helpRadar: radarValue
         };
 
-        const docRef = doc(firestore, "users2", currentEmail);
+        const docRef = doc(firestore, "users", currentEmail);
         updateDoc(docRef, newDoc).then(() => {
             navigation.navigate("Tabs");
         });       

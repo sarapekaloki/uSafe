@@ -17,7 +17,7 @@ export const RejectionMapModal = ({
             <Modal.Container>
 
                 <Modal.Header title={"Aceptaste el pedido de ayuda de "+
-                    user.username}
+                    (user.username ? user.username.split(" ")[0] : user.username)}
                               handleModal={handleModal} user={user} />
                 <Modal.Body>
                     <View style={styles.body}>

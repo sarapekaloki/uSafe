@@ -19,7 +19,7 @@ export const MapModal = ({
         <Modal isVisible={isVisible}>
             <Modal.Container>
 
-                <Modal.Header title={"¡"+user.username+" necesita tu ayuda!"}
+                <Modal.Header title={"¡"+ (user.username ? user.username.split(" ")[0] : user.username) +" necesita tu ayuda!"}
                               handleModal={handleModalRejection}
                               user={user}/>
                 <Modal.Body>

@@ -63,7 +63,7 @@ const UpdateProfilePicture = () => {
                         token: userData.token
                     };
                 
-                    const docRef = doc(firestore, "users2", currentEmail);
+                    const docRef = doc(firestore, "users", currentEmail);
                     updateDoc(docRef, newDoc).then(() => {
                         navigation.goBack()                    
                     });       

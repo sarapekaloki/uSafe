@@ -4,11 +4,17 @@ import {auth} from "../../firebase";
 export const acceptAlarm = async (focusedUser) => {
     const db = getFirestore();
     const alarmsRef = collection(db, "alarms");
+    const chatRef = collection(db, "chat");
   
     async function sendAlarm(alarm) {
         const docRef = doc(db, "alarms", focusedUser.email);
         await setDoc(docRef, alarm);
-        await sendNotification();
+        // await sendNotification(); NO SE Q PASO ACA
+    }
+
+    async function modifyChat(chat) {
+        const docRef = doc(db, "chat", focusedUser.email);
+        await setDoc(docRef, chat);
     }
 
     await getDocs(alarmsRef).then((res) => {
@@ -16,7 +22,19 @@ export const acceptAlarm = async (focusedUser) => {
             if(doc.data().alarmingUser === focusedUser.email){
                 sendAlarm({
                     alarmingUser:doc.data().alarmingUser,
-                    users:doc.data().users.concat([auth.currentUser.email])
+                    users:doc.data().users.concat([auth.currentUser.email]),
+                    messages:[],
+                });
+            }
+        })
+    });
+    await getDocs(chatRef).then((res) => {
+        res.forEach((doc) => {
+            if(doc.data().user === focusedUser.email){
+                modifyChat({
+                    user:doc.data().user,
+                    members:doc.data().members.concat([auth.currentUser.email]),
+                    messages: doc.data().messages
                 });
             }
         })
@@ -24,7 +42,7 @@ export const acceptAlarm = async (focusedUser) => {
 
     const sendNotification = async () => {
         const db = getFirestore();
-        const docRef = doc(db, "users2", auth.currentUser.email);
+        const docRef = doc(db, "users", auth.currentUser.email);
         const docSnap = await getDoc(docRef);
         const message = {
             to: focusedUser.token,

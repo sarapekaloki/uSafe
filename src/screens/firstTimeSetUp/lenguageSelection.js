@@ -42,7 +42,7 @@ const LenguageSelection = () => {
             helpRadar: userData.helpRadar
         };
 
-        const docRef = doc(firestore, "users2", currentEmail);
+        const docRef = doc(firestore, "users", currentEmail);
         updateDoc(docRef, newDoc).then(() => {
             navigation.navigate("HelpRadarSetUp", {userData: newDoc});
         });       

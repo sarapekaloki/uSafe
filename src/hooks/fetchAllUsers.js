@@ -7,7 +7,7 @@ export const fetchAllUsers = (setAllUsers) => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
 
-    const q = query(collection(db, "users2"), where("email", "!=", auth.currentUser.email));
+    const q = query(collection(db, "users"), where("email", "!=", auth.currentUser.email));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const users = [];
         querySnapshot.forEach((doc) => {

@@ -4,7 +4,7 @@ import OwnProfile from "../OwnProfile";
 import Notifications from "../Notifications";
 import { updateUserLocation } from "../../hooks/updateUserLocation";
 import Messages from "../Messages";
-import {Platform, StyleSheet, Image, TouchableOpacity, Animated, View} from "react-native";
+import {Platform, StyleSheet, Image, TouchableOpacity, Animated, View, Text} from "react-native";
 import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
@@ -19,7 +19,12 @@ import {
     Spartan_600SemiBold
   } from '@expo-google-fonts/spartan';
 import {opacity} from "react-native-reanimated/lib/types/lib";
+import {alarm, help, settingsOutline} from "ionicons/icons";
+import indiscreteGestureHandler from "react-native-gesture-handler/src/web/IndiscreteGestureHandler";
+import NoMessages from "../NoMessages";
+import {getSpecificUser} from "../../hooks/getSpecificUser";
 const Tab = createBottomTabNavigator()
+import {useRoute, useNavigation} from "@react-navigation/native";
 
 
 const Tabs = () => {
@@ -32,6 +37,15 @@ const Tabs = () => {
     const fontColor = !alertMode ? '#000' : '#fff'
 
     const [currentUser, setCurrentUser] = useState(null);
+    const [inHelpGroup, setInHelpGroup] = useState(false);
+    const [currentChat, setCurrentChat] = useState(null);
+    const [currentAlarm, setCurrentAlarm] = useState(null);
+
+    const [alarmingUser, setAlarmingUser] = useState(null);
+
+    const [currentScreen, setCurrentScreen] = useState('');
+
+    const [unreadMessages, setUnreadMessages] = useState(0);
 
     let [fontsLoaded] = useFonts({
         Spartan_700Bold,
@@ -39,40 +53,86 @@ const Tabs = () => {
 
     });
 
-    const [tabBarVisible, setTabBarVisible] = useState(false);
+    const [tabBarVisible, setTabBarVisible] = useState(true);
 
-    const fadeAnim = useRef(new Animated.Value(0)).current;
-   
     useFonts({
         Spartan_600SemiBold,
     });
 
+    const usersSnapshot = (usersQuery)=>{
+        onSnapshot(usersQuery,  (querySnapshot) => {
+            let foundAlarmingUser = false;
+            querySnapshot.forEach((doc) => {
+                    setAlarmingUser(doc.data());
+                    foundAlarmingUser = true;
+            });
+            if(!foundAlarmingUser){
+                setAlarmingUser(null);
+            }
+        } )
+    }
+
     useEffect(()=>{
-        console.log(tabBarVisible);
-        Animated.timing(fadeAnim, {
-            toValue: tabBarVisible ? 1 : 0,
-            duration: 10000,
-            useNativeDriver: true,
-        }).start();
-    },[tabBarVisible]);
+        if(currentAlarm !== null){
+            const usersQuery = query(collection(db, "users"), where("email", "==", currentAlarm.alarmingUser));
+            usersSnapshot(usersQuery);
+        }
+    },[currentAlarm]);
+
+
+    const alarmSnapshot = (alarmQuery)=>{
+        onSnapshot(alarmQuery,  (querySnapshot) => {
+            let alertModeActive = false;
+            let auxAlarmingUser = false;
+            let helpingUser = false;
+            querySnapshot.forEach((doc) => {
+                if(doc.data().alarmingUser === auth.currentUser.email){
+                    alertModeActive = true;
+                }
+                if(doc.data().users.includes(auth.currentUser.email)){
+                    auxAlarmingUser = true;
+                    getSpecificUser(doc.data().alarmingUser, setAlarmingUser).then();
+                    setCurrentAlarm(doc.data());
+                    helpingUser = true;
+                }
+            });
+            if(!auxAlarmingUser){
+                setAlarmingUser(null);
+            }
+            if(!helpingUser){
+                setCurrentAlarm(null);
+            }
+            set_alertMode(alertModeActive);
+        } )
+    }
+
+    const chatSnapshot = (chatQuery)=>{
+        onSnapshot(chatQuery,  (querySnapshot) => {
+            let inHelpGroupActive = false;
+            querySnapshot.forEach((doc) => {
+                if(doc.data().user === auth.currentUser.email){
+                    inHelpGroupActive = true;
+                    inHelpGroupActive ? setCurrentChat(doc.data()) : ()=>{};
+                }
+                if(doc.data().members.includes(auth.currentUser.email)){
+                    inHelpGroupActive = true;
+                    inHelpGroupActive ? setCurrentChat(doc.data()) : ()=>{};
+                }
+
+            });
+            setInHelpGroup(inHelpGroupActive);
+        } )
+    }
+
     useEffect(() => {
         if(!gotInfo || !currentUser){
             getCurrentUser(setCurrentUser).then();
-            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
-            onSnapshot(q,  (querySnapshot) => {
-                let alertModeActive = false
-                querySnapshot.forEach((doc) => {
-                    if(doc.data().alarmingUser === auth.currentUser.email){
-                        alertModeActive = true
-                    }
-                });
-                set_alertMode(alertModeActive)
-            } )
+            const alarmQuery = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
+            alarmSnapshot(alarmQuery);
+            const chatQuery = query(collection(db, "chat"), where("user", "!=", ""));
+            chatSnapshot(chatQuery);
             setGotInfo(true);
         }});
-
-    useEffect( () => {}, [alertMode,currentUser]);
-
 
     useEffect(()=>{
         const interval = setInterval(()=>{
@@ -83,17 +143,33 @@ const Tabs = () => {
         return () => clearInterval(interval);
     });
 
-    const toggleVisibility = () => {
-        setTabBarVisible(!tabBarVisible);
-        Animated.timing(
-            fadeAnim,
-            {
-                toValue: tabBarVisible ? 0 : 1,
-                duration: 500,
-                useNativeDriver: true,
+    useEffect( () => {
+        if(!inHelpGroup){
+            setCurrentChat(null);
+        }
+    }, [alertMode,currentUser, inHelpGroup, currentChat]);
+
+    useEffect(()=>{
+        let unread = 0;
+        let seenAny=false;
+        if(currentChat){
+            let index = currentChat.messages.length-1;
+            for(let message of currentChat.messages){
+                for(let user of message.seenBy){
+                    if(user.email === auth.currentUser.email){
+                        index = currentChat.messages.indexOf(message);
+                        seenAny=true;
+                    }
+                }
+
             }
-        ).start();
-    };
+            unread = currentChat.messages.length-1-index;
+        }
+        setUnreadMessages(unread);
+        if(currentChat && !seenAny){
+            setUnreadMessages(currentChat.messages.length);
+        }
+    },[currentChat])
 
     function userIsInZone(){
         if(currentUser){
@@ -118,16 +194,11 @@ const Tabs = () => {
         }
             }}>
             <Tab.Screen name="Mapa" children={
-                ()=> <MapScreen setVisible={setTabBarVisible} visible={tabBarVisible}/>
+                ()=> <MapScreen alarmingUser={alarmingUser} currentUser={currentUser} setVisible={setTabBarVisible} visible={tabBarVisible} changeCurrentScreen={setCurrentScreen} currentScreen={currentScreen}/>
             }
                 options={{
                 tabBarIcon: ({ focused }) => (
-                    // tabBarVisible &&
-                    <View>
-                        <Animated.View style={{opacity: .5}}>
                             <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
-                        </Animated.View>
-                    </View>
                 ),
                 headerStyle:{
                     backgroundColor: backgroundColor,
@@ -187,9 +258,19 @@ const Tabs = () => {
           }
         }}
         />
-          <Tab.Screen name="Mensajes" component={Messages} options={{
+          <Tab.Screen name="Mensajes" children={
+              ()=> currentChat ? <Messages currentChat={currentChat}  changeCurrentScreen={setCurrentScreen} currentScreen={currentScreen}/> : <NoMessages/>
+          } options={{
             tabBarIcon: ({ focused }) => (
-                <Feather name="message-square" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
+                <View style={styles.container}>
+                    <Feather name="message-square" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
+                    {unreadMessages > 0 && (
+                        <View style={styles.circle}>
+                            <Text style={styles.count}>{unreadMessages > 9 ? '9+' : unreadMessages}</Text>
+                        </View>
+                    )}
+                </View>
+
           ),
           headerStyle:{
             backgroundColor: backgroundColor,
@@ -226,5 +307,24 @@ const styles = StyleSheet.create({
        width: 70,
        height: 70,
        borderRadius: 50,
-    }
+    },
+    container: {
+        position: 'relative',
+    },
+    circle: {
+        position: 'absolute',
+        bottom: 16,
+        left: 12,
+        backgroundColor: '#4C11CB',
+        borderRadius: 10,
+        width: 20,
+        height: 20,
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    count: {
+        color: 'white',
+        fontWeight: 'bold',
+        fontSize: 12,
+    },
 })
