@@ -29,6 +29,8 @@ const Settings = () => {
     const [currentCoordinates, setCurrentCoordinates] = useState({});
     const [currentProfilePicture, setProfilePicture] = useState('');  
     const [helpResponses, setHelpResponses] = useState('');
+    const [lenguage, setLenguage] = useState('');
+    const [helpRadar, setHelpRadar] = useState(0);
     const [token, setToken] = useState('');
     const [gotInfo, setGotInfo] = useState(false);
 
@@ -47,7 +49,8 @@ const Settings = () => {
                 setProfilePicture(doc.data().pictureUrl)
                 setCurrentCoordinates(doc.data().coordinates)   
                 setToken(doc.data().token) 
-                
+                setLenguage(doc.data().len)
+                setHelpRadar(doc.data().helpRadar)
             });
             setGotInfo(true);
         }});
@@ -95,7 +98,9 @@ const Settings = () => {
                         coordinates: currentCoordinates,
                         helpResponses: helpResponses,
                         pictureUrl: currentProfilePicture,
-                        token: token
+                        token: token,
+                        helpRadar: helpRadar,
+                        len: lenguage
                     }})}>
                     <View style={styles.leftSide}>
                     <FontAwesome5 name="user-edit" size={20} color="#5C5C5C" />
