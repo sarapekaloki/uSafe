@@ -2,6 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { useState, useEffect } from 'react';
 import OwnProfile from "../OwnProfile";
 import Notifications from "../Notifications";
+import { updateUserLocation } from "../../hooks/updateUserLocation";
 import Messages from "../Messages";
 import { Platform, StyleSheet, Image, TouchableOpacity } from "react-native";
 import { Feather } from '@expo/vector-icons'; 
@@ -58,7 +59,7 @@ const Tabs = () => {
     useEffect(()=>{
         const interval = setInterval(()=>{
             if(currentUser){
-                // updateUserLocation(currentUser).then();
+                updateUserLocation(currentUser).then();
             }
         },6000)
         return () => clearInterval(interval);
