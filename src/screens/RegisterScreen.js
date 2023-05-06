@@ -118,18 +118,18 @@ const RegisterScreen = () => {
             alert('Failed to get push token for push notification!');
             return;
         }
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+              name: 'default',
+              importance: Notifications.AndroidImportance.MAX,
+              vibrationPattern: [0, 250, 250, 250],
+              lightColor: '#FF231F7C',
+            });
+          }
+
         token = (await Notifications.getExpoPushTokenAsync()).data;
         return token;
-        
-      
-        // if (Platform.OS === 'android') {
-        //   Notifications.setNotificationChannelAsync('default', {
-        //     name: 'default',
-        //     importance: Notifications.AndroidImportance.MAX,
-        //     vibrationPattern: [0, 250, 250, 250],
-        //     lightColor: '#FF231F7C',
-        //   });
-        // }
+    
     }      
 
     const addData =  async() => {
