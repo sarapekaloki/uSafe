@@ -2,9 +2,12 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
+      <change afterPath="$PROJECT_DIR$/assets/img/no-messages.png" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/Like.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Like.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/NoMessages.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/NoMessages.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/UpdateUsername.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/UpdateUsername.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/screens/WhoHelpedYou.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/WhoHelpedYou.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -97,6 +100,9 @@
       <workItem from="1683582198673" duration="13709000" />
       <workItem from="1683658418452" duration="9914000" />
       <workItem from="1683768887789" duration="1599000" />
+      <workItem from="1683824931036" duration="7725000" />
+      <workItem from="1683849430600" duration="10925000" />
+      <workItem from="1683917110922" duration="3284000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>

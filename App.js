@@ -16,6 +16,7 @@ import AlertScreen from "./src/screens/navigation/AlertScreen";
 import Main from './src/screens/firstTimeSetUp/main';
 import HelpRadarSetUp from './src/screens/firstTimeSetUp/helpRadar';
 import LenguageSelection from './src/screens/firstTimeSetUp/lenguageSelection';
+import WhoHelpedYou from "./src/screens/WhoHelpedYou";
 const Stack = createNativeStackNavigator();
 global.alerta = false;
 
@@ -60,6 +61,7 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false,  gestureEnabled: false  }}  name="HelpRadarSetUp" component={HelpRadarSetUp} />
         <Stack.Screen options={{ headerShown: false, presentation:'modal' }} name="AlertScreen" component={AlertScreen} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Settings" component={Settings} />
+        <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="WhoHelpedYou" component={WhoHelpedYou} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Delete Account" component={DeleteAccount} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Password" component={UpdatePassword} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Username" component={UpdateUsername} />

@@ -20,6 +20,10 @@ export const Message = (props) => {
     const senderIsVictim = props.victim === props.message.sender;
 
     useEffect(()=>{
+        hourShouldDisplay();
+    },[])
+
+    useEffect(()=>{
         getDocs(usersRef).then((res) => {
             res.forEach((doc) => {
                 if(doc.data().email === props.message.sender){
@@ -32,13 +36,22 @@ export const Message = (props) => {
     useEffect(()=>{
     },[user]);
 
+    const hourShouldDisplay = ()=>{
+        const index = props.currentChat.messages.indexOf(props.message);
+        if(index>0){
+            const difference = Math.abs(props.message.time - props.currentChat.messages[index-1].time);
+            const hours = difference / (1000 * 60 * 60);
+            return hours > 3;
+        }
+        return true;
+    }
 
     return (
         <View style={{marginBottom: props.message.consecutive ?
                 currentUserIsSender ? 0 : -6
                 : 12}}>
             {
-                dateVisible &&
+                (dateVisible || hourShouldDisplay()) &&
                 <Text style={[styles.date]}>{formatDate(props.message.time)}</Text>
             }
             {

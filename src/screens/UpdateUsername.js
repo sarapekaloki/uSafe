@@ -33,7 +33,10 @@ const UpdateUsername = () => {
             helpResponses: userData.helpResponses,
             pictureUrl: userData.pictureUrl,
             username: updatedUsername,
-            token: userData.token
+            token: userData.token,
+            len:userData.len,
+            likes:userData.likes,
+            helpRadar:userData.helpRadar
         };
         setUpdatedUsername(updatedUsername.trim())
         if(updatedUsername != ""){

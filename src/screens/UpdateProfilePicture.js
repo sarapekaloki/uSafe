@@ -60,7 +60,10 @@ const UpdateProfilePicture = () => {
                         helpResponses: userData.helpResponses,
                         pictureUrl: url,
                         username: userData.username,
-                        token: userData.token
+                        token: userData.token,
+                        len:userData.len,
+                        likes:userData.likes,
+                        helpRadar:userData.helpRadar
                     };
                 
                     const docRef = doc(firestore, "users", currentEmail);

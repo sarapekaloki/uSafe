@@ -18,6 +18,7 @@ import {getPreciseDistance} from "geolib";
 import firebase from "firebase/compat";
 import {auth, firebaseConfig} from "../../firebase";
 import {collection, getDocs, getFirestore, onSnapshot, query, where} from "firebase/firestore";
+import * as Haptics from "expo-haptics";
 
 export default function MapScreen(props){
     const [askedForHelp, setAskedForHelp] = useState(false);
@@ -163,7 +164,8 @@ export default function MapScreen(props){
                     user={user}
                     victim={allAlarms.map((alarm)=>alarm.alarmingUser).includes(user.email)}
                     setFocusedUser={setFocusedUser}
-                    handleModal={helpingUser ? ()=>{
+                    handleModal={helpingUser ? async ()=>{
+                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
                         setIsRejectionModalVisible(!isRejectionModalVisible)
                     } : handleModalRejection}
                 />

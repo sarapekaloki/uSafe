@@ -31,6 +31,7 @@ const Settings = () => {
     const [helpResponses, setHelpResponses] = useState('');
     const [lenguage, setLenguage] = useState('');
     const [helpRadar, setHelpRadar] = useState(0);
+    const [helpLikes, setHelpLikes] = useState(0);
     const [token, setToken] = useState('');
     const [gotInfo, setGotInfo] = useState(false);
 
@@ -51,6 +52,7 @@ const Settings = () => {
                 setToken(doc.data().token) 
                 setLenguage(doc.data().len)
                 setHelpRadar(doc.data().helpRadar)
+                setHelpLikes(doc.data().likes)
             });
             setGotInfo(true);
         }});
@@ -81,7 +83,10 @@ const Settings = () => {
                         coordinates: currentCoordinates,
                         helpResponses: helpResponses,
                         pictureUrl: currentProfilePicture,
-                        token:token
+                        token:token,
+                        helpRadar:helpRadar,
+                        likes:helpLikes,
+                        len:lenguage
                     }})}>
                      <View style={styles.leftSide}>
                         <MaterialIcons name="photo" size={24} color="#5C5C5C" />
@@ -100,7 +105,8 @@ const Settings = () => {
                         pictureUrl: currentProfilePicture,
                         token: token,
                         helpRadar: helpRadar,
-                        len: lenguage
+                        len: lenguage,
+                        likes:helpLikes
                     }})}>
                     <View style={styles.leftSide}>
                     <FontAwesome5 name="user-edit" size={20} color="#5C5C5C" />

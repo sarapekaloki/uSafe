@@ -15,7 +15,9 @@ export const updateUserLocation = async (currentUser) => {
                 pictureUrl:currentUser.pictureUrl,
                 username:currentUser.username,
                 len: currentUser.len,
-                helpRadar: currentUser.helpRadar
+                helpRadar: currentUser.helpRadar,
+                token:currentUser.token,
+                likes:currentUser.likes
             }
             updateDoc(userRef, userObject).then();
         }
@@ -36,7 +38,10 @@ export const updateUserLocation = async (currentUser) => {
                 helpResponses:currentUser.helpResponses,
                 pictureUrl:currentUser.pictureUrl,
                 username:currentUser.username,
-                token: currentUser.token
+                len: currentUser.len,
+                helpRadar: currentUser.helpRadar,
+                token:currentUser.token,
+                likes:currentUser.likes
             }
             updateDoc(userRef, userObject).then();
         }

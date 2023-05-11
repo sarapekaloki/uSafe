@@ -38,8 +38,9 @@ const LenguageSelection = () => {
             pictureUrl: userData.pictureUrl,
             username: userData.username,
             token: userData.token,
-            len: lenValue,
-            helpRadar: userData.helpRadar
+            len:lenValue,
+            likes:userData.likes,
+            helpRadar:userData.helpRadar
         };
 
         const docRef = doc(firestore, "users", currentEmail);

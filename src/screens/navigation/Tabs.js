@@ -8,7 +8,7 @@ import {Platform, StyleSheet, Image, TouchableOpacity, Animated, View, Text} fro
 import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
-import {collection, getFirestore, onSnapshot, query, where} from "firebase/firestore";
+import {collection, getDocs, getFirestore, onSnapshot, query, where} from "firebase/firestore";
 import firebase from "firebase/compat";
 import {auth, firebaseConfig} from "../../../firebase";
 import OutOfRangeScreen from "../OutOfRangeScreen";
@@ -25,6 +25,7 @@ import NoMessages from "../NoMessages";
 import {getSpecificUser} from "../../hooks/getSpecificUser";
 const Tab = createBottomTabNavigator()
 import {useRoute, useNavigation} from "@react-navigation/native";
+import * as Haptics from 'expo-haptics';
 
 
 const Tabs = () => {
@@ -46,6 +47,10 @@ const Tabs = () => {
     const [currentScreen, setCurrentScreen] = useState('');
 
     const [unreadMessages, setUnreadMessages] = useState(0);
+
+    const [chatTitle, setChatTitle] = useState('');
+
+    const navigation = useNavigation();
 
     let [fontsLoaded] = useFonts({
         Spartan_700Bold,
@@ -73,6 +78,7 @@ const Tabs = () => {
     }
 
     useEffect(()=>{
+
         if(currentAlarm !== null){
             const usersQuery = query(collection(db, "users"), where("email", "==", currentAlarm.alarmingUser));
             usersSnapshot(usersQuery);
@@ -169,16 +175,23 @@ const Tabs = () => {
         if(currentChat && !seenAny){
             setUnreadMessages(currentChat.messages.length);
         }
-    },[currentChat])
 
-    function userIsInZone(){
-        if(currentUser){
-            return ((currentUser.coordinates.longitude > -116.925975) && (currentUser.coordinates.longitude < -116.922080))
-                && currentUser.coordinates.latitude < 32.508246 && currentUser.coordinates.latitude > 32.505197;
+        if (currentChat) {
+            if (currentChat.user !== auth.currentUser.email) {
+                const db = getFirestore();
+                const usersRef = collection(db, "users");
+                getDocs(usersRef).then((res) => {
+                    res.forEach((doc) => {
+                        if (currentChat.user === doc.data().email) {
+                            setChatTitle('Grupo de ayuda de ' + doc.data().username.split(" ")[0]);
+                        }
+                    });
+                });
+            } else if(currentChat.user === auth.currentUser.email){
+                setChatTitle("Tu grupo de ayuda");
+            }
         }
-        return false;
-
-    }
+    },[currentChat])
 
     if (!fontsLoaded) {
         return null;
@@ -272,6 +285,17 @@ const Tabs = () => {
                 </View>
 
           ),
+          header: () => (
+              <View style={styles.chatHeader}>
+                  <TouchableOpacity onPress={() => {}}>
+                          <Text style={styles.chatHeaderText}>
+                              {
+                                  currentChat ? chatTitle : 'Mensajes'
+                              }
+                          </Text>
+                  </TouchableOpacity>
+              </View>
+          ),
           headerStyle:{
             backgroundColor: backgroundColor,
           },
@@ -280,7 +304,7 @@ const Tabs = () => {
             fontSize: 20,
             right: Platform.OS == 'ios'? '120%': 0,
             color: fontColor
-          }
+          },
         }}
         />
         </Tab.Navigator>
@@ -327,4 +351,21 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 12,
     },
+    chatHeader:{
+        height:100,
+        backgroundColor:'black',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    // chatHeaderTextContainer:{
+    //     alignItems: 'center',
+    //     justifyContent: 'center',
+    // },
+    chatHeaderText:{
+        fontFamily: 'Spartan_700Bold',
+        color:'white',
+        fontSize:20,
+        top:'20%'
+    }
 })

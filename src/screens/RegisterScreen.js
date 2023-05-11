@@ -143,7 +143,8 @@ const RegisterScreen = () => {
             username: username,
             token: token,
             helpRadar: 100,
-            len: ""
+            len: "",
+            likes:0
         };
         await setDoc(docRef, data);
         navigation.navigate("MainFirstTimeSetUp", {userData: data})

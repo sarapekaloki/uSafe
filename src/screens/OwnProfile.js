@@ -27,7 +27,8 @@ const OwnProfile = () => {
     const firestore = getFirestore()
     const profilesRef = collection(firestore, "profiles")
     const [currentUsername, setCurrentUsername] = useState('')
-    const [helpResponses, setHelpResponses] = useState('')
+    const [helpResponses, setHelpResponses] = useState('');
+    const [likes, setLikes] = useState('')
     const [profilePictureURL, setProfilePictureURL] = useState('')
     const [gotInfo, setGotInfo] = useState(false);
 
@@ -57,6 +58,7 @@ const OwnProfile = () => {
         setCurrentUsername(doc.data().username)
         setHelpResponses(doc.data().helpResponses)
         setProfilePictureURL(doc.data().pictureUrl)
+        setLikes(doc.data().likes);
         });
     }
 
@@ -89,7 +91,7 @@ const OwnProfile = () => {
             <View style ={styles.extraInfo}>
                 <View style = {styles.column}>
                     <Text style={styles.extraInfoHeader}>Likes</Text>
-                    <Text style={styles.extraInfoNum}>0</Text>
+                    <Text style={styles.extraInfoNum}>{likes}</Text>
                 </View>
                 <View style = {styles.column}>
                     <Text style={styles.extraInfoHeader}>Help Responses</Text>
