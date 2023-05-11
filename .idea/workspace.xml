@@ -4,7 +4,6 @@
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Messages.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Messages.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -97,6 +96,7 @@
       <workItem from="1683514416889" duration="9761000" />
       <workItem from="1683582198673" duration="13709000" />
       <workItem from="1683658418452" duration="9914000" />
+      <workItem from="1683768887789" duration="1599000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>
