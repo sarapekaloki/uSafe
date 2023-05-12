@@ -189,8 +189,8 @@ const styles = StyleSheet.create({
         height: 60,
         width: '50%',
         borderRadius: 30,
-        marginTop:'55%',
-        marginLeft: '43%'
+        top: 30,
+        left: 85
     },
     
     buttonText: {

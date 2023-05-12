@@ -1,5 +1,5 @@
 import React from "react";
-import {StyleSheet, View, Text, Button, Image, TouchableOpacity} from "react-native";
+import {StyleSheet, View, Text, Button, Image, TouchableOpacity, Platform} from "react-native";
 import {Marker} from "react-native-maps";
 import {addDoc, collection, doc, getFirestore, setDoc} from "firebase/firestore";
 
@@ -21,12 +21,12 @@ export const OtherUserMarker = ({
                     }
                 >
                     <View style={victim ?
-                        [styles.victimContainer,visible ? {borderWidth: 12} :
+                        [styles.victimContainer,visible ? {borderWidth: Platform.OS==='ios' ? 12:6} :
                             {borderWidth:0}] :
                         [styles.container, visible ? {borderWidth: 6} :
                             {borderWidth:0}]}>
                         <Image style={victim ?
-                            [styles.victim,visible ? {width:60,height:60} :
+                            [styles.victim,visible ? {width: Platform.OS==='ios' ? 60:35 ,height: Platform.OS==='ios' ? 60:35} :
                                 {width:0,height:0}] :
                             [styles.image,visible ? {width:35,height:35} :
                                 {width:0,height:0}]} source={user.pictureUrl ? {uri: user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg') }/>
