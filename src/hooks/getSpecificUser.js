@@ -4,7 +4,7 @@ import firebase from 'firebase/compat/app';
 
 export const getSpecificUser = async (email, setAlarmingUser) => {
     const db = getFirestore();
-    const usersRef = collection(db, "users2");
+    const usersRef = collection(db, "users");
 
     await getDocs(usersRef).then((res) => {
         res.forEach((doc) => {

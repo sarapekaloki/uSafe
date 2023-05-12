@@ -24,7 +24,7 @@ export const acceptAlarm = async (focusedUser) => {
 
     const sendNotification = async () => {
         const db = getFirestore();
-        const docRef = doc(db, "users2", auth.currentUser.email);
+        const docRef = doc(db, "users", auth.currentUser.email);
         const docSnap = await getDoc(docRef);
         const message = {
             to: focusedUser.token,

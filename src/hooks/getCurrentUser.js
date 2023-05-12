@@ -5,7 +5,7 @@ import firebase from 'firebase/compat/app';
 export const getCurrentUser = async (setCurrentUser) => {
     const db = getFirestore();
 
-    const q = query(collection(db, "users2"), where("email", "!=", ""));
+    const q = query(collection(db, "users"), where("email", "!=", ""));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
             if(auth && auth.currentUser && auth.currentUser.email){

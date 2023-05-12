@@ -1,28 +1,28 @@
 import React from "react";
-import {StyleSheet, View, Text, Image, TouchableOpacity} from "react-native";
+import {StyleSheet, View} from "react-native";
 import {Modal} from "./Modal";
 import {Button} from "./Button";
-import Ionicons from "react-native-vector-icons/Ionicons";
-
+import { rejectMapModalWords } from "../lenguagesDicts/rejectMapModalWords";
 
 export const RejectionMapModal = ({
                              handleModal,
                              cancelAlarm,
                              isVisible,
                              user,
+                             len,
                              ...props
                          }) => {
     return (
         <Modal isVisible={isVisible}>
             <Modal.Container>
 
-                <Modal.Header title={"Aceptaste el pedido de ayuda de "+
+                <Modal.Header title={rejectMapModalWords[len].title+
                     user.username}
                               handleModal={handleModal} user={user} />
                 <Modal.Body>
                     <View style={styles.body}>
                         <Button
-                            title="DEJAR DE AYUDAR"
+                            title={rejectMapModalWords[len].button}
                             color='#EC4747'
                             onPress={cancelAlarm}
                             width="90%"

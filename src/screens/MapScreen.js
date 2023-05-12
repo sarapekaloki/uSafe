@@ -16,8 +16,13 @@ import MapViewDirections from "react-native-maps-directions";
 import {alarm} from "ionicons/icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MapScreen(props){
+    const [len, setLen] = useState('EN');
+    AsyncStorage.getItem('len').then(res => {
+         setLen(res)
+    });
     const [currentUser, setCurrentUser] = useState(null);
     const [askedForHelp, setAskedForHelp] = useState(false);
     const [currentUserAlarm, setCurrentUserAlarm] = useState(false);
@@ -199,6 +204,7 @@ export default function MapScreen(props){
                         handleModalRejection={handleModalRejection}
                         handleModalAcceptance={handleModalAcceptance}
                         loggedUser={currentUser}
+                        len={len}
                     />
                     <RejectionMapModal
                         isVisible={isRejectionModalVisible}
@@ -206,6 +212,7 @@ export default function MapScreen(props){
                         handleModal={()=>
                             setIsRejectionModalVisible(!isRejectionModalVisible)}
                         cancelAlarm={cancelAcceptedAlarm}
+                        len={len}
                     />
 
                 </Callout>

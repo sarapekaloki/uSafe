@@ -1,10 +1,11 @@
 import React, { useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TextInput, Pressable, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
 import { auth } from "../../firebase";
 import {EmailAuthProvider} from 'firebase/auth';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
+import { passwordWords } from "../lenguagesDicts/passwordWords";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
 import {
     useFonts,
@@ -16,6 +17,8 @@ import {
 
 const UpdatePassword = () => {
     const navigation = useNavigation()
+    const route = useRoute()
+    const len = route.params.len;
     const currentEmail = auth.currentUser.email;
     const currentUser = auth.currentUser;
     const {passwordVisibility, rightIcon, handlePasswordVisibility} =
@@ -149,24 +152,22 @@ const UpdatePassword = () => {
                     setNewPassword(''); navigation.goBack()} }>
                     <Entypo name="chevron-left" size={28} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.sectionTitleText}>CAMBIAR CONTRASEÑA</Text>
+                <Text style={styles.sectionTitleText}>{passwordWords[len].title}</Text>
             </View>
             <View style={styles.inputContainer}>
-                <Text style={styles.inputHeader}>Ingresa tu contraseña actual</Text>
+                <Text style={styles.inputHeader}>{passwordWords[len].currentPassword}</Text>
                 <TextInput
-                        placeholder="Ingresar contraseña"
                         value={currentPassword}
                         onChangeText={text => setCurrentPassword(text)}
                         style = {styles.input}
                         secureTextEntry={true}
                 />
             </View>
-            <Text style =  {currentPasswordError? styles.errorText2: {display: 'none'}}> Contraseña actual incorrecta. </Text>
+            <Text style =  {currentPasswordError? styles.errorText2: {display: 'none'}}> {passwordWords[len].incorrectPassword} </Text>
 
             <View style={styles.inputContainer}>
-                <Text style={styles.inputHeader}>Ingresa tu nueva conntraseña</Text>
+                <Text style={styles.inputHeader}>{passwordWords[len].newPassword}</Text>
                 <TextInput
-                        placeholder="Ingresar nueva contraseña"
                         onChangeText={text => setNewPassword(text)}
                         style = {styles.input}
                         secureTextEntry={passwordVisibility}
@@ -177,12 +178,12 @@ const UpdatePassword = () => {
             </View>
 
             <View style = {newPasswordError? styles.errorContainer: {display: 'none'}}>
-                <Text style =  {passwordLenghtError? styles.errorText: styles.noErrorText}>1. Longitud de mínimo 8 caracteres </Text>
-                <Text style =  {passwordUpperLowerCaseError? styles.errorText: styles.noErrorText}>2. Contener mínimo una mayúscula y una minúscula </Text>
-                <Text style =  {passwordNumberError? styles.errorText: styles.noErrorText}>3. Contener por lo menos un número </Text>
+                <Text style =  {passwordLenghtError? styles.errorText: styles.noErrorText}>{passwordWords[len].lenError} </Text>
+                <Text style =  {passwordUpperLowerCaseError? styles.errorText: styles.noErrorText}>{passwordWords[len].capsError} </Text>
+                <Text style =  {passwordNumberError? styles.errorText: styles.noErrorText}>{passwordWords[len].numError} </Text>
             </View>
             <TouchableOpacity style = {newPassword.trim() == "" || currentPassword.trim() == "" ? styles.disabledButton: styles.confirmButton} onPress={updatePassword} disabled={newPassword.trim() == "" || currentPassword.trim() == "" ? true : false}>
-                <Text style={styles.buttonText}>Confirmar</Text>
+                <Text style={styles.buttonText}>{passwordWords[len].button}</Text>
             </TouchableOpacity>
         </KeyboardAvoidingView>
     )

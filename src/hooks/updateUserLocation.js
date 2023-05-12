@@ -7,7 +7,7 @@ export const updateUserLocation = async (currentUser) => {
     let { status } = await Location.requestForegroundPermissionsAsync();
     if(status !== 'granted'){
         if(auth && auth.currentUser && auth.currentUser.email){
-            const userRef = doc(db, "users2", auth.currentUser.email);
+            const userRef = doc(db, "users", auth.currentUser.email);
             const userObject = {
                 coordinates:{latitude:0,longitude: 0},
                 email:auth.currentUser.email,
@@ -29,7 +29,7 @@ export const updateUserLocation = async (currentUser) => {
 
     if(current.latitude && current.longitude){
         if(auth && auth.currentUser && auth.currentUser.email){
-            const userRef = doc(db, "users2", auth.currentUser.email);
+            const userRef = doc(db, "users", auth.currentUser.email);
             const userObject = {
                 coordinates:current,
                 email:auth.currentUser.email,

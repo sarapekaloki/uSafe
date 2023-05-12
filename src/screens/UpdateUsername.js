@@ -10,6 +10,7 @@ import {
     OpenSans_500Medium,
     OpenSans_600SemiBold
   } from '@expo-google-fonts/open-sans';
+import { usernameWords } from "../lenguagesDicts/usernameWords";
 
 const UpdateUsername = () => {
     const navigation = useNavigation();
@@ -18,6 +19,8 @@ const UpdateUsername = () => {
     const currentEmail = auth.currentUser.email;
     const currentUser = auth.currentUser;
     const userData = route.params.userData;
+    console.log(userData.len)
+    const len = userData.len;
     const [updatedUsername, setUpdatedUsername] = useState('');
 
     let [fontsLoaded] = useFonts({
@@ -33,11 +36,12 @@ const UpdateUsername = () => {
             helpResponses: userData.helpResponses,
             pictureUrl: userData.pictureUrl,
             username: updatedUsername,
-            token: userData.token
+            token: userData.token,
+            len: userData.len
         };
         setUpdatedUsername(updatedUsername.trim())
         if(updatedUsername != ""){
-            const docRef = doc(firestore, "users2", currentEmail);
+            const docRef = doc(firestore, "users", currentEmail);
             updateDoc(docRef, newDoc).then(() => {
                 navigation.goBack();
                 setUpdatedUsername("");      
@@ -56,10 +60,10 @@ const UpdateUsername = () => {
             </View>
             <View style={styles.sectionTitle}>
                     <Entypo name="chevron-left" size={28} color="black" />
-                <Text style={styles.sectionTitleText}>CAMBIAR NOMBRE DE USUARIO</Text>
+                <Text style={styles.sectionTitleText}>{usernameWords[len].title}</Text>
             </View>
             <View style={styles.inputContainer}>
-                <Text style={styles.inputHeader}>Ingresa un nuevo nombre de usuario</Text>
+                <Text style={styles.inputHeader}>{usernameWords[len].description}</Text>
                 <TextInput
                         placeholder={userData.username}
                         onChangeText={text => setUpdatedUsername(text)}
@@ -71,7 +75,7 @@ const UpdateUsername = () => {
                     style = {updatedUsername.trim() == ""? styles.disabledButton :styles.confirmButton} 
                     disabled={updatedUsername.trim() == ""? true: false}
                     onPress={updateUsername}>
-                    <Text style={styles.buttonText} >Confirmar</Text>
+                    <Text style={styles.buttonText} >{usernameWords[len].button}</Text>
                 </TouchableOpacity>
         </KeyboardAvoidingView>
 

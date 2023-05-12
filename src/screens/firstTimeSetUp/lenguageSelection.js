@@ -5,6 +5,9 @@ import { Entypo } from '@expo/vector-icons';
 import { auth } from "../../../firebase";
 import {getFirestore, doc, updateDoc} from 'firebase/firestore';
 import { Dropdown } from 'react-native-element-dropdown';
+import { lenguageSelectionWords } from "../../lenguagesDicts/lenguageSelectionWords";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 
 import {
     useFonts,
@@ -16,10 +19,11 @@ import {
 
 
 const LenguageSelection = () => {
-    const [lenValue, setLenValue] = useState('')
+    const [lenValue, setLenValue] = useState('');
     const navigation = useNavigation();
     const route = useRoute();
     const userData = route.params.userData;
+    const len = userData.len;
     const firestore = getFirestore();
     const currentEmail = auth.currentUser.email;
 
@@ -31,6 +35,12 @@ const LenguageSelection = () => {
       });
 
       const setLenguage = () => {
+        AsyncStorage.getItem('len').then(res => {
+            if (res != lenValue){
+                AsyncStorage.setItem('len', lenValue);
+            }
+            }
+        )
         const newDoc = {
             coordinates: userData.coordinates,
             email: userData.email,
@@ -42,7 +52,7 @@ const LenguageSelection = () => {
             helpRadar: userData.helpRadar
         };
 
-        const docRef = doc(firestore, "users2", currentEmail);
+        const docRef = doc(firestore, "users", currentEmail);
         updateDoc(docRef, newDoc).then(() => {
             navigation.navigate("HelpRadarSetUp", {userData: newDoc});
         });       
@@ -57,23 +67,23 @@ const LenguageSelection = () => {
     return(
        <View style = {styles.container}>
             <Image style={styles.earthPhoto} source={require('../../../assets/img/earth.png')}></Image>
-            <Text style={styles.header}>Seleccionar lenguaje de preferencia</Text>
+            <Text style={styles.header}>{lenguageSelectionWords[len].title}</Text>
             <Dropdown
                 style={styles.dropdown}
                 placeholderStyle={styles.placeholderStyle}
                 containerStyle={styles.containerStyle}
-                placeholder= {lenValue==""? "Seleccionar lenguaje: ": lenValue}
-                data={[{label: 'Español', value: 'ES'}, {label: 'English', value: 'EN'} ]}
+                placeholder= {lenValue==""? lenguageSelectionWords[len].placeHolder: lenValue}
+                data={[{label: lenguageSelectionWords[len].options.spanish, value: 'ES'}, {label: lenguageSelectionWords[len].options.english, value: 'EN'} ]}
                 maxHeight={300}
                 labelField="label"
                 valueField="value"
-                onChange={element => setLenValue(element.label)}
+                onChange={element => setLenValue(element.value)}
                 activeColor={'#E5E5E5'}
             >
             </Dropdown>
             <TouchableOpacity style = {lenValue==""? styles.disabledButton: styles.button} onPress={() => setLenguage()} disabled={lenValue==""}>
                 <Text style={styles.buttonText}>
-                    Confirmar y continuar
+                    {lenguageSelectionWords[len].button}
                 </Text>
                 <Entypo style = {styles.icon2} name="chevron-thin-right" size={24} color="white" />
             </TouchableOpacity>

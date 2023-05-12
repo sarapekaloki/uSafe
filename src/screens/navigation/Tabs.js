@@ -4,27 +4,30 @@ import OwnProfile from "../OwnProfile";
 import Notifications from "../Notifications";
 import { updateUserLocation } from "../../hooks/updateUserLocation";
 import Messages from "../Messages";
-import {Platform, StyleSheet, Image, TouchableOpacity, Animated, View} from "react-native";
+import { useRoute } from "@react-navigation/native";
+
+import {StyleSheet, Image, Animated} from "react-native";
 import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
 import {collection, getFirestore, onSnapshot, query, where} from "firebase/firestore";
 import firebase from "firebase/compat";
+import { tabsWords } from "../../lenguagesDicts/tabsWords";
 import {auth, firebaseConfig} from "../../../firebase";
-import OutOfRangeScreen from "../OutOfRangeScreen";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import {
     useFonts,
     Spartan_700Bold,
     Spartan_600SemiBold
   } from '@expo-google-fonts/spartan';
-import {opacity} from "react-native-reanimated/lib/types/lib";
 const Tab = createBottomTabNavigator()
 
 
 const Tabs = () => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
+    const route = useRoute();
+    const len = route.params.len;
     const [ alertMode , set_alertMode ] = useState(false);
     const [ gotInfo, setGotInfo ] = useState(false);
 
@@ -39,7 +42,7 @@ const Tabs = () => {
 
     });
 
-    const [tabBarVisible, setTabBarVisible] = useState(false);
+    const [tabBarVisible, setTabBarVisible] = useState(true);
 
     const fadeAnim = useRef(new Animated.Value(0)).current;
    
@@ -48,7 +51,6 @@ const Tabs = () => {
     });
 
     useEffect(()=>{
-        console.log(tabBarVisible);
         Animated.timing(fadeAnim, {
             toValue: tabBarVisible ? 1 : 0,
             duration: 10000,
@@ -83,33 +85,12 @@ const Tabs = () => {
         return () => clearInterval(interval);
     });
 
-    const toggleVisibility = () => {
-        setTabBarVisible(!tabBarVisible);
-        Animated.timing(
-            fadeAnim,
-            {
-                toValue: tabBarVisible ? 0 : 1,
-                duration: 500,
-                useNativeDriver: true,
-            }
-        ).start();
-    };
-
-    function userIsInZone(){
-        if(currentUser){
-            return ((currentUser.coordinates.longitude > -116.925975) && (currentUser.coordinates.longitude < -116.922080))
-                && currentUser.coordinates.latitude < 32.508246 && currentUser.coordinates.latitude > 32.505197;
-        }
-        return false;
-
-    }
-
     if (!fontsLoaded) {
         return null;
     }
 
     return (
-        <Tab.Navigator initialRouteName="Mapa" screenOptions={{tabBarShowLabel: false,tabBarStyle:{
+        <Tab.Navigator initialRouteName={tabsWords[len].map} screenOptions={{tabBarShowLabel: false,tabBarStyle:{
             elevation: 0,
             backgroundColor: backgroundColor,
             height: tabBarVisible ? '11%' : 0,
@@ -117,30 +98,25 @@ const Tabs = () => {
             ...styles.shadow
         }
             }}>
-            <Tab.Screen name="Mapa" children={
+            <Tab.Screen name={tabsWords[len].map} children={
                 ()=> <MapScreen setVisible={setTabBarVisible} visible={tabBarVisible}/>
             }
                 options={{
                 tabBarIcon: ({ focused }) => (
-                    // tabBarVisible &&
-                    <View>
-                        <Animated.View style={{opacity: .5}}>
-                            <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
-                        </Animated.View>
-                    </View>
+                    <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}/>
+               
                 ),
                 headerStyle:{
                     backgroundColor: backgroundColor,
                 },
                 headerTitleStyle:{
-                    fontWeight: 'bold',
-                    fontSize: 25,
-                    right: Platform.OS == 'ios'? '210%': 0,
+                    fontFamily: 'Spartan_700Bold',
+                    fontSize: 20,
                     color: fontColor
                 }
             }}
             />
-        <Tab.Screen name="Notificaciones" component={Notifications} options={{
+        <Tab.Screen name={tabsWords[len].notifications} component={Notifications} options={{
             tabBarIcon: ({ focused }) => (
                 tabBarVisible && <Feather name="bell" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
           ),
@@ -150,7 +126,6 @@ const Tabs = () => {
           headerTitleStyle:{
             fontFamily: 'Spartan_700Bold',
             fontSize: 20,
-            right: Platform.OS == 'ios'? '65%': 0,
             color: fontColor
           }
         }}
@@ -162,7 +137,6 @@ const Tabs = () => {
             },
         })} options={{
             tabBarIcon: ({focused}) => (
-                // <Feather name="alert-circle" size={24} color="black" style ={styles.alarm}/>
                 tabBarVisible && <Image source={require( '../../../assets/icons/selected-alarm-icon.png') }
                     style={styles.alarm}/>
 
@@ -170,7 +144,7 @@ const Tabs = () => {
             )
         }}/>
 
-        <Tab.Screen name="Perfil" component={OwnProfile} options={{
+        <Tab.Screen name={tabsWords[len].profile} component={OwnProfile} options={{
             tabBarIcon: ({ focused }) => (
                 <Feather name="user" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
 
@@ -187,7 +161,7 @@ const Tabs = () => {
           }
         }}
         />
-          <Tab.Screen name="Mensajes" component={Messages} options={{
+          <Tab.Screen name={tabsWords[len].chats} component={Messages} options={{
             tabBarIcon: ({ focused }) => (
                 <Feather name="message-square" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
           ),
@@ -197,7 +171,6 @@ const Tabs = () => {
           headerTitleStyle:{
             fontFamily: 'Spartan_700Bold',
             fontSize: 20,
-            right: Platform.OS == 'ios'? '120%': 0,
             color: fontColor
           }
         }}

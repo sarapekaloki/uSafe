@@ -5,7 +5,8 @@ import { Entypo } from '@expo/vector-icons';
 import { auth } from "../../../firebase";
 import {getFirestore, doc, updateDoc} from 'firebase/firestore';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
-import NumericInput from 'react-native-numeric-input'
+import NumericInput from 'react-native-numeric-input';
+import { helpRadarWords } from "../../lenguagesDicts/helpRadarWords";
 
 import {
     useFonts,
@@ -23,7 +24,8 @@ const HelpRadarSetUp = () => {
     const firestore = getFirestore();
     const currentEmail = auth.currentUser.email;
     const userData = route.params.userData;
-
+    const len = userData.len;
+    console.log(len);
     let [fontsLoaded] = useFonts({
         Spartan_800ExtraBold,
         Spartan_700Bold,
@@ -42,14 +44,12 @@ const HelpRadarSetUp = () => {
             helpRadar: radarValue
         };
 
-        const docRef = doc(firestore, "users2", currentEmail);
+        const docRef = doc(firestore, "users", currentEmail);
         updateDoc(docRef, newDoc).then(() => {
-            navigation.navigate("Tabs");
+            navigation.navigate("Tabs", {len: len});
         });       
         
     };
-
-  
 
     if (!fontsLoaded) {
         return null;
@@ -57,11 +57,11 @@ const HelpRadarSetUp = () => {
 
     return(
        <View style = {styles.container}>
-        <Text style = {styles.title}>
-            Radar de ayuda
+        <Text style = {[styles.title,{left: len == 'EN'? '46%': '40%'}]}>
+            {helpRadarWords[len].title}
         </Text>
         <Text style = {styles.descriptionText}>
-            Selecciona la distancia a la redonda (metros), en la cual recibes pedidos de ayuda de otros usuarios
+            {helpRadarWords[len].description}
         </Text>
         <MaterialCommunityIcons style={styles.icon} name="radar" size={300} color="#C1A7FF" />    
         <NumericInput 
@@ -71,6 +71,7 @@ const HelpRadarSetUp = () => {
             minValue={100}
             maxValue={1500}
             step={100}
+            editable={false}
             rounded
             iconStyle={{ color: 'white' }} 
             leftButtonBackgroundColor={"#F18CE7"}
@@ -84,7 +85,7 @@ const HelpRadarSetUp = () => {
         />
            <TouchableOpacity style = {styles.button} onPress={() => setHelpRadar()}>
             <Text style={styles.buttonText}>
-                Finalizar
+                {helpRadarWords[len].button}
             </Text>
             <Entypo style = {styles.icon2} name="chevron-thin-right" size={24} color="white" />
         </TouchableOpacity>
@@ -105,7 +106,6 @@ const styles = StyleSheet.create({
         fontFamily: 'Spartan_700Bold',
         fontSize: 25,
         top: '9%',
-        left: '40%',
         marginBottom: 10
     },
     descriptionText: {

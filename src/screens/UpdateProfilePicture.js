@@ -7,6 +7,7 @@ import { auth } from "../../firebase";
 import * as ImagePicker from 'expo-image-picker';
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons';
+import { updateProfilePictureWords } from "../lenguagesDicts/updateProfilePictureWords";
 
 import {
     useFonts,
@@ -24,6 +25,7 @@ const UpdateProfilePicture = () => {
     const currentEmail = auth.currentUser.email;
     const [image, setImage] = useState(null);
     const userData = route.params.userData;
+    const len = userData.len;
     const [disableButton, setDisableButton] = useState(true);
 
     let [fontsLoaded] = useFonts({
@@ -63,7 +65,7 @@ const UpdateProfilePicture = () => {
                         token: userData.token
                     };
                 
-                    const docRef = doc(firestore, "users2", currentEmail);
+                    const docRef = doc(firestore, "users", currentEmail);
                     updateDoc(docRef, newDoc).then(() => {
                         navigation.goBack()                    
                     });       
@@ -82,7 +84,7 @@ const UpdateProfilePicture = () => {
         const permissionResult = await ImagePicker.requestMediaLibraryPermissionsAsync();
 
         if(permissionResult.granted === false){
-            alert("Esta app no tiene permiso para acceder a tus fotos");
+            alert(updateProfilePictureWords[len].error1);
         }
         else{
             let pickerResult = await ImagePicker.launchImageLibraryAsync({
@@ -105,7 +107,7 @@ const UpdateProfilePicture = () => {
         const permissionResult = await ImagePicker.requestCameraPermissionsAsync();
         
             if (permissionResult.granted === false) {
-            alert("Esta app no tiene permiso para acceder a tu camara");
+            alert(updateProfilePictureWords[len].error2);
     
             } else {
             const result = await ImagePicker.launchCameraAsync({
@@ -137,29 +139,29 @@ const UpdateProfilePicture = () => {
                 <TouchableOpacity  onPress={() => {navigation.goBack()} }>
                     <Entypo name="chevron-left" size={28} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.sectionTitleText}>CAMBIAR CONTRASEÑA</Text>
+                <Text style={styles.sectionTitleText}>{updateProfilePictureWords[len].title}</Text>
         </View>
         
   
 
 
         <Image style={styles.previewImage} source={image? {uri: image} :  require('../../assets/img/initial-profile-picture.jpeg')}></Image>
-        <Text style={styles.previewImageText}> Vista previa</Text>
+        <Text style={styles.previewImageText}> {updateProfilePictureWords[len].preview}</Text>
 
         <View style = {styles.buttonSectionImageModal}>
             <TouchableOpacity style = {styles.button} onPress={onImageLibraryPress}>
-                <Text style={styles.buttonImageText} >Desde el carrete</Text>
+                <Text style={styles.buttonImageText} >{updateProfilePictureWords[len].fromLibrary}</Text>
                 <Feather style = {styles.icon}name="image" size={20} color="grey" />
             </TouchableOpacity>
             <View style= {styles.divider}></View>
             <TouchableOpacity style = {styles.button} onPress={onCameraPress}>
-                <Text style={styles.buttonImageText} >Desde la cámara</Text>
+                <Text style={styles.buttonImageText} >{updateProfilePictureWords[len].fromCamera}</Text>
                 <Feather style = {styles.icon} name="camera" size={20} color="grey" />
             </TouchableOpacity>
         </View>
       
         <TouchableOpacity style = {image && disableButton? styles.confirmButton: styles.disabledButton} onPress={changeProfilePic} disabled={image&& disableButton? false: true}>
-            <Text style={styles.buttonText} >Confirmar</Text>
+            <Text style={styles.buttonText} >{updateProfilePictureWords[len].button}</Text>
         </TouchableOpacity>
     </KeyboardAvoidingView>
     )

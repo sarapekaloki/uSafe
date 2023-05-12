@@ -6,13 +6,13 @@ import {getFirestore, collection, onSnapshot, doc} from 'firebase/firestore';
 const screenWidth = Dimensions.get("screen").width;
 import { Feather } from '@expo/vector-icons';
 import { MaterialIcons } from '@expo/vector-icons'; 
+import { ownProfileWords } from "../lenguagesDicts/ownProfileWords";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 //Alert button imports
 import * as Haptics from 'expo-haptics';
-import BottomSheet from "react-native-gesture-bottom-sheet";
 import image1 from '../../assets/img/buttonUnpressed.png'
 import image2 from '../../assets/img/buttonPressed2.png'
-import { setData } from "./LoginScreen";
 import {
     useFonts,
     Spartan_500Medium,
@@ -21,11 +21,13 @@ import {
   } from '@expo-google-fonts/spartan';
 
 const OwnProfile = () => {
-
+    const [len, setLen] = useState('EN');
     const navigation = useNavigation()
     const currentEmail = auth.currentUser.email
     const firestore = getFirestore()
-    const profilesRef = collection(firestore, "profiles")
+    AsyncStorage.getItem('len').then(res => {
+         setLen(res)
+    });
     const [currentUsername, setCurrentUsername] = useState('')
     const [helpResponses, setHelpResponses] = useState('')
     const [profilePictureURL, setProfilePictureURL] = useState('')
@@ -33,10 +35,9 @@ const OwnProfile = () => {
 
 
     const handleSignOut =async  () => {
-        await setData("userCredentials", null);
         auth
         .signOut()
-        .then(() => navigation.replace("Login"));
+        .then(() => navigation.navigate("Login"));
     };
     let [fontsLoaded] = useFonts({
         Spartan_500Medium,
@@ -52,7 +53,7 @@ const OwnProfile = () => {
     })
 
     const getUserData =  () => {
-       onSnapshot(doc(firestore, "users2", currentEmail.toLowerCase()), (doc) => {
+       onSnapshot(doc(firestore, "users", currentEmail.toLowerCase()), (doc) => {
         if(doc.data()=== undefined) return;
         setCurrentUsername(doc.data().username)
         setHelpResponses(doc.data().helpResponses)
@@ -80,7 +81,7 @@ const OwnProfile = () => {
             <View style={styles.profileDetails}>
                 <View style={styles.pdFirstRow}>
                     <Text style={styles.userNameText}> {currentUsername}</Text>
-                    <TouchableOpacity onPress={() => navigation.navigate('Settings')}>
+                    <TouchableOpacity onPress={() => navigation.navigate('Settings', {len: len})}>
                         <Feather name="edit" size={24} color="#8F8F8F" />
                     </TouchableOpacity>
                 </View>
@@ -88,17 +89,17 @@ const OwnProfile = () => {
             </View>
             <View style ={styles.extraInfo}>
                 <View style = {styles.column}>
-                    <Text style={styles.extraInfoHeader}>Likes</Text>
+                    <Text style={styles.extraInfoHeader}>{ownProfileWords[len].likes}</Text>
                     <Text style={styles.extraInfoNum}>0</Text>
                 </View>
                 <View style = {styles.column}>
-                    <Text style={styles.extraInfoHeader}>Help Responses</Text>
+                    <Text style={styles.extraInfoHeader}>{ownProfileWords[len].helpResponses}</Text>
                     <Text style={styles.extraInfoNum}>{helpResponses}</Text>
                 </View>
             </View>
 
             <TouchableOpacity style={styles.button} onPress={handleSignOut}>
-                <Text style={styles.buttonText}>Cerrar Sesión</Text>
+                <Text style={styles.buttonText}>{ownProfileWords[len].logOut}</Text>
                 <MaterialIcons name="logout" size={24} color="black" />
             </TouchableOpacity>          
        </View>

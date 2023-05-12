@@ -9,11 +9,12 @@ import {getFirestore, collection, query, where, onSnapshot} from "firebase/fires
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
+import { alertTabWords } from '../../lenguagesDicts/alertTabWords';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
     useFonts,
-    Roboto_700Bold,
-    Roboto_400Regular
+    Roboto_700Bold
   } from '@expo-google-fonts/roboto';
 
 const sleep = (milliseconds) => {
@@ -25,12 +26,16 @@ const sleep = (milliseconds) => {
     }
 }
 
+// Falta agregar pantalla cuando no hay ubicación
+
 const AlertScreen = () =>{
     firebase.initializeApp(firebaseConfig);
+    const [len, setLen] = useState('EN');
+    AsyncStorage.getItem('len').then(res => {
+        setLen(res)
+   });
     const db = getFirestore();
     const [ gotInfo, set_gotInfo ] = useState(false);
-    const modoNoAlerta = "¡Iniciar Modo Alerta!"
-    const modoAlerta = "¿Terminar Modo Alerta?"
     const [ mode , set_mode ] = useState(false)
     const [ currentUser , set_currentUser] = useState({})
     const [ helping, set_helping ] = useState(false)
@@ -86,7 +91,7 @@ const AlertScreen = () =>{
             })
         }
         else{
-            alert("¡No puedes entrar en modo alerta mientras ayudas a alguien!")
+            alert(alertTabWords[len].notAvailableMessage)
         }
     
     }
@@ -96,7 +101,7 @@ const AlertScreen = () =>{
             to: userToken,
             sound: 'default',
             title: 'uSafe',
-            body:  `¡${currentUser.username} necesita ayuda!`,
+            body:  `${currentUser.username} ${alertTabWords[len].notificationMessage}`,
             data: { someData:'' },
           };
         await fetch('https://exp.host/--/api/v2/push/send', {
@@ -120,18 +125,20 @@ const AlertScreen = () =>{
                 }
             })
         })
-            const allUsers = collection(db, "users2");
+            const allUsers = collection(db, "users");
             await getDocs(allUsers).then((res) => {
                 res.forEach((document) => {
                     if(users.includes(document.data().email)){
-                        const usersRef = doc(db, "users2", document.data().email);
+                        const usersRef = doc(db, "users", document.data().email);
                         updateDoc(usersRef, {
                             coordinates:document.data().coordinates,
                             email:document.data().email,
                             helpResponses:document.data().helpResponses + 1,
                             pictureUrl:document.data().pictureUrl,
                             username:document.data().username,
-                            token: document.data().token
+                            token: document.data().token,
+                            helpRadar: document.data().helpRadar,
+                            len: document.data().len
                         }).then();
                     }
                 })
@@ -166,7 +173,7 @@ const AlertScreen = () =>{
                 <Image source={mode ? image2 : image1} style={styles.buttonImage}/>
             </TouchableOpacity>
             <Text style={styles.message}>
-                {mode ? modoAlerta : modoNoAlerta}
+                {mode ? alertTabWords[len].endAlert : alertTabWords[len].startAlert}
             </Text>
         </View>
     )
