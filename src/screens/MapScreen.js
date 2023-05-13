@@ -212,8 +212,8 @@ export default function MapScreen(props){
                     }
                     onRegionChangeComplete={()=>setReCenterVisible(helpingUser)}
                     onPress={handleMapPress}
-                    provider={PROVIDER_GOOGLE}
-                    cacheEnabled={true}
+                    // provider={PROVIDER_GOOGLE}
+                    // cacheEnabled={true}
                 >
                     <Marker coordinate={props.currentUser ? props.currentUser.coordinates : userLocation}>
                         <View style={[styles.userLocation2, {borderColor:askedForHelp?'rgba(98, 0, 255, 0.3)':'rgba(0, 66, 255, 0.3)' }]}>
