@@ -22,6 +22,8 @@ import {
     Roboto_700Bold,
     Roboto_400Regular
   } from '@expo-google-fonts/roboto';
+import {updateUserLocation} from "../hooks/updateUserLocation";
+import * as Location from "expo-location";
   
 const RegisterScreen = () => {
 
@@ -135,8 +137,13 @@ const RegisterScreen = () => {
         const token = await registerForPushNotificationsAsync();
         const firestore = getFirestore();
         const docRef = doc(firestore, "users", email.toLowerCase());
+        let location = await Location.getCurrentPositionAsync({});
+        const current = {
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude
+        }
         const data = {
-            coordinates: {longitude:0, latitude:0},
+            coordinates: {longitude:current.latitude, latitude:current.longitude},
             email: email.toLowerCase(),
             helpResponses: 0,
             pictureUrl: "",
@@ -144,7 +151,9 @@ const RegisterScreen = () => {
             token: token,
             helpRadar: 100,
             len: "",
-            likes:0
+            likes:0,
+            reportedBy:[],
+            reported:[]
         };
         await setDoc(docRef, data);
         navigation.navigate("MainFirstTimeSetUp", {userData: data})

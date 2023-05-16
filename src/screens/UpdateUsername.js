@@ -36,7 +36,9 @@ const UpdateUsername = () => {
             token: userData.token,
             len:userData.len,
             likes:userData.likes,
-            helpRadar:userData.helpRadar
+            helpRadar:userData.helpRadar,
+            reportedBy:userData.reportedBy,
+            reported:userData.reported
         };
         setUpdatedUsername(updatedUsername.trim())
         if(updatedUsername != ""){

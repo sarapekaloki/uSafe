@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
 import {auth} from "../../firebase";
-import {collection, getDocs, getFirestore} from "firebase/firestore";
+import {collection, getDocs, getFirestore, onSnapshot, query, where} from "firebase/firestore";
 import {formatDate} from "../hooks/formatMessageDate";
 import {setRandomColor} from "../hooks/setRandomColor"
 import {ChatBubble} from "./ChatBubble";
@@ -22,17 +22,16 @@ export const Message = (props) => {
     },[])
 
     useEffect(()=>{
-        getDocs(usersRef).then((res) => {
-            res.forEach((doc) => {
-                if(doc.data().email === props.message.sender){
+        const usersQuery = query(collection(db, "users"), where("email", "==", props.message.sender));
+        const usersSnapshot = (usersQuery)=>{
+            onSnapshot(usersQuery,  (querySnapshot) => {
+                querySnapshot.forEach((doc) => {
                     setUser(doc.data());
-                }
-            })
-        });
+                });
+            } )
+        }
+        usersSnapshot(usersQuery);
     },[])
-
-    useEffect(()=>{
-    },[user]);
 
     const hourShouldDisplay = ()=>{
         const index = props.currentChat.messages.indexOf(props.message);

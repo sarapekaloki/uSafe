@@ -4,8 +4,9 @@ import {Ionicons} from "@expo/vector-icons";
 import {doc, getFirestore, onSnapshot, setDoc} from "firebase/firestore";
 import * as Haptics from 'expo-haptics';
 import {useNavigation} from "@react-navigation/native";
+import {auth} from "../../firebase";
 
-export const Like = ({ user }) => {
+export const ChatMember = ({ user }) => {
 
     const [color, setColor ] = useState('#FFDDFA');
     const db = getFirestore();
@@ -42,24 +43,22 @@ export const Like = ({ user }) => {
     }
 
     return (
-        <View style={styles.likesContainer}>
+        <View style={styles.membersContainer}>
             <View style={{flexDirection:'row'}}>
                 <TouchableOpacity onPress={()=>{
-                    navigation.navigate('OtherProfile',{user})
+                    if(user.email === auth.currentUser.email){
+                        navigation.navigate('Perfil');
+                    }
+                    else{
+                        navigation.navigate('OtherProfile',{user})
+                    }
                 }}>
                     <Image source={user.pictureUrl ? {uri:user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg')}
                            style={styles.image}/>
                 </TouchableOpacity>
 
-                <Text style={styles.name}>{user.username.split(' ')[0]}</Text>
+                <Text style={styles.name}>{user.email === auth.currentUser.email ? 'Tú' : user.username}</Text>
             </View>
-            <TouchableOpacity onPress={handleLikePress} style={[styles.likeCircle,{backgroundColor: color}]}>
-                <Ionicons name={'heart'}
-                          size={30}
-                          color={'#FFFFFF'}
-                />
-            </TouchableOpacity>
-            {/*</View>*/}
         </View>
     );
 };
@@ -72,7 +71,7 @@ const styles = StyleSheet.create({
         overflow:'hidden',
 
     },
-    likesContainer:{
+    membersContainer:{
         width:'100%',
         flexDirection: 'row',
         borderBottomColor:'rgba(0,0,0,.05)',
@@ -84,12 +83,5 @@ const styles = StyleSheet.create({
         margin:14,
         fontFamily: 'Spartan_700Bold',
         fontSize: 18,
-    },
-    likeCircle:{
-        width:70,
-        height:70,
-        borderRadius:100,
-        alignItems:'center',
-        justifyContent:'center',
     }
 });

@@ -41,10 +41,25 @@ export default function MapScreen(props){
     const isFocused = useIsFocused();
     const route = useRoute();
 
-    useEffect(()=>{
-        if(isFocused && route.params){
-            const focusedCoords = route.params.coords;
-            if(focusedCoords){
+    const checkIfFocused = (coords, callback) => {
+        map.current.getCamera().then(({ center }) => {
+            const distance = getPreciseDistance(coords, center);
+            const isFocusedOnCoords = distance < 100000;
+            callback(isFocusedOnCoords);
+        }).catch((error) => {
+            callback(false); // Return false in case of an error
+        });
+    };
+
+
+    useEffect( ()=>{
+        if(props.currentUser && !gotInfo){
+            const focusedCoords = props.currentUser.coordinates;
+            checkIfFocused(focusedCoords, (focused)=>{
+                if(focused){
+                    setGotInfo(true);
+                }
+            })
                 const region = {
                     latitude: focusedCoords.latitude,
                     longitude: focusedCoords.longitude,
@@ -52,18 +67,15 @@ export default function MapScreen(props){
                     longitudeDelta: .05,
                 };
                 map.current.animateToRegion(region, 1000);
-            }
-            route.params.coords = null;
-        }
+                setTimeout(()=>{setGotInfo(true)},7000);
 
-    },[isFocused])
+        }
+    })
 
     useEffect(() => {
-        if(!gotInfo){
-            fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
-            fetchAllUsers(setAllUsers);
-            setGotInfo(true);
-        }});
+        fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
+        fetchAllUsers(setAllUsers);
+    },[]);
     useEffect(()=>{
     },[reCenterVisible]);
     useEffect(()=>{
@@ -75,11 +87,14 @@ export default function MapScreen(props){
         }
     },[acceptedAlarm]);
 
-    const handleModalRejection = ()=>{
+    const handleModalVisibility = ()=>{
         setIsModalVisible(!isModalVisible);
     }
+    const handleRejectionModalVisibility = ()=>{
+        setIsRejectionModalVisible(!isRejectionModalVisible);
+    }
     const handleModalAcceptance = ()=>{
-        handleModalRejection();
+        handleModalVisibility();
         acceptAlarm(focusedUser).then();
     }
 
@@ -102,6 +117,14 @@ export default function MapScreen(props){
     }
 
     const setUserVisibility = (user) => {
+        if(props.currentUser.reported.includes(user.email) ||
+            props.currentUser.reportedBy.includes(user.email) ||
+            user.reported.includes(props.currentUser.email) ||
+            user.reportedBy.includes(props.currentUser.email) ||
+            props.currentUser.reportedBy.length >=3 ||
+            user.reportedBy.length >=3){
+            return false;
+        }
         if(!askedForHelp){
             if(helpingUser){
                 return acceptedAlarm.alarmingUser === user.email ||
@@ -111,25 +134,6 @@ export default function MapScreen(props){
         }
         return currentUserAlarm && currentUserAlarm.users.includes(user.email);
 
-    }
-
-    const setInitialRegion = ()=>{
-        if(!props.currentUser ||
-        props.currentUser.coordinates ===
-            {latitude:0,longitude:0}){
-            return {
-                latitude:props.currentUser.coordinates.latitude,
-                longitude:props.currentUser.coordinates.longitude,
-                latitudeDelta:0.004,
-                longitudeDelta:0.004
-            }
-        }
-        return {
-            latitude:32,
-            longitude:-100,
-            latitudeDelta:180,
-            longitudeDelta:360
-        }
     }
 
     const centerMapOnCoords = (origin,destination) => {
@@ -157,6 +161,14 @@ export default function MapScreen(props){
     }
 
     const updateUserMarkers = ()=>{
+        // return <OtherUserMarker
+        //     visible={true}
+        //     user={props.currentUser}
+        //     victim={false}
+        //     setFocusedUser={setFocusedUser}
+        //     handleModal={()=>{}}
+        // />
+
         return allUsers.map((user,index) =>{
                 return <OtherUserMarker
                     key={index}
@@ -164,10 +176,7 @@ export default function MapScreen(props){
                     user={user}
                     victim={allAlarms.map((alarm)=>alarm.alarmingUser).includes(user.email)}
                     setFocusedUser={setFocusedUser}
-                    handleModal={helpingUser ? async ()=>{
-                        await Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
-                        setIsRejectionModalVisible(!isRejectionModalVisible)
-                    } : handleModalRejection}
+                    handleModal={helpingUser ? handleRejectionModalVisibility : handleModalVisibility}
                 />
             }
         )
@@ -188,30 +197,21 @@ export default function MapScreen(props){
 
     return(
         <View style={styles.container}>
-            {   props.currentUser &&
+            {   props.currentUser && props.currentUser.coordinates &&
                 <MapView
                     ref={map}
                     style={styles.map}
                     initialRegion={
-                        (!props.currentUser ||
-                            props.currentUser.coordinates !==
-                            {latitude:0,longitude:0}) ?
                             {
                                 latitude:props.currentUser.coordinates.latitude,
                                 longitude:props.currentUser.coordinates.longitude,
                                 latitudeDelta:0.004,
                                 longitudeDelta:0.004
-                            } :
-                            {
-                                latitude:32,
-                                longitude:-100,
-                                latitudeDelta:180,
-                                longitudeDelta:360
                             }
-
                     }
                     onRegionChangeComplete={()=>setReCenterVisible(helpingUser)}
                     onPress={handleMapPress}
+                    scrollEnabled={gotInfo}
                     // provider={PROVIDER_GOOGLE}
                     // cacheEnabled={true}
                 >
@@ -233,7 +233,7 @@ export default function MapScreen(props){
                         <MapModal
                             isVisible={isModalVisible}
                             user={focusedUser}
-                            handleModalRejection={handleModalRejection}
+                            handleModalRejection={handleModalVisibility}
                             handleModalAcceptance={handleModalAcceptance}
                             loggedUser={props.currentUser}
                         />

@@ -23,8 +23,10 @@ import {
 } from '@expo-google-fonts/open-sans';
 import {OtherUserMarker} from "../components/OtherUserMarker";
 import {Like} from "../components/Like";
+import {ChatMember} from "../components/ChatMember";
+import {getCurrentUser} from "../hooks/getCurrentUser";
 
-export default function WhoHelpedYou() {
+export default function ChatMembers() {
     const navigation = useNavigation();
     const route = useRoute();
     const db = getFirestore();
@@ -34,6 +36,7 @@ export default function WhoHelpedYou() {
 
     const [members, setMembers] = useState([]);
     const [likedUsers, setLikedUsers] = useState([]);
+    const [currentUser, setCurrentUser] = useState(null);
 
     let [fontsLoaded] = useFonts({
         OpenSans_400Regular,
@@ -41,13 +44,20 @@ export default function WhoHelpedYou() {
         OpenSans_600SemiBold
     });
 
+    useEffect(()=>{
+        getCurrentUser(setCurrentUser).then();
+    },[]);
+
     const getChatMembers = ()=>{
         const usersQuery = query(collection(db, "users"), where("email", "!=", ""));
         onSnapshot(usersQuery,  (querySnapshot) => {
             let auxMembers=[];
             querySnapshot.forEach((doc) => {
-                if(currentChat.includes(doc.data().email)){
+                if(currentChat.members.includes(doc.data().email)){
                     auxMembers.push(doc.data());
+                }
+                if(currentChat.user === doc.data().email && doc.data().email){
+                    auxMembers.unshift(doc.data());
                 }
             });
             setMembers(auxMembers);
@@ -55,7 +65,7 @@ export default function WhoHelpedYou() {
     }
 
     useEffect(()=>{
-        setCurrentChat(route.params.chat);
+        setCurrentChat(route.params.currentChat);
     },[])
 
     useEffect(()=>{
@@ -68,11 +78,14 @@ export default function WhoHelpedYou() {
         return null;
     }
 
-    const renderLikes = ()=>{
+    const renderMembers = ()=>{
         return members.map((user,index) =>{
                 return (
                     !(user.reportedBy.includes(auth.currentUser.email)) &&
-                    <Like
+                    !user.reported.includes(auth.currentUser.email) &&
+                    !(currentUser.reportedBy.includes(user.email)) &&
+                    !currentUser.reported.includes(user.email) &&
+                    <ChatMember
                         key={index}
                         user={user}
                     />
@@ -84,28 +97,22 @@ export default function WhoHelpedYou() {
     return (
         <View style={styles.container}>
             <View style={styles.topBar}>
-                <View style={styles.titleContainer}>
-                    <Ionicons name={'checkmark-circle'}
-                              size={26}
-                              color={'#B9A7EE'}
-                              style={{marginLeft: 10}}
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                    <Ionicons name={'arrow-back-outline'}
+                              size={30}
+                              color={'black'}
                     />
-                    <Text style={styles.title}>Who helped you</Text>
+                </TouchableOpacity>
+                <View style={styles.titleContainer}>
+                    <Text style={styles.title}>{route.params.chatTitle}</Text>
                 </View>
-
-                <TouchableOpacity onPress={() => navigation.navigate('Mapa')}>
-                    <Text style={styles.skipButton}>Skip</Text>
-                </TouchableOpacity>
             </View>
-            <Text style={styles.disclaimer}>Deja un like a todos los usuarios que te ayudaron durante tu alerta</Text>
-            <ScrollView style={styles.content}>
-                {renderLikes()}
-            </ScrollView>
-                <TouchableOpacity style={styles.finishButton} onPress={() => navigation.navigate('Mapa')}>
-                    <Text style={styles.finishText}>
-                        Terminar
-                    </Text>
-                </TouchableOpacity>
+            {
+                currentUser &&
+                <ScrollView style={styles.content}>
+                    {renderMembers()}
+                </ScrollView>
+            }
         </View>
     )
 }
@@ -124,7 +131,7 @@ const styles = StyleSheet.create({
     topBar: {
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingHorizontal: 50,
         paddingTop: 50,
         paddingBottom: 20,
@@ -147,10 +154,8 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         margin:20,
-        maxHeight:'50%',
-        borderColor:'rgba(0,0,0,.05)',
-        borderWidth:2,
-        borderRadius:10
+        borderBottomColor:'rgba(0,0,0,.05)',
+        borderBottomWidth:2,
     },
     disclaimer:{
         fontFamily: 'Spartan_700Bold',

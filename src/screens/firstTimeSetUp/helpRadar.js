@@ -40,7 +40,9 @@ const HelpRadarSetUp = () => {
             token: userData.token,
             len: userData.len,
             helpRadar: radarValue,
-            likes:userData.likes
+            likes:userData.likes,
+            reportedBy:userData.reportedBy,
+            reported:userData.reported
         };
 
         const docRef = doc(firestore, "users", currentEmail);

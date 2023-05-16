@@ -154,7 +154,9 @@ const AlertScreen = () =>{
                             token: document.data().token,
                             len:document.data().len,
                             likes:document.data().likes,
-                            helpRadar:document.data().helpRadar
+                            helpRadar:document.data().helpRadar,
+                            reportedBy:document.data().reportedBy,
+                            reported:document.data().reported
                         }).then();
                     }
                 })

@@ -3,13 +3,7 @@
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/ChatBubble.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/ChatBubble.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/Message.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/Message.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/components/SeenContainer.js" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/Messages.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/Messages.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/WhoHelpedYou.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/WhoHelpedYou.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/navigation/Tabs.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,7 +34,7 @@
   <component name="PropertiesComponent">{
   &quot;keyToString&quot;: {
     &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/hugui/Documents/cc-webapp&quot;,
+    &quot;last_opened_file_path&quot;: &quot;C:/Users/hugui/WebstormProjects/uSafe/assets/img&quot;,
     &quot;nodejs_package_manager_path&quot;: &quot;yarn&quot;,
     &quot;ts.external.directory.path&quot;: &quot;C:\\Program Files\\JetBrains\\WebStorm 2022.2.3\\plugins\\JavaScriptLanguage\\jsLanguageServicesImpl\\external&quot;,
     &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
@@ -48,9 +42,12 @@
 }</component>
   <component name="RecentsManager">
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="C:\Users\hugui\WebstormProjects\uSafe\assets\img" />
       <recent name="C:\Users\hugui\WebstormProjects\uSafe\src\screens" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\hugui\WebstormProjects\uSafe\assets\img" />
+      <recent name="C:\Users\hugui\WebstormProjects\uSafe\assets\people-delete-filled" />
       <recent name="C:\Users\hugui\WebstormProjects\uSafe\src\screens" />
     </key>
   </component>
@@ -106,6 +103,9 @@
       <workItem from="1683849430600" duration="10925000" />
       <workItem from="1683917110922" duration="5356000" />
       <workItem from="1683940310076" duration="2218000" />
+      <workItem from="1684187589943" duration="12464000" />
+      <workItem from="1684435453417" duration="18714000" />
+      <workItem from="1684523798033" duration="7760000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>

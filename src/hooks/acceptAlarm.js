@@ -23,7 +23,6 @@ export const acceptAlarm = async (focusedUser) => {
                 sendAlarm({
                     alarmingUser:doc.data().alarmingUser,
                     users:doc.data().users.concat([auth.currentUser.email]),
-                    messages:[],
                 });
             }
         })

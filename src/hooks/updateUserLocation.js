@@ -17,7 +17,9 @@ export const updateUserLocation = async (currentUser) => {
                 len: currentUser.len,
                 helpRadar: currentUser.helpRadar,
                 token:currentUser.token,
-                likes:currentUser.likes
+                likes:currentUser.likes,
+                reportedBy:currentUser.reportedBy,
+                reported:currentUser.reported
             }
             updateDoc(userRef, userObject).then();
         }
@@ -41,7 +43,9 @@ export const updateUserLocation = async (currentUser) => {
                 len: currentUser.len,
                 helpRadar: currentUser.helpRadar,
                 token:currentUser.token,
-                likes:currentUser.likes
+                likes:currentUser.likes,
+                reportedBy:currentUser.reportedBy,
+                reported:currentUser.reported
             }
             updateDoc(userRef, userObject).then();
         }

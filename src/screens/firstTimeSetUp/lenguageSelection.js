@@ -40,7 +40,9 @@ const LenguageSelection = () => {
             token: userData.token,
             len:lenValue,
             likes:userData.likes,
-            helpRadar:userData.helpRadar
+            helpRadar:userData.helpRadar,
+            reportedBy:userData.reportedBy,
+            reported:userData.reported
         };
 
         const docRef = doc(firestore, "users", currentEmail);

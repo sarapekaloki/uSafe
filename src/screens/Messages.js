@@ -36,9 +36,6 @@ export default function Messages(props) {
         }});
 
     useEffect(()=>{
-    },[currentUser]);
-
-    useEffect(()=>{
         if(isFocused){
             props.changeCurrentScreen("Chat");
         }

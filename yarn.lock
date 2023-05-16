@@ -4321,7 +4321,7 @@ expand-brackets@^2.1.4:
     snapdragon "^0.8.1"
     to-regex "^3.0.1"
 
-expo-app-loading@~2.1.0:
+expo-app-loading@^2.1.1:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/expo-app-loading/-/expo-app-loading-2.1.1.tgz#5abde2e219ed4a6dcf8a9858a7317792fd9a18d2"
   integrity sha512-b3VNkPuFaI9J847HSpjI4uiuyE4+IWyAIPT9uzbkS7QFknL99DMoihtgzeWzKaJKSAmbYc3ph2Vl9skJAkVYUg==

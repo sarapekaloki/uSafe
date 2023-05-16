@@ -1,29 +1,38 @@
-import React from "react";
+import React, {useEffect, useState} from "react";
 import {Image, StyleSheet, View, TouchableOpacity} from "react-native";
 import {auth} from "../../firebase";
 import {useNavigation} from "@react-navigation/native";
+import {getCurrentUser} from "../hooks/getCurrentUser";
 
 
 export const ChatBubbleImage = (props) => {
-    const navigation = useNavigation()
+    const navigation = useNavigation();
+    const [currentUser, setCurrentUser] = useState(null);
 
-    const goToMap = ()=>{
-        if(props.currentChat.members.includes(props.user.email) ||
-        props.currentChat.user === props.user.email){
-            const coords = props.user.coordinates;
-            navigation.navigate("Mapa", {coords});
-        }
-    }
+    useEffect(()=>{
+        getCurrentUser(setCurrentUser).then();
+    },[])
 
     return (
         <View>
             {
-                !props.currentUserIsSender && props.user && !props.message.consecutive &&
+                !props.currentUserIsSender && props.user && !props.message.consecutive && currentUser &&
                 <View style={[styles.imageContainer,
                     {borderColor: props.victim === props.message.sender ?
                             'rgba(76,17,203, 0.5)' :
                             'rgba(76,17,203, 0.0)'}]}>
-                    <TouchableOpacity onPress={goToMap}>
+                    <TouchableOpacity onPress={()=>{
+                        const user = props.user;
+                        if(!user.reportedBy.includes(auth.currentUser.email) &&
+                            !currentUser.reportedBy.includes(user.email) &&
+                            !currentUser.reported.includes(user.email) &&
+                            !user.reported.includes(auth.currentUser.email) &&
+                            (props.currentChat.members.includes(user.email) ||
+                            props.currentChat.user === user.email)){
+
+                            navigation.navigate('OtherProfile',{user});
+                        }
+                    }}>
                         <Image source={props.user.pictureUrl ? {uri:props.user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg')}
                                style={styles.image}/>
                     </TouchableOpacity>
