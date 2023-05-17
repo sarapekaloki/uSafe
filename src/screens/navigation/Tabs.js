@@ -286,9 +286,9 @@ const Tabs = () => {
 
           ),
           header: () => (
-              <View style={styles.chatHeader}>
+              <View style={[styles.chatHeader, {backgroundColor: backgroundColor}]}>
                   <TouchableOpacity onPress={() => {}}>
-                          <Text style={styles.chatHeaderText}>
+                          <Text style={[styles.chatHeaderText, {color: fontColor}]}>
                               {
                                   currentChat ? chatTitle : 'Mensajes'
                               }
@@ -353,7 +353,6 @@ const styles = StyleSheet.create({
     },
     chatHeader:{
         height:100,
-        backgroundColor:'black',
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
@@ -364,7 +363,6 @@ const styles = StyleSheet.create({
     // },
     chatHeaderText:{
         fontFamily: 'Spartan_700Bold',
-        color:'white',
         fontSize:20,
         top:'20%'
     }
