@@ -100,13 +100,11 @@ export default function WhoHelpedYou() {
             <ScrollView style={styles.content}>
                 {renderLikes()}
             </ScrollView>
-            <View style={styles.finishButton}>
-                <TouchableOpacity onPress={() => navigation.navigate('Mapa')}>
+                <TouchableOpacity style={styles.finishButton} onPress={() => navigation.navigate('Mapa')}>
                     <Text style={styles.finishText}>
                         Terminar
                     </Text>
                 </TouchableOpacity>
-            </View>
         </View>
     )
 }

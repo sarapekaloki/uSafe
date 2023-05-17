@@ -156,26 +156,6 @@ const Tabs = () => {
     }, [alertMode,currentUser, inHelpGroup, currentChat]);
 
     useEffect(()=>{
-        let unread = 0;
-        let seenAny=false;
-        if(currentChat){
-            let index = currentChat.messages.length-1;
-            for(let message of currentChat.messages){
-                for(let user of message.seenBy){
-                    if(user.email === auth.currentUser.email){
-                        index = currentChat.messages.indexOf(message);
-                        seenAny=true;
-                    }
-                }
-
-            }
-            unread = currentChat.messages.length-1-index;
-        }
-        setUnreadMessages(unread);
-        if(currentChat && !seenAny){
-            setUnreadMessages(currentChat.messages.length);
-        }
-
         if (currentChat) {
             if (currentChat.user !== auth.currentUser.email) {
                 const db = getFirestore();
@@ -277,11 +257,6 @@ const Tabs = () => {
             tabBarIcon: ({ focused }) => (
                 <View style={styles.container}>
                     <Feather name="message-square" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
-                    {unreadMessages > 0 && (
-                        <View style={styles.circle}>
-                            <Text style={styles.count}>{unreadMessages > 9 ? '9+' : unreadMessages}</Text>
-                        </View>
-                    )}
                 </View>
 
           ),
@@ -357,10 +332,6 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
     },
-    // chatHeaderTextContainer:{
-    //     alignItems: 'center',
-    //     justifyContent: 'center',
-    // },
     chatHeaderText:{
         fontFamily: 'Spartan_700Bold',
         fontSize:20,

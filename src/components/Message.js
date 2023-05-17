@@ -1,12 +1,10 @@
 import React, {useEffect, useState} from "react";
 import {Image, StyleSheet, Text, TouchableOpacity, View} from "react-native";
-import firebase from "firebase/compat";
 import {auth} from "../../firebase";
 import {collection, getDocs, getFirestore} from "firebase/firestore";
 import {formatDate} from "../hooks/formatMessageDate";
 import {setRandomColor} from "../hooks/setRandomColor"
 import {ChatBubble} from "./ChatBubble";
-import {SeenContainer} from "./SeenContainer";
 import {ChatBubbleImage} from "./ChatBubbleImage";
 
 export const Message = (props) => {
@@ -85,7 +83,6 @@ export const Message = (props) => {
                         senderIsVictim={senderIsVictim}
                     />
             </View>
-            <SeenContainer user={user} message={props.message}/>
         </View>
     );
 };

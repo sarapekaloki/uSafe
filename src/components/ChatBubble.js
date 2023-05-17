@@ -4,24 +4,35 @@ import {Image, StyleSheet, Text, TouchableOpacity, TouchableOpacityComponent, Vi
 export const ChatBubble = (props) => {
 
     return (
-        <View style={
-            [styles.bubble, props.currentUserIsSender ? styles.right : [
-                styles.left,{backgroundColor:
-                        props.senderIsVictim ?
-                            '#4C11CB':
-                            'black'}
-            ],
-            ]
-        }>
-            <TouchableOpacity onPress={
+        // <View style={
+        //     [styles.bubble, props.currentUserIsSender ? styles.right : [
+        //         styles.left,{backgroundColor:
+        //                 props.senderIsVictim ?
+        //                     '#4C11CB':
+        //                     'black'}
+        //     ],
+        //     ]
+        // }>
+            <TouchableOpacity style={
+                [styles.bubble, props.currentUserIsSender ? styles.right : [
+                    styles.left,{backgroundColor:
+                            props.senderIsVictim ?
+                                '#4C11CB':
+                                'black'}
+                ],
+                ]
+            } onPress={
                 ()=>{
                     props.setDateVisible(!props.dateVisible)}
             }>
-                <Text style={[styles.text, props.currentUserIsSender ? styles.textRight : styles.textLeft]}>
-                    {props.message.content}
-                </Text>
+                <View>
+                    <Text style={[styles.text, props.currentUserIsSender ? styles.textRight : styles.textLeft]}>
+                        {props.message.content}
+                    </Text>
+                </View>
+
             </TouchableOpacity>
-        </View>
+        // </View>
     );
 };
 const styles = StyleSheet.create({
