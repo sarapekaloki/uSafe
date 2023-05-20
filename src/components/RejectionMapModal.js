@@ -15,9 +15,9 @@ export const RejectionMapModal = ({
     return (
         <Modal isVisible={isVisible}>
             <Modal.Container>
-
                 <Modal.Header title={rejectMapModalWords[len].title+
-                    user.username}
+                    (user.username ? user.username.split(" ")[0] : user.username)}
+
                               handleModal={handleModal} user={user} />
                 <Modal.Body>
                     <View style={styles.body}>

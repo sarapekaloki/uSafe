@@ -41,6 +41,7 @@ const AlertScreen = () =>{
     const [ helping, set_helping ] = useState(false)
     const [allUsers, SetAllUsers] = useState([])
     const tabColor = Platform.OS =='ios'? '#c9c9c9':'#a3a3a3';
+    const navigation = useNavigation();
 
     useEffect( () => {
         if(!gotInfo){
@@ -76,16 +77,23 @@ const AlertScreen = () =>{
     async function sendAlarm() {
         if(!helping){
             Vibration.vibrate(2000);
-            const docRef = doc(db, "alarms", auth.currentUser.email);
-            const data = {
+            const alarmsRef = doc(db, "alarms", auth.currentUser.email);
+            const alarmData = {
                 alarmingUser:auth.currentUser.email,
                 users:[]
             };
-            await setDoc(docRef, data);
+            const chatRef = doc(db, "chat", auth.currentUser.email);
+            const chatData = {
+                user:auth.currentUser.email,
+                messages:[],
+                members:[],
+            };
+            await setDoc(alarmsRef, alarmData);
+            await setDoc(chatRef, chatData);
             allUsers.forEach(user => {
                 if((user.email != currentUser.email) && user.token != ""){
                     if(user.token != currentUser.token){
-                        sendNotification(user.token);
+                        // sendNotification(user.token);
                     }
                 }
             })
@@ -116,6 +124,17 @@ const AlertScreen = () =>{
     }
 
     async function cancelAlarm() {
+        let chatRef = collection(db, "chat");
+
+        let chat = null;
+        await getDocs(chatRef).then((res) => {
+            res.forEach((doc) => {
+                if(doc.data().user === auth.currentUser.email){
+                    chat = doc.data().members
+                }
+            })
+        });
+
         let users;
         const alarmRef = collection(db, "alarms");
         await getDocs(alarmRef).then((res) => {
@@ -131,21 +150,31 @@ const AlertScreen = () =>{
                     if(users.includes(document.data().email)){
                         const usersRef = doc(db, "users", document.data().email);
                         updateDoc(usersRef, {
-                            coordinates:document.data().coordinates,
-                            email:document.data().email,
-                            helpResponses:document.data().helpResponses + 1,
-                            pictureUrl:document.data().pictureUrl,
-                            username:document.data().username,
+                            coordinates: document.data().coordinates,
+                            email: document.data().email,
+                            helpResponses: document.data().helpResponses+1,
+                            pictureUrl: document.data().pictureUrl,
+                            username: document.data().username,
                             token: document.data().token,
-                            helpRadar: document.data().helpRadar,
-                            len: document.data().len
+                            len:document.data().len,
+                            likes:document.data().likes,
+                            helpRadar:document.data().helpRadar,
+                            reportedBy:document.data().reportedBy,
+                            reported:document.data().reported
                         }).then();
                     }
                 })
             })
 
+        if(chat !== null && chat.length > 0){
+            navigation.navigate("WhoHelpedYou",{chat});
+        }
+
+
         const docRef = doc(db, "alarms", auth.currentUser.email);
         await deleteDoc(docRef);
+        chatRef = doc(db, "chat", auth.currentUser.email);
+        await deleteDoc(chatRef);
         Vibration.vibrate(2000)
 
     }

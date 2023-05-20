@@ -1,7 +1,6 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Button} from "../components/Button";
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as React from "react";
-import MapView, {Callout, Marker, PROVIDER_GOOGLE} from "react-native-maps";
+import MapView, {Callout, Marker} from "react-native-maps";
 import {useEffect, useRef, useState, useCallback} from "react";
 import {getCurrentUser} from "../hooks/getCurrentUser";
 import {getSpecificUser} from "../hooks/getSpecificUser";
@@ -13,7 +12,6 @@ import {fetchAllAlarms} from "../hooks/fetchAllAlarms";
 import {acceptAlarm } from "../hooks/acceptAlarm";
 import {rejectAlarm} from "../hooks/rejectAlarm";
 import MapViewDirections from "react-native-maps-directions";
-import {alarm} from "ionicons/icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -30,7 +28,6 @@ export default function MapScreen(props){
     const [allAlarms, setAllAlarms] = useState([]);
     const [focusedUser, setFocusedUser] = useState({});
     const [acceptedAlarm, setAcceptedAlarm] = useState(null);
-    const [alarmingUser, setAlarmingUser] = useState(false);
     const [helpingUser, setHelpingUser] = useState(false);
     const [gotInfo, setGotInfo] = useState(false);
     const [isModalVisible, setIsModalVisible] = useState(false);
@@ -42,49 +39,59 @@ export default function MapScreen(props){
     const [reCenterVisible, setReCenterVisible] = useState(false);
     const navigation = useNavigation()
 
-    useEffect(() => {
-        if(!gotInfo || !currentUser){
-            getCurrentUser(setCurrentUser).then();
-            fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
-            fetchAllUsers(setAllUsers);
-            setGotInfo(true);
-        }});
+    const checkIfFocused = (coords, callback) => {
+        map.current.getCamera().then(({ center }) => {
+            const distance = getPreciseDistance(coords, center);
+            const isFocusedOnCoords = distance < 100000;
+            callback(isFocusedOnCoords);
+        }).catch((error) => {
+            callback(false); // Return false in case of an error
+        });
+    };
 
-    useEffect(()=>{
-    },[currentUser]);
-    useEffect(()=>{
-        if(alarmingUser){
-            centerMapOnCoords(currentUser,alarmingUser);
+    useEffect( ()=>{
+        if(props.currentUser && !gotInfo){
+            const focusedCoords = props.currentUser.coordinates;
+            checkIfFocused(focusedCoords, (focused)=>{
+                if(focused){
+                    setGotInfo(true);
+                }
+            })
+                const region = {
+                    latitude: focusedCoords.latitude,
+                    longitude: focusedCoords.longitude,
+                    latitudeDelta: .05,
+                    longitudeDelta: .05,
+                };
+                map.current.animateToRegion(region, 1000);
+                setTimeout(()=>{setGotInfo(true)},7000);
+
         }
-    },[alarmingUser]);
+    })
+
+    useEffect(() => {
+        fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
+        fetchAllUsers(setAllUsers);
+    },[]);
     useEffect(()=>{
     },[reCenterVisible]);
     useEffect(()=>{
     },[markerPressed]);
 
-
-
     useEffect(()=>{
         if(!acceptedAlarm){
-            setAlarmingUser(false);
             setReCenterVisible(false);
-        }
-        else{
-            if(!alarmingUser){
-                getSpecificUser(acceptedAlarm.alarmingUser,setAlarmingUser).
-                then();
-
-
-            }
-
         }
     },[acceptedAlarm]);
 
-    const handleModalRejection = ()=>{
+    const handleModalVisibility = ()=>{
         setIsModalVisible(!isModalVisible);
     }
+    const handleRejectionModalVisibility = ()=>{
+        setIsRejectionModalVisible(!isRejectionModalVisible);
+    }
     const handleModalAcceptance = ()=>{
-        handleModalRejection();
+        handleModalVisibility();
         acceptAlarm(focusedUser).then();
     }
 
@@ -107,25 +114,33 @@ export default function MapScreen(props){
     }
 
     const setUserVisibility = (user) => {
+        if(props.currentUser.reported.includes(user.email) ||
+            props.currentUser.reportedBy.includes(user.email) ||
+            user.reported.includes(props.currentUser.email) ||
+            user.reportedBy.includes(props.currentUser.email) ||
+            props.currentUser.reportedBy.length >=3 ||
+            user.reportedBy.length >=3){
+            return false;
+        }
         if(!askedForHelp){
             if(helpingUser){
                 return acceptedAlarm.alarmingUser === user.email ||
                     acceptedAlarm.users.includes(user.email)
             }
-            return true;
+            return userIsInRadar(user);
         }
         return currentUserAlarm && currentUserAlarm.users.includes(user.email);
 
     }
 
     const centerMapOnCoords = (origin,destination) => {
-        const edgePadding = 50
+        const edgePadding = 70
         map.current.fitToCoordinates([origin.coordinates,
             destination.coordinates],{
             edgePadding: {
                 top: edgePadding,
                 right: edgePadding,
-                bottom: edgePadding,
+                bottom: props.visible ? edgePadding+40 : edgePadding,
                 left: edgePadding,
             },
         });
@@ -135,7 +150,22 @@ export default function MapScreen(props){
 
     }
 
+    const userIsInRadar = (otherUser)=>{
+        return getPreciseDistance(
+            props.currentUser.coordinates,
+            otherUser.coordinates
+        ) < props.currentUser.helpRadar;
+    }
+
     const updateUserMarkers = ()=>{
+        // return <OtherUserMarker
+        //     visible={true}
+        //     user={props.currentUser}
+        //     victim={false}
+        //     setFocusedUser={setFocusedUser}
+        //     handleModal={()=>{}}
+        // />
+
         return allUsers.map((user,index) =>{
                 return <OtherUserMarker
                     key={index}
@@ -143,59 +173,59 @@ export default function MapScreen(props){
                     user={user}
                     victim={allAlarms.map((alarm)=>alarm.alarmingUser).includes(user.email)}
                     setFocusedUser={setFocusedUser}
-                    handleModal={helpingUser ? ()=>{
-                        setIsRejectionModalVisible(!isRejectionModalVisible)
-                    } : handleModalRejection}
+                    handleModal={helpingUser ? handleRejectionModalVisibility : handleModalVisibility}
                 />
             }
         )
     }
 
-    const mapViewDirections = useCallback(() =>
-            (
-                <>
-                    {currentUser && alarmingUser && <MapViewDirections
-                        origin={currentUser.coordinates}
-                        destination={alarmingUser.coordinates}
-                        apikey={process.env.GOOGLE_MAPS_KEY}
-                        strokeWidth={8}
-                        strokeColor="#914FFC"
-                        strokeColors={["#c39cff","#a75eff"]}
-                    />
-                    }
-                </>
-            )
-        ,[alarmingUser]);
+    const updateDirections = ()=>{
+        return props.alarmingUser && <MapViewDirections
+            origin={props.currentUser.coordinates}
+            destination={props.alarmingUser.coordinates}
+            apikey={process.env.GOOGLE_MAPS_KEY}
+            strokeWidth={8}
+            strokeColor="#914FFC"
+            strokeColors={["#c39cff","#a75eff"]}
+        />
+    }
 
     const map = useRef();
 
+
     return(
         <View style={styles.container}>
-            <MapView
-                ref={map}
-                style={styles.map}
-                initialRegion={{
-                    latitude:userLocation.latitude,
-                    longitude:userLocation.longitude,
-                    latitudeDelta:0.004,
-                    longitudeDelta:0.004
-                }}
-                onRegionChangeComplete={()=>setReCenterVisible(helpingUser)}
-                onPress={handleMapPress}
-            >
-                <Marker coordinate={currentUser ? currentUser.coordinates : userLocation}>
-                    <View style={[styles.userLocation2, {borderColor:askedForHelp?'rgba(98, 0, 255, 0.3)':'rgba(0, 66, 255, 0.3)' }]}>
-                        <Image style={[styles.userLocation, {backgroundColor: askedForHelp? '#6540F5': '#0035f2'}]}/>
-                    </View>
-                </Marker>
+            {   props.currentUser && props.currentUser.coordinates &&
+                <MapView
+                    ref={map}
+                    style={styles.map}
+                    initialRegion={
+                            {
+                                latitude:props.currentUser.coordinates.latitude,
+                                longitude:props.currentUser.coordinates.longitude,
+                                latitudeDelta:0.004,
+                                longitudeDelta:0.004
+                            }
+                    }
+                    onRegionChangeComplete={()=>setReCenterVisible(helpingUser)}
+                    onPress={handleMapPress}
+                    scrollEnabled={gotInfo}
+                    // provider={PROVIDER_GOOGLE}
+                    // cacheEnabled={true}
+                >
+                    <Marker coordinate={props.currentUser ? props.currentUser.coordinates : userLocation}>
+                        <View style={[styles.userLocation2, {borderColor:askedForHelp?'rgba(98, 0, 255, 0.3)':'rgba(0, 66, 255, 0.3)' }]}>
+                            <Image style={[styles.userLocation, {backgroundColor: askedForHelp? '#6540F5': '#0035f2'}]}/>
+                        </View>
+                    </Marker>
 
-                {
-                    mapViewDirections()
-                }
+                    {
+                        updateDirections()
+                    }
 
-                {
-                    updateUserMarkers()
-                }
+                    {
+                        updateUserMarkers()
+                    }
 
                 <Callout>
                     <MapModal
@@ -216,8 +246,8 @@ export default function MapScreen(props){
                     />
 
                 </Callout>
-
             </MapView>
+            }
             <View style={[styles.buttonCallout,{
                 // bottom:'13%'
                 bottom: props.visible ? '13%' : '3%'
@@ -298,3 +328,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
+

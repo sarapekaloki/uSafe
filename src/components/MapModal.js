@@ -20,8 +20,8 @@ export const MapModal = ({
     return (
         <Modal isVisible={isVisible}>
             <Modal.Container>
+                <Modal.Header title={ (len =="ES"? "¡": "") +(user.username ? user.username.split(" ")[0] : user.username)+ mapModalWords[len].title}
 
-                <Modal.Header title={ (len =="ES"? "¡": "") +user.username+ mapModalWords[len].title}
                               handleModal={handleModalRejection}
                               user={user}/>
                 <Modal.Body>

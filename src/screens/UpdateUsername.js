@@ -17,9 +17,7 @@ const UpdateUsername = () => {
     const route = useRoute();
     const firestore = getFirestore();
     const currentEmail = auth.currentUser.email;
-    const currentUser = auth.currentUser;
     const userData = route.params.userData;
-    console.log(userData.len)
     const len = userData.len;
     const [updatedUsername, setUpdatedUsername] = useState('');
 
@@ -37,7 +35,11 @@ const UpdateUsername = () => {
             pictureUrl: userData.pictureUrl,
             username: updatedUsername,
             token: userData.token,
-            len: userData.len
+            len: userData.len,
+            likes:userData.likes,
+            helpRadar:userData.helpRadar,
+            reportedBy:userData.reportedBy,
+            reported:userData.reported
         };
         setUpdatedUsername(updatedUsername.trim())
         if(updatedUsername != ""){

@@ -15,8 +15,6 @@ import {
     Spartan_500Medium
   } from '@expo-google-fonts/spartan';
 
-
-
 const HelpRadarSetUp = () => {
     const [radarValue, setRadarValue] = useState(100)
     const navigation = useNavigation()
@@ -41,7 +39,10 @@ const HelpRadarSetUp = () => {
             username: userData.username,
             token: userData.token,
             len: userData.len,
-            helpRadar: radarValue
+            helpRadar: radarValue,
+            likes:userData.likes,
+            reportedBy:userData.reportedBy,
+            reported:userData.reported
         };
 
         const docRef = doc(firestore, "users", currentEmail);

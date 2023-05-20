@@ -7,7 +7,6 @@ import { FontAwesome5 } from '@expo/vector-icons';
 import { MaterialCommunityIcons } from '@expo/vector-icons'; 
 import { settingsWords } from "../lenguagesDicts/settingsWords";
 import AsyncStorage from "@react-native-async-storage/async-storage";
-
 import {
     Image,
     StyleSheet,
@@ -36,8 +35,10 @@ const Settings = () => {
     const [currentCoordinates, setCurrentCoordinates] = useState({});
     const [currentProfilePicture, setProfilePicture] = useState('');  
     const [helpResponses, setHelpResponses] = useState('');
-    const [lenguage, setLenguage] = useState('');
     const [helpRadar, setHelpRadar] = useState(0);
+    const [helpLikes, setHelpLikes] = useState(0);
+    const [reported, setReported] = useState([]);
+    const [reportedBy, setReportedBy] = useState([]);
     const [token, setToken] = useState('');
     const [gotInfo, setGotInfo] = useState(false);
 
@@ -56,8 +57,10 @@ const Settings = () => {
                 setProfilePicture(doc.data().pictureUrl)
                 setCurrentCoordinates(doc.data().coordinates)   
                 setToken(doc.data().token) 
-                setLenguage(doc.data().len)
                 setHelpRadar(doc.data().helpRadar)
+                setHelpLikes(doc.data().likes)
+                setReported(doc.data().reported)
+                setReportedBy(doc.data().reportedBy)
             });
             setGotInfo(true);
         }});
@@ -89,7 +92,11 @@ const Settings = () => {
                         helpResponses: helpResponses,
                         pictureUrl: currentProfilePicture,
                         token:token,
-                        len: len
+                        len: len,
+                        helpRadar:helpRadar,
+                        likes:helpLikes,
+                        reportedBy:reportedBy,
+                        reported:reported
                     }})}>
                      <View style={styles.leftSide}>
                         <MaterialIcons name="photo" size={24} color="#5C5C5C" />
@@ -108,7 +115,10 @@ const Settings = () => {
                         pictureUrl: currentProfilePicture,
                         token: token,
                         helpRadar: helpRadar,
-                        len: len
+                        len: len,
+                        likes:helpLikes,
+                        reportedBy:reportedBy,
+                        reported:reported
                     }})}>
                     <View style={styles.leftSide}>
                     <FontAwesome5 name="user-edit" size={20} color="#5C5C5C" />

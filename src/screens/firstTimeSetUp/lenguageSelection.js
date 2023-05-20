@@ -8,15 +8,12 @@ import { Dropdown } from 'react-native-element-dropdown';
 import { lenguageSelectionWords } from "../../lenguagesDicts/lenguageSelectionWords";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
 import {
     useFonts,
     Spartan_800ExtraBold,
     Spartan_700Bold,
     Spartan_500Medium
   } from '@expo-google-fonts/spartan';
-
-
 
 const LenguageSelection = () => {
     const [lenValue, setLenValue] = useState('');
@@ -49,7 +46,10 @@ const LenguageSelection = () => {
             username: userData.username,
             token: userData.token,
             len: lenValue,
-            helpRadar: userData.helpRadar
+            likes:userData.likes,
+            helpRadar:userData.helpRadar,
+            reportedBy:userData.reportedBy,
+            reported:userData.reported
         };
 
         const docRef = doc(firestore, "users", currentEmail);
@@ -162,5 +162,4 @@ const styles = StyleSheet.create({
     icon2: {
         marginRight: 10
     }
-
 })
