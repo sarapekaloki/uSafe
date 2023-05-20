@@ -12,21 +12,21 @@ import {
 } from "react-native";
 import { Ionicons } from '@expo/vector-icons'; 
 import * as Notifications from 'expo-notifications';
-import { Platform } from "react-native";
-import {useNavigation} from "@react-navigation/native";
+import {useNavigation, useRoute} from "@react-navigation/native";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
 import { auth } from "../../firebase";
 import {getFirestore, setDoc, doc} from 'firebase/firestore';
+import { registerWords } from "../lenguagesDicts/registerWords";
 import {
     useFonts,
     Roboto_700Bold,
     Roboto_400Regular
   } from '@expo-google-fonts/roboto';
-import {updateUserLocation} from "../hooks/updateUserLocation";
 import * as Location from "expo-location";
-  
-const RegisterScreen = () => {
 
+const RegisterScreen = () => {
+    const route = useRoute();
+    const len = route.params.len;
     const {passwordVisibility, rightIcon, handlePasswordVisibility} =
         useTogglePasswordVisibility();
 
@@ -34,6 +34,7 @@ const RegisterScreen = () => {
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const navigation = useNavigation()
+
     const [usernameErrorOccurs, usernamesetError] = useState(false)
     const [emptyEmailErrorOccurs, emptyEmailsetError] = useState(false)
     const [invalidEmailErrorOccurs, invalidEmailsetError] = useState(false)
@@ -136,27 +137,32 @@ const RegisterScreen = () => {
     const addData =  async() => {
         const token = await registerForPushNotificationsAsync();
         const firestore = getFirestore();
-        const docRef = doc(firestore, "users", email.toLowerCase());
+        const docRefUsers = doc(firestore, "users", email.toLowerCase());
+        const docRefNotif = doc(firestore, "notifications", email.toLowerCase());
         let location = await Location.getCurrentPositionAsync({});
         const current = {
             latitude: location.coords.latitude,
             longitude: location.coords.longitude
         }
-        const data = {
-            coordinates: {longitude:current.latitude, latitude:current.longitude},
+        const usersData = {
+            coordinates:{longitude:current.latitude, latitude:current.longitude},
             email: email.toLowerCase(),
             helpResponses: 0,
             pictureUrl: "",
             username: username,
             token: token,
             helpRadar: 100,
-            len: "",
+            len: len,
             likes:0,
             reportedBy:[],
             reported:[]
         };
-        await setDoc(docRef, data);
-        navigation.navigate("MainFirstTimeSetUp", {userData: data})
+        const notificationsData = {
+            "notifications": []
+        }
+        await setDoc(docRefUsers, usersData);
+        await setDoc(docRefNotif, notificationsData);
+        navigation.navigate("MainFirstTimeSetUp", {userData: usersData})
     }
 
     if (!fontsLoaded) {
@@ -174,31 +180,28 @@ const RegisterScreen = () => {
                 style={styles.logo}
                 source={require( '../../assets/img/logoPurple.png')}
             />
-                <Text style= {styles.headerText}>Registrate</Text>
+                <Text style= {styles.headerText}>{registerWords[len].title}</Text>
                     <View  style = {styles.inputContainer}>
-                        <Text style = {styles.text} >Nombre de usuario</Text>
+                        <Text style = {styles.text} >{registerWords[len].username}</Text>
                         <TextInput
-                            placeholder="Ingresar nombre de usuario"
                             value={username}
                             onChangeText={text => setUsername(text)}
                             style = {styles.input}
                             maxLength={15}
                         />
-                <Text style =  {usernameErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
-                <Text style = {styles.text} >Correo</Text>
+                <Text style =  {usernameErrorOccurs? styles.errorText: {display: 'none'}}> {registerWords[len].inputEmptyError} </Text>
+                <Text style = {styles.text} >{registerWords[len].email}</Text>
                 <TextInput
-                    placeholder="Ingresar correo"
                     value={email}
                     onChangeText={text => setEmail(text)}
                     style = {styles.input}
                 />
-                <Text style =  {emptyEmailErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
-                <Text style =  {invalidEmailErrorOccurs? styles.errorText: {display: 'none'}}> Por favor ingresa un correo válido </Text>
-                <Text style =  {repeatedEmailErrorOccurs? styles.errorText: {display: 'none'}}> Ya existe una cuenta con este correo </Text>
-                <Text style = {styles.text}>Contraseña</Text>
+                <Text style =  {emptyEmailErrorOccurs? styles.errorText: {display: 'none'}}> {registerWords[len].inputEmptyError} </Text>
+                <Text style =  {invalidEmailErrorOccurs? styles.errorText: {display: 'none'}}> {registerWords[len].invalidEmailError} </Text>
+                <Text style =  {repeatedEmailErrorOccurs? styles.errorText: {display: 'none'}}> {registerWords[len].alreadyExistsEmailError} </Text>
+                <Text style = {styles.text}>{registerWords[len].password}</Text>
                 <View  style={styles.passwordContainer}>
                     <TextInput
-                        placeholder="Ingresar contraseña"
                         value={password}
                         onChangeText={text => setPassword(text)}
                         style = {styles.input}
@@ -208,28 +211,28 @@ const RegisterScreen = () => {
                         <Ionicons name={rightIcon} size={24} color="grey" />
                     </Pressable>
                 </View>
-                <Text style =  {emptyPasswordErrorOccurs? styles.errorText: {display: 'none'}}> Este campo no puede estar vacío </Text>
-                <Text style =  {lenPasswordErrorOccurs? styles.errorText: {display: 'none'}}>1. Longitud de mínimo 8 caracteres </Text>
-                <Text style =  {lenPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>1. Longitud de mínimo 8 caracteres </Text>
-                <Text style =  {lowerPasswordErrorOccurs? styles.errorText: {display: 'none'}}>2. Contener mínimo una mayúscula y una minúscula </Text>
-                <Text style =  {lowerPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>2. Contener mínimo una mayúscula y una minúscula </Text>
-                <Text style =  {numberPasswordErrorOccurs? styles.errorText: {display: 'none'}}>3. Contener por lo menos un número </Text>
-                <Text style =  {numberPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>3. Contener por lo menos un número </Text>
+                <Text style =  {emptyPasswordErrorOccurs? styles.errorText: {display: 'none'}}> {registerWords[len].inputEmptyError} </Text>
+                <Text style =  {lenPasswordErrorOccurs? styles.errorText: {display: 'none'}}>{registerWords[len].lenError} </Text>
+                <Text style =  {lenPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>{registerWords[len].lenError} </Text>
+                <Text style =  {lowerPasswordErrorOccurs? styles.errorText: {display: 'none'}}>{registerWords[len].capsError}</Text>
+                <Text style =  {lowerPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>{registerWords[len].capsError}</Text>
+                <Text style =  {numberPasswordErrorOccurs? styles.errorText: {display: 'none'}}>{registerWords[len].numError} </Text>
+                <Text style =  {numberPasswordFixOccurs? styles.fixErrorText: {display: 'none'}}>{registerWords[len].numError} </Text>
             </View>
 
             <TouchableOpacity
                 style = {styles.button}
                 onPress={handleSignUp}
             >
-                <Text style = {styles.buttonText}>Registrar cuenta</Text>
+                <Text style = {styles.buttonText}>{registerWords[len].title}</Text>
                 <Ionicons name="chevron-forward" size={24} color="white" />
             </TouchableOpacity>
 
             <View  style={styles.registerText}>
-                <Text>¿Ya tienes cuenta? </Text>
+                <Text>{registerWords[len].accountQuestion}</Text>
                 <Text style={{color: 'blue'}}
-                        onPress={() => navigation.replace("Login")}>
-                    Iniciar sesión
+                        onPress={() => navigation.navigate("Login")}>
+                    {registerWords[len].login}
                 </Text>
                 </View>
                 </View>

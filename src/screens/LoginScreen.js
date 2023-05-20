@@ -1,6 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import { Ionicons } from '@expo/vector-icons'; 
-import React, { useState} from "react";
+import * as Localization from 'expo-localization';
+import React, { useState, useEffect} from "react";
 import {
     KeyboardAvoidingView,
     StyleSheet,
@@ -17,33 +18,31 @@ import {
     Roboto_700Bold,
     Roboto_400Regular
   } from '@expo-google-fonts/roboto';
-  
 import { auth } from "../../firebase";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { loginWords } from "../lenguagesDicts/loginWords";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
-
-export const setData = async (key, value) => {
-    value = JSON.stringify(value);
-    await AsyncStorage.setItem(key, value);
-};
-
-export const getData = async (key) => {
-    return JSON.parse(await AsyncStorage.getItem(key));
-}
 
 const LoginScreen = () => {
+    const [len, setLen] = useState("EN");
     const {passwordVisibility, rightIcon, handlePasswordVisibility} =
         useTogglePasswordVisibility();
     const [email, setEmail] = useState('')
     const [password, setPassword] = useState('')
     const [anErrorOccurs, setError] = useState(false)
     const navigation = useNavigation()
-
-    let [fontsLoaded] = useFonts({
-        Roboto_700Bold,
-        Roboto_400Regular
-    });
+    const localLenguage = Localization.locale.slice(0,2).toUpperCase()
+    
+    AsyncStorage.getItem('len').then(res => {
+        if (res != null) {
+            setLen(res)
+        } else {
+            const auxLen = ['EN', 'ES'].includes(localLenguage)? localLenguage : 'EN'
+            setLen(auxLen)
+            AsyncStorage.setItem('len', localLenguage)
+        }
+    })
 
     const handleLogin = (email, password) => {
         auth
@@ -51,7 +50,7 @@ const LoginScreen = () => {
         .then(userCredentials => {
             setError(false);
             userCredentials.user;
-            navigation.replace("Tabs");
+            navigation.navigate("Tabs", {"len": len});
         })
         .catch(error => {
             if (error.code === 'auth/invalid-email' || 'auth/wrong-password') {
@@ -59,6 +58,12 @@ const LoginScreen = () => {
               }
            })
     }
+
+    let [fontsLoaded] = useFonts({
+        Roboto_700Bold,
+        Roboto_400Regular
+    });
+
 
     if (!fontsLoaded) {
         return null;
@@ -77,12 +82,11 @@ const LoginScreen = () => {
                     style={styles.logo}
                     source={require( '../../assets/img/logoPurple.png')}
                 />
-                <Text style= {styles.headerText}> Iniciar Sesión</Text>
+                <Text style= {styles.headerText}>{loginWords[len].title}</Text>
 
                 <View  style = {styles.inputContainer}>
-                    <Text style = {styles.text} >Correo</Text>
+                    <Text style = {styles.text} >{loginWords[len].email}</Text>
                     <TextInput
-                        placeholder="Ingresar correo"
                         value={email}
                         onChangeText={text => setEmail(text)}
                         style = {styles.input}
@@ -90,9 +94,8 @@ const LoginScreen = () => {
                  </View>
 
                 <View style={styles.inputContainer}>
-                    <Text style = {styles.text}>Contraseña</Text>
+                    <Text style = {styles.text}>{loginWords[len].password}</Text>
                     <TextInput
-                        placeholder="Ingresar contraseña"
                         value={password}
                         onChangeText={text => setPassword(text)}
                         style = {styles.input}
@@ -107,17 +110,17 @@ const LoginScreen = () => {
                     onPress={() => handleLogin(email, password)}
                     style = {styles.button}
                 >
-                    <Text style = {styles.buttonText}>Iniciar Sesión</Text>
+                    <Text style = {styles.buttonText}>{loginWords[len].title}</Text>
                     <Ionicons name="chevron-forward" size={24} color="white" />
                 </TouchableOpacity>
 
-                <Text style =  {anErrorOccurs? styles.errorText: {display: 'none'}}> Contraseña o correo incorrectos. </Text>
+                <Text style =  {anErrorOccurs? styles.errorText: {display: 'none'}}> {loginWords[len].error}</Text>
 
                 <View style={styles.registerText}>
-                        <Text>¿No tienes cuenta? </Text>
+                        <Text>{loginWords[len].accountQuestion} </Text>
                         <Text style={{color: 'blue'}}
-                            onPress={() => navigation.replace("Register")}>
-                        Regístrate
+                            onPress={() => navigation.navigate("Register", {len: len})}>
+                        {loginWords[len].register}
                         </Text>
                 </View>
                 </View>

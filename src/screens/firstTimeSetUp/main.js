@@ -2,6 +2,7 @@ import React from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
 import { Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import { Entypo } from '@expo/vector-icons';
+import { firstTimeSetUpWords } from "../../lenguagesDicts/firstTimeSetUpWords";
 
 import {
     useFonts,
@@ -14,6 +15,8 @@ const Main = () => {
     const navigation = useNavigation();
     const route = useRoute();
     const userData = route.params.userData;
+    const len = userData.len;
+
 
     let [fontsLoaded] = useFonts({
         Spartan_800ExtraBold,
@@ -29,13 +32,13 @@ const Main = () => {
     return(
        <View style = {styles.container}>
         <Text style = {styles.text}>
-            Prevén situaciones de riesgo con
+            {firstTimeSetUpWords[len].title}
         </Text>
         <Image style ={styles.logo} source={require('../../../assets/img/logo3.png')}></Image>
         <Image style ={styles.phoneGirl} source={require('../../../assets/img/phone-girl.png')}></Image>
         <TouchableOpacity style = {styles.button} onPress={() => {navigation.navigate("LenguageSelection", {userData: userData})}}>
             <Text style={styles.buttonText}>
-                Configurar cuenta
+               {firstTimeSetUpWords[len].button}
             </Text>
             <Entypo style = {styles.icon} name="chevron-thin-right" size={24} color="white" />
         </TouchableOpacity>

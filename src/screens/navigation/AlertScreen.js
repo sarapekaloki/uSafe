@@ -9,13 +9,13 @@ import {getFirestore, collection, query, where, onSnapshot} from "firebase/fires
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
+import { alertTabWords } from '../../lenguagesDicts/alertTabWords';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 import {
     useFonts,
-    Roboto_700Bold,
-    Roboto_400Regular
+    Roboto_700Bold
   } from '@expo-google-fonts/roboto';
-import {useNavigation} from "@react-navigation/native";
 
 const sleep = (milliseconds) => {
     var start = new Date().getTime();
@@ -26,12 +26,16 @@ const sleep = (milliseconds) => {
     }
 }
 
+// Falta agregar pantalla cuando no hay ubicación
+
 const AlertScreen = () =>{
     firebase.initializeApp(firebaseConfig);
+    const [len, setLen] = useState('EN');
+    AsyncStorage.getItem('len').then(res => {
+        setLen(res)
+   });
     const db = getFirestore();
     const [ gotInfo, set_gotInfo ] = useState(false);
-    const modoNoAlerta = "¡Iniciar Modo Alerta!"
-    const modoAlerta = "¿Terminar Modo Alerta?"
     const [ mode , set_mode ] = useState(false)
     const [ currentUser , set_currentUser] = useState({})
     const [ helping, set_helping ] = useState(false)
@@ -95,7 +99,7 @@ const AlertScreen = () =>{
             })
         }
         else{
-            alert("¡No puedes entrar en modo alerta mientras ayudas a alguien!")
+            alert(alertTabWords[len].notAvailableMessage)
         }
     
     }
@@ -105,7 +109,7 @@ const AlertScreen = () =>{
             to: userToken,
             sound: 'default',
             title: 'uSafe',
-            body:  `¡${currentUser.username} necesita ayuda!`,
+            body:  `${currentUser.username} ${alertTabWords[len].notificationMessage}`,
             data: { someData:'' },
           };
         await fetch('https://exp.host/--/api/v2/push/send', {
@@ -198,7 +202,7 @@ const AlertScreen = () =>{
                 <Image source={mode ? image2 : image1} style={styles.buttonImage}/>
             </TouchableOpacity>
             <Text style={styles.message}>
-                {mode ? modoAlerta : modoNoAlerta}
+                {mode ? alertTabWords[len].endAlert : alertTabWords[len].startAlert}
             </Text>
         </View>
     )

@@ -5,6 +5,7 @@ import {Button} from "./Button";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import {getPreciseDistance} from "geolib";
 import { Entypo } from '@expo/vector-icons';
+import { mapModalWords } from "../lenguagesDicts/mapModalWords";
 
 
 export const MapModal = ({
@@ -13,13 +14,14 @@ export const MapModal = ({
                           isVisible,
                           user,
                           loggedUser,
+                          len,
                           ...props
                       }) => {
     return (
         <Modal isVisible={isVisible}>
             <Modal.Container>
+                <Modal.Header title={ (len =="ES"? "¡": "") +(user.username ? user.username.split(" ")[0] : user.username)+ mapModalWords[len].title}
 
-                <Modal.Header title={"¡"+ (user.username ? user.username.split(" ")[0] : user.username) +" necesita tu ayuda!"}
                               handleModal={handleModalRejection}
                               user={user}/>
                 <Modal.Body>
@@ -30,7 +32,7 @@ export const MapModal = ({
                                       color={'black'}
                                       style={{marginTop: '-1%'}}/>
 
-                            <Text style={styles.text}>Respuestas de ayuda: {user.helpResponses}</Text>
+                            <Text style={styles.text}>{mapModalWords[len].helpResponses} {user.helpResponses}</Text>
                         </View>
                         <View style={[styles.userAttribute,
                             {marginTop: '4%'}]}>
@@ -53,8 +55,8 @@ export const MapModal = ({
                         marginTop:'-10%',
                         bottom:'30%'
                     }}>
-                        <Button title="ACEPTAR" color='#75D5A7' onPress={handleModalAcceptance} width="40%"/>
-                        <Button title="DECLINAR" color='#EC4747' onPress={handleModalRejection} width="40%" />
+                        <Button title={mapModalWords[len].accept} color='#75D5A7' onPress={handleModalAcceptance} width="40%"/>
+                        <Button title={mapModalWords[len].decline} color='#EC4747' onPress={handleModalRejection} width="40%" />
                     </View>
 
                 </Modal.Footer>

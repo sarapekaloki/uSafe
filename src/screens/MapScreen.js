@@ -1,8 +1,9 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import {Button} from "../components/Button";
+import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as React from "react";
-import MapView, {Callout, Marker, PROVIDER_GOOGLE} from "react-native-maps";
+import MapView, {Callout, Marker} from "react-native-maps";
 import {useEffect, useRef, useState, useCallback} from "react";
+import {getCurrentUser} from "../hooks/getCurrentUser";
+import {getSpecificUser} from "../hooks/getSpecificUser";
 import {fetchAllUsers} from "../hooks/fetchAllUsers";
 import {OtherUserMarker} from "../components/OtherUserMarker";
 import {MapModal} from "../components/MapModal";
@@ -11,16 +12,16 @@ import {fetchAllAlarms} from "../hooks/fetchAllAlarms";
 import {acceptAlarm } from "../hooks/acceptAlarm";
 import {rejectAlarm} from "../hooks/rejectAlarm";
 import MapViewDirections from "react-native-maps-directions";
-import {alarm} from "ionicons/icons";
 import Ionicons from "react-native-vector-icons/Ionicons";
-import {useIsFocused, useNavigation, useRoute} from "@react-navigation/native";
-import {getPreciseDistance} from "geolib";
-import firebase from "firebase/compat";
-import {auth, firebaseConfig} from "../../firebase";
-import {collection, getDocs, getFirestore, onSnapshot, query, where} from "firebase/firestore";
-import * as Haptics from "expo-haptics";
+import { useNavigation } from "@react-navigation/native";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export default function MapScreen(props){
+    const [len, setLen] = useState('EN');
+    AsyncStorage.getItem('len').then(res => {
+         setLen(res)
+    });
+    const [currentUser, setCurrentUser] = useState(null);
     const [askedForHelp, setAskedForHelp] = useState(false);
     const [currentUserAlarm, setCurrentUserAlarm] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
@@ -36,10 +37,7 @@ export default function MapScreen(props){
     });
     const [markerPressed, setMarkerPressed] = useState(false);
     const [reCenterVisible, setReCenterVisible] = useState(false);
-    const navigation = useNavigation();
-    const [mapIsFocused, setMapIsFocused] = useState(true);
-    const isFocused = useIsFocused();
-    const route = useRoute();
+    const navigation = useNavigation()
 
     const checkIfFocused = (coords, callback) => {
         map.current.getCamera().then(({ center }) => {
@@ -50,7 +48,6 @@ export default function MapScreen(props){
             callback(false); // Return false in case of an error
         });
     };
-
 
     useEffect( ()=>{
         if(props.currentUser && !gotInfo){
@@ -195,6 +192,7 @@ export default function MapScreen(props){
 
     const map = useRef();
 
+
     return(
         <View style={styles.container}>
             {   props.currentUser && props.currentUser.coordinates &&
@@ -229,33 +227,35 @@ export default function MapScreen(props){
                         updateUserMarkers()
                     }
 
-                    <Callout>
-                        <MapModal
-                            isVisible={isModalVisible}
-                            user={focusedUser}
-                            handleModalRejection={handleModalVisibility}
-                            handleModalAcceptance={handleModalAcceptance}
-                            loggedUser={props.currentUser}
-                        />
-                        <RejectionMapModal
-                            isVisible={isRejectionModalVisible}
-                            user={focusedUser}
-                            handleModal={()=>
-                                setIsRejectionModalVisible(!isRejectionModalVisible)}
-                            cancelAlarm={cancelAcceptedAlarm}
-                        />
+                <Callout>
+                    <MapModal
+                        isVisible={isModalVisible}
+                        user={focusedUser}
+                        handleModalRejection={handleModalRejection}
+                        handleModalAcceptance={handleModalAcceptance}
+                        loggedUser={currentUser}
+                        len={len}
+                    />
+                    <RejectionMapModal
+                        isVisible={isRejectionModalVisible}
+                        user={focusedUser}
+                        handleModal={()=>
+                            setIsRejectionModalVisible(!isRejectionModalVisible)}
+                        cancelAlarm={cancelAcceptedAlarm}
+                        len={len}
+                    />
 
-                    </Callout>
-
-                </MapView>
+                </Callout>
+            </MapView>
             }
             <View style={[styles.buttonCallout,{
+                // bottom:'13%'
                 bottom: props.visible ? '13%' : '3%'
             }]}>
                 {
                     reCenterVisible &&
                     <TouchableOpacity style={[styles.button]}
-                                      onPress={()=>{centerMapOnCoords(props.currentUser,props.alarmingUser)
+                                      onPress={()=>{centerMapOnCoords(currentUser,alarmingUser)
                                       }}>
                         <Ionicons name={'navigate-outline'}
                                   size={26}
@@ -328,3 +328,4 @@ const styles = StyleSheet.create({
         fontSize: 16,
     },
 });
+

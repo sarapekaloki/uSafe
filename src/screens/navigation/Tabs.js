@@ -4,33 +4,33 @@ import OwnProfile from "../OwnProfile";
 import Notifications from "../Notifications";
 import { updateUserLocation } from "../../hooks/updateUserLocation";
 import Messages from "../Messages";
-import {Platform, StyleSheet, Image, TouchableOpacity, Animated, View, Text} from "react-native";
+import { useRoute, useNavigation } from "@react-navigation/native";
+
+import {StyleSheet, Image, Animated, Platform, TouchableOpacity, View, Text} from "react-native";
 import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
-import {collection, getDocs, getFirestore, onSnapshot, query, where} from "firebase/firestore";
+import {collection,getDocs, getFirestore, onSnapshot, query, where, doc} from "firebase/firestore";
 import firebase from "firebase/compat";
+import { tabsWords } from "../../lenguagesDicts/tabsWords";
 import {auth, firebaseConfig} from "../../../firebase";
-import OutOfRangeScreen from "../OutOfRangeScreen";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import {
     useFonts,
     Spartan_700Bold,
     Spartan_600SemiBold
   } from '@expo-google-fonts/spartan';
-import {opacity} from "react-native-reanimated/lib/types/lib";
-import {alarm, help, settingsOutline} from "ionicons/icons";
-import indiscreteGestureHandler from "react-native-gesture-handler/src/web/IndiscreteGestureHandler";
+const Tab = createBottomTabNavigator()
 import NoMessages from "../NoMessages";
 import {getSpecificUser} from "../../hooks/getSpecificUser";
-const Tab = createBottomTabNavigator()
-import {useRoute, useNavigation} from "@react-navigation/native";
-import * as Haptics from 'expo-haptics';
-
 
 const Tabs = () => {
     firebase.initializeApp(firebaseConfig);
+    const currentEmail = auth.currentUser.email;
     const db = getFirestore();
+    const route = useRoute();
+    const len = route.params.len;
+    const [notifications, setNotifications] = useState(null);
     const [ alertMode , set_alertMode ] = useState(false);
     const [ gotInfo, setGotInfo ] = useState(false);
 
@@ -41,15 +41,10 @@ const Tabs = () => {
     const [inHelpGroup, setInHelpGroup] = useState(false);
     const [currentChat, setCurrentChat] = useState(null);
     const [currentAlarm, setCurrentAlarm] = useState(null);
-
     const [alarmingUser, setAlarmingUser] = useState(null);
-
     const [currentScreen, setCurrentScreen] = useState('');
-
     const [unreadMessages, setUnreadMessages] = useState(0);
-
     const [chatTitle, setChatTitle] = useState('');
-
     const navigation = useNavigation();
 
     let [fontsLoaded] = useFonts({
@@ -60,9 +55,19 @@ const Tabs = () => {
 
     const [tabBarVisible, setTabBarVisible] = useState(true);
 
+    const fadeAnim = useRef(new Animated.Value(0)).current;
+   
     useFonts({
         Spartan_600SemiBold,
     });
+
+    useEffect(()=>{
+        Animated.timing(fadeAnim, {
+            toValue: tabBarVisible ? 1 : 0,
+            duration: 10000,
+            useNativeDriver: true,
+        }).start();
+    },[tabBarVisible]);
 
     const usersSnapshot = (usersQuery)=>{
         onSnapshot(usersQuery,  (querySnapshot) => {
@@ -140,6 +145,8 @@ const Tabs = () => {
             setGotInfo(true);
         }});
 
+
+
     useEffect(()=>{
         const interval = setInterval(()=>{
             if(currentUser){
@@ -148,6 +155,13 @@ const Tabs = () => {
         },6000)
         return () => clearInterval(interval);
     });
+
+    useEffect(() => {
+        onSnapshot(doc(db, "notifications", currentEmail.toLowerCase()), (doc) => {
+            if(doc.data()=== undefined) return;
+            setNotifications(doc.data());            
+            });    
+    },[])
 
     useEffect( () => {
         if(!inHelpGroup){
@@ -178,7 +192,7 @@ const Tabs = () => {
     }
 
     return (
-        <Tab.Navigator initialRouteName="Mapa" screenOptions={{tabBarShowLabel: false,tabBarStyle:{
+        <Tab.Navigator initialRouteName={tabsWords[len].map} screenOptions={{tabBarShowLabel: false,tabBarStyle:{
             elevation: 0,
             backgroundColor: backgroundColor,
             height: tabBarVisible ? '11%' : 0,
@@ -186,25 +200,25 @@ const Tabs = () => {
             ...styles.shadow
         }
             }}>
-            <Tab.Screen name="Mapa" children={
-                ()=> <MapScreen alarmingUser={alarmingUser} currentUser={currentUser} setVisible={setTabBarVisible} visible={tabBarVisible} changeCurrentScreen={setCurrentScreen} currentScreen={currentScreen}/>
+            <Tab.Screen name={tabsWords[len].map} children={
+                ()=><MapScreen alarmingUser={alarmingUser} currentUser={currentUser} setVisible={setTabBarVisible} visible={tabBarVisible} changeCurrentScreen={setCurrentScreen} currentScreen={currentScreen}/>
             }
                 options={{
                 tabBarIcon: ({ focused }) => (
-                            <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
+                    <Feather name="map-pin" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")}ffr443 />
+               
                 ),
                 headerStyle:{
                     backgroundColor: backgroundColor,
                 },
                 headerTitleStyle:{
-                    fontWeight: 'bold',
-                    fontSize: 25,
-                    right: Platform.OS == 'ios'? '210%': 0,
+                    fontFamily: 'Spartan_700Bold',
+                    fontSize: 20,
                     color: fontColor
                 }
             }}
             />
-        <Tab.Screen name="Notificaciones" component={Notifications} options={{
+        <Tab.Screen name={tabsWords[len].notifications} children={() => <Notifications notifications={notifications.notifications}/>} options={{
             tabBarIcon: ({ focused }) => (
                 tabBarVisible && <Feather name="bell" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
           ),
@@ -214,7 +228,6 @@ const Tabs = () => {
           headerTitleStyle:{
             fontFamily: 'Spartan_700Bold',
             fontSize: 20,
-            right: Platform.OS == 'ios'? '65%': 0,
             color: fontColor
           }
         }}
@@ -226,15 +239,12 @@ const Tabs = () => {
             },
         })} options={{
             tabBarIcon: ({focused}) => (
-                // <Feather name="alert-circle" size={24} color="black" style ={styles.alarm}/>
                 tabBarVisible && <Image source={require( '../../../assets/icons/selected-alarm-icon.png') }
                     style={styles.alarm}/>
-
-
             )
         }}/>
 
-        <Tab.Screen name="Perfil" component={OwnProfile} options={{
+        <Tab.Screen name={tabsWords[len].profile} component={OwnProfile} options={{
             tabBarIcon: ({ focused }) => (
                 <Feather name="user" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
 
@@ -251,7 +261,7 @@ const Tabs = () => {
           }
         }}
         />
-          <Tab.Screen name="Mensajes" children={
+          <Tab.Screen name={tabsWords[len].chats} children={
               ()=> currentChat ? <Messages currentChat={currentChat}  changeCurrentScreen={setCurrentScreen} currentScreen={currentScreen}/> : <NoMessages/>
           } options={{
             tabBarIcon: ({ focused }) => (

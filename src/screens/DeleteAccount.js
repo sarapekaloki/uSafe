@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from "react";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, useRoute } from "@react-navigation/native";
 import { ref, getStorage, deleteObject } from "firebase/storage";
 import { Image, StyleSheet, Text, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
 import { auth } from "../../firebase";
 import { Entypo } from '@expo/vector-icons';
 import { Feather } from '@expo/vector-icons'; 
+import { deleteAccountWords } from "../lenguagesDicts/deleteAccountWords";
 import {getFirestore, doc, deleteDoc, query, onSnapshot, where, collection} from 'firebase/firestore';
 
 import {
@@ -24,6 +25,8 @@ const DeleteAccount = () => {
     const firestore = getFirestore();
     const [ gotInfo, set_gotInfo ] = useState(false);
     const [ disabledButton , setDisabledButton ] = useState(false);
+    const route = useRoute();
+    const len = route.params.len;
   
 
     let [fontsLoaded] = useFonts({
@@ -91,17 +94,17 @@ const DeleteAccount = () => {
                     setNewPassword(''); navigation.goBack()} }>
                     <Entypo name="chevron-left" size={28} color="black" />
                 </TouchableOpacity>
-                <Text style={styles.sectionTitleText}>BORRAR CUENTA</Text>
+                <Text style={styles.sectionTitleText}>{deleteAccountWords[len].title}</Text>
             </View>
             <View style ={styles.deleteMessage}>
                 <Feather name="info" size={20} color="#4C11CB" />
                 <Text style = {styles.deleteText}>
-                    Estas a punto de eliminar tu cuenta, esta acción es irreversible. Si estas seguro, presiona el botón de eliminar cuenta.
+                {deleteAccountWords[len].description}
                 </Text>
             </View>
                 
             <TouchableOpacity style={ disabledButton? styles.disabledButton: styles.confirmButton} disabled={disabledButton} onPress = {deleteUser}>
-                <Text style={styles.buttonText} >Eliminar cuenta</Text>
+                <Text style={styles.buttonText} >{deleteAccountWords[len].button}</Text>
             </TouchableOpacity> 
       
     </KeyboardAvoidingView>
