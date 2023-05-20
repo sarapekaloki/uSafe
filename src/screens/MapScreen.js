@@ -12,6 +12,7 @@ import {fetchAllAlarms} from "../hooks/fetchAllAlarms";
 import {acceptAlarm } from "../hooks/acceptAlarm";
 import {rejectAlarm} from "../hooks/rejectAlarm";
 import MapViewDirections from "react-native-maps-directions";
+import {getPreciseDistance} from "geolib";
 import Ionicons from "react-native-vector-icons/Ionicons";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -231,7 +232,7 @@ export default function MapScreen(props){
                     <MapModal
                         isVisible={isModalVisible}
                         user={focusedUser}
-                        handleModalRejection={handleModalRejection}
+                        handleModalRejection={handleRejectionModalVisibility}
                         handleModalAcceptance={handleModalAcceptance}
                         loggedUser={currentUser}
                         len={len}

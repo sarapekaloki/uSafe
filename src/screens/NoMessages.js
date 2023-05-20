@@ -1,10 +1,10 @@
 import React, {Image, StyleSheet, Text, View} from 'react-native';
 import {
     useFonts,
-    OpenSans_400Regular,
-    OpenSans_500Medium,
-    OpenSans_600SemiBold
-} from '@expo-google-fonts/open-sans';
+    Spartan_400Regular,
+    Spartan_500Medium,
+    Spartan_600SemiBold
+  } from '@expo-google-fonts/spartan';
 
 export default function NoMessages(){
 
@@ -19,9 +19,9 @@ export default function NoMessages(){
     }
 
     let [fontsLoaded] = useFonts({
-        OpenSans_400Regular,
-        OpenSans_500Medium,
-        OpenSans_600SemiBold
+        Spartan_400Regular,
+        Spartan_500Medium,
+        Spartan_600SemiBold
     });
 
     if (!fontsLoaded) {
@@ -59,16 +59,16 @@ const styles = StyleSheet.create({
         height: 270,
     },
     header:{
-        marginTop:'10%',
+        marginTop:10,
         textAlign:'center',
-        fontFamily: 'Spartan_700Bold',
-        fontSize:22,
+        fontFamily: 'Spartan_600SemiBold',
+        fontSize:18,
     },
     text:{
-        marginTop:'10%',
+        marginTop:10,
         textAlign:'center',
-        fontFamily: 'Spartan_700Bold',
-        fontSize:15,
+        fontFamily: 'Spartan_500Medium',
+        fontSize:14,
         opacity:.6,
     },
     textContainer:{

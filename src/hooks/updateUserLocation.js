@@ -50,3 +50,4 @@ export const updateUserLocation = async (currentUser) => {
             updateDoc(userRef, userObject).then();
         }
     }
+}
