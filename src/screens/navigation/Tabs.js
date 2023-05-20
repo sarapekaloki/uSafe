@@ -10,7 +10,7 @@ import {StyleSheet, Image, Animated} from "react-native";
 import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
-import {collection, getFirestore, onSnapshot, query, where} from "firebase/firestore";
+import {collection, getFirestore, onSnapshot, query, where, doc} from "firebase/firestore";
 import firebase from "firebase/compat";
 import { tabsWords } from "../../lenguagesDicts/tabsWords";
 import {auth, firebaseConfig} from "../../../firebase";
@@ -25,9 +25,12 @@ const Tab = createBottomTabNavigator()
 
 const Tabs = () => {
     firebase.initializeApp(firebaseConfig);
+    const currentEmail = auth.currentUser.email;
     const db = getFirestore();
     const route = useRoute();
     const len = route.params.len;
+    const [gotNotifications, setGotNotifications] = useState(false);
+    const [notifications, setNotifications] = useState(null);
     const [ alertMode , set_alertMode ] = useState(false);
     const [ gotInfo, setGotInfo ] = useState(false);
 
@@ -57,6 +60,7 @@ const Tabs = () => {
             useNativeDriver: true,
         }).start();
     },[tabBarVisible]);
+
     useEffect(() => {
         if(!gotInfo || !currentUser){
             getCurrentUser(setCurrentUser).then();
@@ -84,6 +88,13 @@ const Tabs = () => {
         },6000)
         return () => clearInterval(interval);
     });
+
+    useEffect(() => {
+        onSnapshot(doc(db, "notifications", currentEmail.toLowerCase()), (doc) => {
+            if(doc.data()=== undefined) return;
+            setNotifications(doc.data());            
+            });    
+    },[])
 
     if (!fontsLoaded) {
         return null;
@@ -116,7 +127,7 @@ const Tabs = () => {
                 }
             }}
             />
-        <Tab.Screen name={tabsWords[len].notifications} component={Notifications} options={{
+        <Tab.Screen name={tabsWords[len].notifications} children={() => <Notifications notifications={notifications.notifications}/>} options={{
             tabBarIcon: ({ focused }) => (
                 tabBarVisible && <Feather name="bell" size={24} color={focused? (alertMode? "grey": "black"): (alertMode? "white": "grey")} />
           ),
