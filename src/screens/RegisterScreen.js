@@ -136,8 +136,9 @@ const RegisterScreen = () => {
     const addData =  async() => {
         const token = await registerForPushNotificationsAsync();
         const firestore = getFirestore();
-        const docRef = doc(firestore, "users", email.toLowerCase());
-        const data = {
+        const docRefUsers = doc(firestore, "users", email.toLowerCase());
+        const docRefNotif = doc(firestore, "notifications", email.toLowerCase());
+        const usersData = {
             coordinates: {longitude:0, latitude:0},
             email: email.toLowerCase(),
             helpResponses: 0,
@@ -147,8 +148,12 @@ const RegisterScreen = () => {
             helpRadar: 100,
             len: len
         };
-        await setDoc(docRef, data);
-        navigation.navigate("MainFirstTimeSetUp", {userData: data})
+        const notificationsData = {
+            "notifications": []
+        }
+        await setDoc(docRefUsers, usersData);
+        await setDoc(docRefNotif, notificationsData);
+        navigation.navigate("MainFirstTimeSetUp", {userData: usersData})
     }
 
     if (!fontsLoaded) {
