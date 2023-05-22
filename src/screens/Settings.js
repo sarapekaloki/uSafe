@@ -127,7 +127,20 @@ const Settings = () => {
                     <Entypo name="chevron-right" size={24} color="#5C5C5C" />
                 </TouchableOpacity>
 
-                <TouchableOpacity style = {styles.configOption}>
+                <TouchableOpacity style = {styles.configOption} onPress={() => navigation.navigate("Update Help Radar", 
+                    {userData:{
+                        username: currentUsername,
+                        email: currentEmail, 
+                        coordinates: currentCoordinates,
+                        helpResponses: helpResponses,
+                        pictureUrl: currentProfilePicture,
+                        token: token,
+                        helpRadar: helpRadar,
+                        len: len,
+                        likes:helpLikes,
+                        reportedBy:reportedBy,
+                        reported:reported
+                    }})}>
                     <View style={styles.leftSide}>
                     <MaterialCommunityIcons name="radar" size={24} color="#5C5C5C" />                    
                     <Text style = {styles.configOptionText}>{settingsWords[len].helpRadar}</Text>

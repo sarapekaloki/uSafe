@@ -64,7 +64,7 @@ const UpdatePassword = () => {
                  sleep(1000);
                  setCurrentPassword('');
                  setNewPassword(''); 
-                 navigation.navigate('Tabs', { screen: 'Configuracion' }) 
+                 navigation.goBack();                     
              })
  
          }}).catch((error) => {

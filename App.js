@@ -19,6 +19,7 @@ import LenguageSelection from './src/screens/firstTimeSetUp/lenguageSelection';
 import WhoHelpedYou from "./src/screens/WhoHelpedYou";
 import OtherProfile from "./src/screens/OtherProfile";
 import ChatMembers from "./src/screens/ChatMembers";
+import UpdateHelpRadar from './src/screens/UpdateHelpRadar';
 
 const Stack = createNativeStackNavigator();
 global.alerta = false;
@@ -70,6 +71,7 @@ export default function App(){
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Password" component={UpdatePassword} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Username" component={UpdateUsername} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Profile Picture" component={UpdateProfilePicture} />
+        <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="Update Help Radar" component={UpdateHelpRadar} />
         <Stack.Screen options={{ headerShown: false, disableBackButtonOverride: true}} name="ChatMembers" component={ChatMembers} />
         <Stack.Screen
               name="Tabs"
