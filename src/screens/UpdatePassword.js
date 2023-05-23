@@ -1,12 +1,13 @@
 import React, { useState } from "react";
 import { useNavigation, useRoute } from "@react-navigation/native";
-import { Image, StyleSheet, Text, TextInput, Pressable, TouchableOpacity, View, KeyboardAvoidingView } from "react-native";
+import { Image, StyleSheet, Text, TextInput, Pressable, TouchableOpacity, View, KeyboardAvoidingView, Button } from "react-native";
 import { auth } from "../../firebase";
 import {EmailAuthProvider} from 'firebase/auth';
 import { Entypo } from '@expo/vector-icons';
 import { Ionicons } from '@expo/vector-icons'; 
 import { passwordWords } from "../lenguagesDicts/passwordWords";
 import {useTogglePasswordVisibility} from "../hooks/useTogglePasswordVisibility";
+import Modal from "react-native-modal";
 import {
     useFonts,
     OpenSans_400Regular,
@@ -14,6 +15,9 @@ import {
     OpenSans_600SemiBold
   } from '@expo-google-fonts/open-sans';
 
+  import {
+    Spartan_500Medium
+  } from '@expo-google-fonts/spartan';
 
 const UpdatePassword = () => {
     const navigation = useNavigation()
@@ -33,10 +37,17 @@ const UpdatePassword = () => {
     const [passwordUpperLowerCaseError, setPasswordUpperLowerCaseError] = useState(false);
     const [disableButton, setDisableButton] = useState(false);
 
+    const [isModalVisible, setModalVisible] = useState(false);
+
+    const toggleModal = () => {
+      setModalVisible(!isModalVisible);
+    };
+
     let [fontsLoaded] = useFonts({
         OpenSans_400Regular,
         OpenSans_500Medium,
-        OpenSans_600SemiBold
+        OpenSans_600SemiBold,
+        Spartan_500Medium
       });
 
     const updatePassword = () => {
@@ -64,7 +75,7 @@ const UpdatePassword = () => {
                  sleep(1000);
                  setCurrentPassword('');
                  setNewPassword(''); 
-                 navigation.goBack();                     
+                 toggleModal();
              })
  
          }}).catch((error) => {
@@ -73,6 +84,10 @@ const UpdatePassword = () => {
          }
         
      };
+
+     const finishConfirmationMessage = () => {
+        navigation.goBack();                     
+     }
  
      const checkNewPasswordErrors = () => {
          const res = {
@@ -185,6 +200,20 @@ const UpdatePassword = () => {
             <TouchableOpacity style = {newPassword.trim() == "" || currentPassword.trim() == "" ? styles.disabledButton: styles.confirmButton} onPress={updatePassword} disabled={newPassword.trim() == "" || currentPassword.trim() == "" ? true : false}>
                 <Text style={styles.buttonText}>{passwordWords[len].button}</Text>
             </TouchableOpacity>
+            <Modal isVisible={isModalVisible}>
+                <View style={styles.modal}>
+                    <View style={styles.icon}>
+                        <Entypo name="check" size={24} color="white" />
+                    </View>
+                    <Text style={styles.modalDescription}>
+                     {passwordWords[len].modalDescription}
+                    </Text>
+                    <TouchableOpacity style={styles.modalButton} onPress={finishConfirmationMessage}>
+                        <Text style={styles.modalButtonText}>{passwordWords[len].modalButton}</Text>
+                    </TouchableOpacity>
+                </View>
+            </Modal>
+       
         </KeyboardAvoidingView>
     )
 }
@@ -280,5 +309,39 @@ const styles = StyleSheet.create({
     noErrorText:{
         fontFamily:'OpenSans_400Regular',
         color: 'green',
-    }
+    },
+    modal: {
+        "backgroundColor": '#FFF',
+        "borderRadius": 20,
+        "height": 200,
+        'alignItems': 'center'
+    },
+    icon: {
+        'backgroundColor': '#A8EFCD',
+        'width': 50,
+        'height': 50,
+        'alignItems': 'center',
+        'justifyContent': 'center',
+        'marginTop': 10,
+        'borderRadius': 50
+    },
+    modalDescription: {
+        'fontFamily': 'Spartan_500Medium',
+        'fontSize': 16,
+        'marginTop': 15
+    },
+     modalButton: {
+        marginTop: 35,
+        width:'50%',
+        height: 45,
+        borderRadius:20,
+        justifyContent: "center",
+        alignItems:'center',
+        backgroundColor:'#A29AFF'
+     },
+     modalButtonText: {
+        'fontFamily': 'Spartan_500Medium',
+        'color': '#fff'
+     }
+
 })
