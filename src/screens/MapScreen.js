@@ -1,9 +1,7 @@
 import {Image, StyleSheet, TouchableOpacity, View} from 'react-native';
 import * as React from "react";
-import MapView, {Callout, Marker} from "react-native-maps";
+import MapView, {Callout, Marker, PROVIDER_GOOGLE} from "react-native-maps";
 import {useEffect, useRef, useState, useCallback} from "react";
-import {getCurrentUser} from "../hooks/getCurrentUser";
-import {getSpecificUser} from "../hooks/getSpecificUser";
 import {fetchAllUsers} from "../hooks/fetchAllUsers";
 import {OtherUserMarker} from "../components/OtherUserMarker";
 import {MapModal} from "../components/MapModal";
@@ -22,7 +20,6 @@ export default function MapScreen(props){
     AsyncStorage.getItem('len').then(res => {
          setLen(res)
     });
-    const [currentUser, setCurrentUser] = useState(null);
     const [askedForHelp, setAskedForHelp] = useState(false);
     const [currentUserAlarm, setCurrentUserAlarm] = useState(false);
     const [allUsers, setAllUsers] = useState([]);
@@ -36,7 +33,6 @@ export default function MapScreen(props){
     const [userLocation, setUserLocation] = useState({
         latitude:32.50605,longitude: -116.92371
     });
-    const [markerPressed, setMarkerPressed] = useState(false);
     const [reCenterVisible, setReCenterVisible] = useState(false);
     const navigation = useNavigation()
 
@@ -46,7 +42,7 @@ export default function MapScreen(props){
             const isFocusedOnCoords = distance < 100000;
             callback(isFocusedOnCoords);
         }).catch((error) => {
-            callback(false); // Return false in case of an error
+            callback(false);
         });
     };
 
@@ -66,18 +62,13 @@ export default function MapScreen(props){
                 };
                 map.current.animateToRegion(region, 1000);
                 setTimeout(()=>{setGotInfo(true)},7000);
-
         }
     })
 
     useEffect(() => {
         fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
-        fetchAllUsers(setAllUsers);
+        fetchAllUsers(setAllUsers, props.currentUser);
     },[]);
-    useEffect(()=>{
-    },[reCenterVisible]);
-    useEffect(()=>{
-    },[markerPressed]);
 
     useEffect(()=>{
         if(!acceptedAlarm){
@@ -128,7 +119,7 @@ export default function MapScreen(props){
                 return acceptedAlarm.alarmingUser === user.email ||
                     acceptedAlarm.users.includes(user.email)
             }
-            return userIsInRadar(user);
+            return true;
         }
         return currentUserAlarm && currentUserAlarm.users.includes(user.email);
 
@@ -159,14 +150,6 @@ export default function MapScreen(props){
     }
 
     const updateUserMarkers = ()=>{
-        // return <OtherUserMarker
-        //     visible={true}
-        //     user={props.currentUser}
-        //     victim={false}
-        //     setFocusedUser={setFocusedUser}
-        //     handleModal={()=>{}}
-        // />
-
         return allUsers.map((user,index) =>{
                 return <OtherUserMarker
                     key={index}
@@ -193,7 +176,6 @@ export default function MapScreen(props){
 
     const map = useRef();
 
-
     return(
         <View style={styles.container}>
             {   props.currentUser && props.currentUser.coordinates &&
@@ -211,8 +193,7 @@ export default function MapScreen(props){
                     onRegionChangeComplete={()=>setReCenterVisible(helpingUser)}
                     onPress={handleMapPress}
                     scrollEnabled={gotInfo}
-                    // provider={PROVIDER_GOOGLE}
-                    // cacheEnabled={true}
+                    provider={PROVIDER_GOOGLE}
                 >
                     <Marker coordinate={props.currentUser ? props.currentUser.coordinates : userLocation}>
                         <View style={[styles.userLocation2, {borderColor:askedForHelp?'rgba(98, 0, 255, 0.3)':'rgba(0, 66, 255, 0.3)' }]}>
@@ -234,7 +215,7 @@ export default function MapScreen(props){
                         user={focusedUser}
                         handleModalRejection={handleRejectionModalVisibility}
                         handleModalAcceptance={handleModalAcceptance}
-                        loggedUser={currentUser}
+                        loggedUser={props.currentUser}
                         len={len}
                     />
                     <RejectionMapModal
@@ -256,7 +237,7 @@ export default function MapScreen(props){
                 {
                     reCenterVisible &&
                     <TouchableOpacity style={[styles.button]}
-                                      onPress={()=>{centerMapOnCoords(currentUser,alarmingUser)
+                                      onPress={()=>{centerMapOnCoords(props.currentUser,props.alarmingUser)
                                       }}>
                         <Ionicons name={'navigate-outline'}
                                   size={26}

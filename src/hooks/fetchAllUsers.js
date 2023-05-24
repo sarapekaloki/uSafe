@@ -2,8 +2,19 @@ import {getFirestore, collection, query, where, onSnapshot} from "firebase/fires
 import firebase from 'firebase/compat/app';
 import {firebaseConfig} from "../../firebase";
 import {auth} from "../../firebase";
+import {getPreciseDistance} from "geolib";
 
-export const fetchAllUsers = (setAllUsers) => {
+const userIsInRadar = (currentUser,otherUser)=>{
+    const distance = getPreciseDistance(
+        currentUser.coordinates,
+        otherUser.coordinates
+    );
+
+    return distance < currentUser.helpRadar &&
+        distance < otherUser.helpRadar;
+}
+
+export const fetchAllUsers = (setAllUsers, currentUser) => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
 
@@ -11,7 +22,9 @@ export const fetchAllUsers = (setAllUsers) => {
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
         const users = [];
         querySnapshot.forEach((doc) => {
-            users.push(doc.data());
+            if(currentUser && userIsInRadar(currentUser,doc.data())){
+                users.push(doc.data());
+            }
         });
         setAllUsers(users);
     });

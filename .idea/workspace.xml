@@ -3,7 +3,9 @@
   <component name="ChangeListManager">
     <list default="true" id="fb40ab6b-737c-4aa9-904f-68a9b4d3367a" name="Changes" comment="Merge master y mapa">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/hooks/fetchAllUsers.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/screens/MapScreen.js" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/MapScreen.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/yarn.lock" beforeDir="false" afterPath="$PROJECT_DIR$/yarn.lock" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -106,6 +108,7 @@
       <workItem from="1684187589943" duration="12464000" />
       <workItem from="1684435453417" duration="18714000" />
       <workItem from="1684523798033" duration="7760000" />
+      <workItem from="1684874295921" duration="3140000" />
     </task>
     <task id="LOCAL-00001" summary="Merge master y mapa">
       <created>1667450297359</created>
