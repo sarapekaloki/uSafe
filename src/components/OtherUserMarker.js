@@ -25,8 +25,8 @@ export const OtherUserMarker = ({
                             {borderWidth:0}] :
                         [styles.container, visible ? {borderWidth: 6} :
                             {borderWidth:0}]}>
-                        <Image style={victim ?
-                            [styles.victim,visible ? {width:60,height:60} :
+                      <Image style={victim ?
+                            [styles.victim,visible ? {width: Platform.OS==='ios' ? 60:35 ,height: Platform.OS==='ios' ? 60:35} :
                                 {width:0,height:0}] :
                             [styles.image,visible ? {width:35,height:35} :
                                 {width:0,height:0}]} source={user.pictureUrl ? {uri: user.pictureUrl} : require('../../assets/img/initial-profile-picture.jpeg') }/>

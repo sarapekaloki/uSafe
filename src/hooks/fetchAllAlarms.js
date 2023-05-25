@@ -6,7 +6,7 @@ import {auth} from "../../firebase";
 export const fetchAllAlarms = (setAllAlarms,setAcceptedAlarm,setHelpingUser,setAskedForHelp, setCurrentUserAlarm) => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
-    const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
+    const q = query(collection(db, "alarms2"), where("alarmingUser", "!=", ""));
     onSnapshot(q, (querySnapshot) => {
         let aux_alarms=[];
         let aux_helping_user = false;

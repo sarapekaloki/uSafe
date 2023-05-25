@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "332189173609",
+    "project_id": "usafe-65334",
+    "storage_bucket": "usafe-65334.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:332189173609:android:1b9ca49505b7f72e2f1ff8",
+        "android_client_info": {
+          "package_name": "com.sarapekaloki.uSafe"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "332189173609-f62bdgk435eiou286e8oa7l9r8d1h958.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBmGflb4WJLyS-ucZWXsTL-GvKiVhDH7d8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "332189173609-f62bdgk435eiou286e8oa7l9r8d1h958.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "332189173609-8jgvmv953pefh3e9chqcdkfl434gsa8q.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "uSafe"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -29,7 +29,7 @@ const Tabs = () => {
     useEffect(() => {
         if(!gotInfo || !currentUser){
             getCurrentUser(setCurrentUser).then();
-            const q = query(collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
+            const q = query(collection(db, "alarms2"), where("alarmingUser", "==", auth.currentUser.email))
             onSnapshot(q,  (querySnapshot) => {
                 let alertModeActive = false
                 querySnapshot.forEach((doc) => {

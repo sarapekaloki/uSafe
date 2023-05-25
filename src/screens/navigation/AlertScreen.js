@@ -38,7 +38,7 @@ const AlertScreen = () =>{
         if(!gotInfo){
             if(auth){
                 getCurrentUser(set_currentUser).then();
-                const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
+                const q = query(collection(db, "alarms2"), where("alarmingUser", "!=", ""));
                 onSnapshot(q, (querySnapshot) => {
                         let alertMode = false
                         let aux = false
@@ -76,7 +76,7 @@ const AlertScreen = () =>{
         if(userIsInZone()){
             if(!helping){
                 Vibration.vibrate(2000);
-                const docRef = doc(db, "alarms", auth.currentUser.email);
+                const docRef = doc(db, "alarms2", auth.currentUser.email);
                 const data = {
                     alarmingUser:auth.currentUser.email,
                     users:[]
@@ -121,7 +121,7 @@ const AlertScreen = () =>{
 
     async function cancelAlarm() {
         let users;
-        const alarmRef = collection(db, "alarms");
+        const alarmRef = collection(db, "alarms2");
         await getDocs(alarmRef).then((res) => {
             res.forEach((doc) => {
                 if((doc.data().alarmingUser).toLowerCase() === auth.currentUser.email){
@@ -146,7 +146,7 @@ const AlertScreen = () =>{
                 })
             })
 
-        const docRef = doc(db, "alarms", auth.currentUser.email);
+        const docRef = doc(db, "alarms2", auth.currentUser.email);
         await deleteDoc(docRef);
         Vibration.vibrate(2000)
 

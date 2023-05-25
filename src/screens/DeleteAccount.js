@@ -20,7 +20,7 @@ const DeleteAccount = () => {
             setDisabledButton(false)
             let helpingMode = false
 
-            const q =  query(  collection(db, "alarms"), where("alarmingUser", "==", auth.currentUser.email))
+            const q =  query(  collection(db, "alarms2"), where("alarmingUser", "==", auth.currentUser.email))
              onSnapshot(q,  (querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     if(doc.data().alarmingUser === auth.currentUser.email){
@@ -29,7 +29,7 @@ const DeleteAccount = () => {
                 });
             })
 
-            const q2 = query(collection(db, "alarms"), where("users", "array-contains", auth.currentUser.email));
+            const q2 = query(collection(db, "alarms2"), where("users", "array-contains", auth.currentUser.email));
             onSnapshot(q2,  (querySnapshot) => {
                 querySnapshot.forEach((doc) => {
                     if(doc){

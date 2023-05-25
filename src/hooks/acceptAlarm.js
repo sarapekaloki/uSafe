@@ -3,10 +3,10 @@ import {auth} from "../../firebase";
 
 export const acceptAlarm = async (focusedUser) => {
     const db = getFirestore();
-    const alarmsRef = collection(db, "alarms");
+    const alarmsRef = collection(db, "alarms2");
   
     async function sendAlarm(alarm) {
-        const docRef = doc(db, "alarms", focusedUser.email);
+        const docRef = doc(db, "alarms2", focusedUser.email);
         await setDoc(docRef, alarm);
         await sendNotification();
     }

@@ -107,17 +107,8 @@ const RegisterScreen = () => {
         }
     }
     async function registerForPushNotificationsAsync() {
-        let token;
-        const { status: existingStatus } = await Notifications.getPermissionsAsync();
-        let finalStatus = existingStatus;
-        if (existingStatus !== 'granted') {
-            const { status } = await Notifications.requestPermissionsAsync();
-            finalStatus = status;
-        }
-        if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
-        }
+        let token = "";
+
         if (Platform.OS === 'android') {
             Notifications.setNotificationChannelAsync('default', {
               name: 'default',
@@ -127,9 +118,18 @@ const RegisterScreen = () => {
             });
           }
 
-        token = (await Notifications.getExpoPushTokenAsync()).data;
+        const { status: existingStatus } = await Notifications.getPermissionsAsync();
+        let finalStatus = existingStatus;
+        if (existingStatus !== 'granted') {
+            const { status } = await Notifications.requestPermissionsAsync();
+            finalStatus = status;
+        }
+        if (finalStatus !== 'granted') {
+            token = ""
+        } else {
+            token = (await Notifications.getExpoPushTokenAsync()).data;
+        }
         return token;
-    
     }      
 
     const addData =  async() => {
