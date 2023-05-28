@@ -27,7 +27,8 @@
         "backgroundColor": "#FFFFFF"
       },
       "package": "com.sarapekaloki.uSafe",
-      "versionCode":6,
+      "permissions": ["ACCESS_FINE_LOCATION", "ACCESS_COARSE_LOCATION"],
+      "versionCode":7,
       "googleServicesFile": "./google-services.json"
     },
     "web": {
