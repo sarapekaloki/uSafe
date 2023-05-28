@@ -23,7 +23,6 @@ const HelpRadarSetUp = () => {
     const currentEmail = auth.currentUser.email;
     const userData = route.params.userData;
     const len = userData.len;
-    console.log(len);
     let [fontsLoaded] = useFonts({
         Spartan_800ExtraBold,
         Spartan_700Bold,

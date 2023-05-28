@@ -106,14 +106,7 @@ export default function MapScreen(props){
     }
 
     const setUserVisibility = (user) => {
-        if(props.currentUser.reported.includes(user.email) ||
-            props.currentUser.reportedBy.includes(user.email) ||
-            user.reported.includes(props.currentUser.email) ||
-            user.reportedBy.includes(props.currentUser.email) ||
-            props.currentUser.reportedBy.length >=3 ||
-            user.reportedBy.length >=3){
-            return false;
-        }
+        // return true
         if(!askedForHelp){
             if(helpingUser){
                 return acceptedAlarm.alarmingUser === user.email ||

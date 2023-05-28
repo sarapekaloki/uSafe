@@ -17,15 +17,16 @@ const userIsInRadar = (currentUser,otherUser)=>{
 export const fetchAllUsers = (setAllUsers, currentUser) => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
+    const users = [];
 
     const q = query(collection(db, "users"), where("email", "!=", auth.currentUser.email));
-    const unsubscribe = onSnapshot(q, (querySnapshot) => {
-        const users = [];
+    onSnapshot(q, (querySnapshot) => {
         querySnapshot.forEach((doc) => {
-            if(currentUser && userIsInRadar(currentUser,doc.data())){
+            if(currentUser){
                 users.push(doc.data());
             }
         });
         setAllUsers(users);
     });
+
 }

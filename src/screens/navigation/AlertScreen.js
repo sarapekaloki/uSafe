@@ -12,7 +12,6 @@ import {auth, firebaseConfig} from "../../../firebase";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
 import { alertTabWords } from '../../lenguagesDicts/alertTabWords';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
 import {
     useFonts,
     Roboto_700Bold
@@ -29,7 +28,7 @@ const sleep = (milliseconds) => {
 
 // Falta agregar pantalla cuando no hay ubicación
 
-const AlertScreen = () =>{
+const AlertScreen = (props) =>{
     firebase.initializeApp(firebaseConfig);
     const [len, setLen] = useState('EN');
     AsyncStorage.getItem('len').then(res => {
@@ -37,17 +36,16 @@ const AlertScreen = () =>{
    });
     const db = getFirestore();
     const [ gotInfo, set_gotInfo ] = useState(false);
-    const [ mode , set_mode ] = useState(false)
-    const [ currentUser , set_currentUser] = useState({})
-    const [ helping, set_helping ] = useState(false)
-    const [allUsers, SetAllUsers] = useState([])
+    const [ mode , set_mode ] = useState(false);
+    const currentUser = props.currentUser;
+    const [ helping, set_helping ] = useState(false);
+    const [allUsers, SetAllUsers] = useState([]);
     const tabColor = Platform.OS =='ios'? '#c9c9c9':'#a3a3a3';
     const navigation = useNavigation();
 
     useEffect( () => {
         if(!gotInfo){
             if(auth){
-                getCurrentUser(set_currentUser).then();
                 const q = query(collection(db, "alarms"), where("alarmingUser", "!=", ""));
                 onSnapshot(q, (querySnapshot) => {
                         let alertMode = false
@@ -67,7 +65,7 @@ const AlertScreen = () =>{
                 });
                 set_gotInfo(true);
             }
-            fetchAllUsers(SetAllUsers);
+            fetchAllUsers(SetAllUsers, currentUser)
         }
     })
 
@@ -91,10 +89,11 @@ const AlertScreen = () =>{
             };
             await setDoc(alarmsRef, alarmData);
             await setDoc(chatRef, chatData);
+            console.log(allUsers);
             allUsers.forEach(user => {
                 if((user.email != currentUser.email) && user.token != ""){
                     if(user.token != currentUser.token){
-                        // sendNotification(user.token);
+                        sendPushNotification(user.token);
                     }
                 }
             })
@@ -105,7 +104,11 @@ const AlertScreen = () =>{
     
     }
 
-    const sendNotification = async (userToken) => {
+    function sendNotification (users) {
+       console.log(users)
+    }
+
+    const sendPushNotification = async (userToken) => {
         const message = {
             to: userToken,
             sound: 'default',

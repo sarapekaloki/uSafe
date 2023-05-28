@@ -232,7 +232,7 @@ const Tabs = () => {
           }
         }}
         />
-        <Tab.Screen name="Alarma"  component={AlertScreen}  listeners={({ navigation }) => ({
+        <Tab.Screen name="Alarma" children={() => <AlertScreen currentUser={currentUser}/>} listeners={({ navigation }) => ({
             tabPress: (e) => {
                 e.preventDefault()
                 navigation.navigate("AlertScreen")

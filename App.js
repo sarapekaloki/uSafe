@@ -20,6 +20,7 @@ import WhoHelpedYou from "./src/screens/WhoHelpedYou";
 import OtherProfile from "./src/screens/OtherProfile";
 import ChatMembers from "./src/screens/ChatMembers";
 import UpdateHelpRadar from './src/screens/UpdateHelpRadar';
+import MainForgotPassword from './src/screens/mainForgotPassword';
 
 const Stack = createNativeStackNavigator();
 global.alerta = false;
@@ -59,6 +60,7 @@ export default function App(){
       <Stack.Navigator>
         <Stack.Screen options={{ headerShown: false }} name="Home Page" component={HomePage} />
         <Stack.Screen options={{ headerShown: false }} name="Login" component={LoginScreen} />
+        <Stack.Screen options={{ headerShown: false,  gestureEnabled: false }} name="ForgotPassword" component={MainForgotPassword} />
         <Stack.Screen options={{ headerShown: false }} name="Register" component={RegisterScreen} />
         <Stack.Screen options={{ headerShown: false,  gestureEnabled: false }} name="MainFirstTimeSetUp" component={Main} />
         <Stack.Screen options={{ headerShown: false,  gestureEnabled: false  }}  name="LenguageSelection" component={LenguageSelection} />
