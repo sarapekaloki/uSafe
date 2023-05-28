@@ -6,7 +6,8 @@ export const loginWords = {
         "password": "Password",
         "register": "Register",
         "accountQuestion":"You don't have an account? ",
-        "error":"Wrong password or email."
+        "error":"Wrong password or email.",
+        "forgotPassword": "Forgot password?"
     },
     "ES":{
         "title":"Iniciar Sesión",
@@ -14,6 +15,7 @@ export const loginWords = {
         "password": "Contraseña",
         "register": "Regístrate",
         "accountQuestion":"¿No tienes cuenta?",
-        "error": "Contraseña o correo incorrectos. "
+        "error": "Contraseña o correo incorrectos. ",
+        "forgotPassword": "¿Olvidaste tu contraseña?"
     }
 }

@@ -105,6 +105,10 @@ const LoginScreen = () => {
                         <Ionicons name={rightIcon} size={24} color="grey" />
                     </Pressable>
                 </View>
+                <TouchableOpacity style={styles.forgotPassword}>
+                    <Text style={{color: 'blue'}}
+                    onPress={() => navigation.navigate("ForgotPassword", {len: len})}> {loginWords[len].forgotPassword}</Text>
+                </TouchableOpacity>
 
                 <TouchableOpacity
                     onPress={() => handleLogin(email, password)}
@@ -210,4 +214,9 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '100%'
     },
+    forgotPassword: {
+        bottom: 30,
+        alignSelf: 'flex-end',
+        marginRight: '13%'
+    }
 })
