@@ -75,13 +75,14 @@ const styles = StyleSheet.create({
         width:'100%',
         flexDirection: 'row',
         borderBottomColor:'rgba(0,0,0,.05)',
-        borderBottomWidth:2,
+        borderBottomWidth:1,
         padding:10,
         justifyContent:'space-between'
     },
     name:{
         margin:14,
-        fontFamily: 'Spartan_700Bold',
+        fontFamily: 'Spartan_600SemiBold',
+        alignSelf: 'center',
         fontSize: 18,
     }
 });

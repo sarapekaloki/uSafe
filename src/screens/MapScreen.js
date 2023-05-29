@@ -84,7 +84,7 @@ export default function MapScreen(props){
     }
     const handleModalAcceptance = ()=>{
         handleModalVisibility();
-        acceptAlarm(focusedUser).then();
+        acceptAlarm(focusedUser, props.currentUser, len).then();
     }
 
     const cancelAcceptedAlarm = ()=>{

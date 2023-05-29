@@ -98,8 +98,8 @@ export default function ChatMembers() {
         <View style={styles.container}>
             <View style={styles.topBar}>
                 <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Ionicons name={'arrow-back-outline'}
-                              size={30}
+                    <Ionicons style= {{marginLeft: 35}} name={'arrow-back-outline'}
+                              size={25}
                               color={'black'}
                     />
                 </TouchableOpacity>
@@ -127,12 +127,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         width: '100%',
+        right: 35
     },
     topBar: {
         flexDirection: 'row',
-        alignItems: 'center',
         justifyContent: 'center',
-        paddingHorizontal: 50,
+        alignItems: 'flex-start',
         paddingTop: 50,
         paddingBottom: 20,
         width: '100%',
@@ -141,7 +141,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontFamily: 'Spartan_700Bold',
-        fontSize: 22,
+        fontSize: 18,
         textAlign: 'center',
         marginLeft: 10,
     },

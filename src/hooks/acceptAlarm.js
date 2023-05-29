@@ -1,15 +1,18 @@
 import {getFirestore, collection, getDocs, doc, setDoc, getDoc} from "firebase/firestore";
 import {auth} from "../../firebase";
+import { sendNotification } from "./sendNotification";
 
-export const acceptAlarm = async (focusedUser) => {
+export const acceptAlarm = async (focusedUser, currentUser, len) => {
     const db = getFirestore();
     const alarmsRef = collection(db, "alarms");
     const chatRef = collection(db, "chat");
   
     async function sendAlarm(alarm) {
-        const docRef = doc(db, "alarms", focusedUser.email);
         await setDoc(docRef, alarm);
-        // await sendNotification(); NO SE Q PASO ACA
+        if(focusedUser.token != ""){
+            await sendPushNotification(); 
+        }
+        sendNotification(focusedUser.email, "help", currentUser.username)
     }
 
     async function modifyChat(chat) {
@@ -39,15 +42,16 @@ export const acceptAlarm = async (focusedUser) => {
         })
     });
 
-    const sendNotification = async () => {
+    const sendPushNotification = async () => {
         const db = getFirestore();
         const docRef = doc(db, "users", auth.currentUser.email);
         const docSnap = await getDoc(docRef);
+        const messageText = len == "EN"? "accepted your help request.": "ha aceptado tu pedido de ayuda."
         const message = {
             to: focusedUser.token,
             sound: 'default',
             title: 'uSafe',
-            body:  `${docSnap.data().username} ha aceptado tu pedido de ayuda.`,
+            body:  `${docSnap.data().username} ${messageText}`,
             data: { someData:'' },
           };
         await fetch('https://exp.host/--/api/v2/push/send', {

@@ -6,7 +6,7 @@ import { updateUserLocation } from "../../hooks/updateUserLocation";
 import Messages from "../Messages";
 import { useRoute, useNavigation } from "@react-navigation/native";
 
-import {StyleSheet, Image, Animated, Platform, TouchableOpacity, View, Text} from "react-native";
+import {StyleSheet, Image, Animated, Platform, TouchableOpacity, View, Text, StatusBar} from "react-native";
 import { Feather } from '@expo/vector-icons'; 
 import MapScreen from "../MapScreen";
 import AlertScreen from "./AlertScreen";
@@ -15,6 +15,7 @@ import firebase from "firebase/compat";
 import { tabsWords } from "../../lenguagesDicts/tabsWords";
 import {auth, firebaseConfig} from "../../../firebase";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
+import { messagesWords } from "../../lenguagesDicts/messagesWords";
 import {
     useFonts,
     Spartan_700Bold,
@@ -177,12 +178,13 @@ const Tabs = () => {
                 getDocs(usersRef).then((res) => {
                     res.forEach((doc) => {
                         if (currentChat.user === doc.data().email) {
-                            setChatTitle('Grupo de ayuda de ' + doc.data().username.split(" ")[0]);
+                            const title = len == "EN"?  doc.data().username.split(" ")[0] + "help group": 'Grupo de ayuda de ' + doc.data().username.split(" ")[0]
+                            setChatTitle(title);
                         }
                     });
                 });
             } else if(currentChat.user === auth.currentUser.email){
-                setChatTitle("Tu grupo de ayuda");
+                setChatTitle(messagesWords[len].chatTitle);
             }
         }
     },[currentChat])

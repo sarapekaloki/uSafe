@@ -2,16 +2,18 @@ import * as React from 'react';
 import { useState , useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { fetchAllUsers } from '../../hooks/fetchAllUsers';
-import {View, Text, TouchableOpacity, StyleSheet, Image, Platform, Vibration} from 'react-native';
+import {View, Text, TouchableOpacity, StyleSheet, Image, Platform, Vibration, StatusBar} from 'react-native';
 import image1 from '../../../assets/img/buttonUnpressed.png'
 import image2 from '../../../assets/img/buttonPressed2.png'
-import {deleteDoc, doc, getDocs, setDoc, updateDoc} from "firebase/firestore";
+import {deleteDoc, doc, getDocs, setDoc, updateDoc, Timestamp} from "firebase/firestore";
 import {getFirestore, collection, query, where, onSnapshot} from "firebase/firestore";
 import firebase from 'firebase/compat/app';
 import {auth, firebaseConfig} from "../../../firebase";
 import {getCurrentUser} from "../../hooks/getCurrentUser";
+
 import { alertTabWords } from '../../lenguagesDicts/alertTabWords';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { sendNotification } from '../../hooks/sendNotification';
 import {
     useFonts,
     Roboto_700Bold
@@ -114,7 +116,7 @@ const AlertScreen = (props) =>{
             await setDoc(chatRef, chatData);
         
             usersInRadar.forEach(user => {
-                console.log(user.email)
+                sendNotification(user.email, "alert", currentUser.username);
                 if((user.email != currentUser.email) && user.token != ""){
                     if(user.token != currentUser.token){
                         sendPushNotification(user.token);
@@ -128,9 +130,6 @@ const AlertScreen = (props) =>{
     
     }
 
-    function sendNotification (users) {
-       console.log(users)
-    }
 
     const sendPushNotification = async (userToken) => {
         const message = {
@@ -172,30 +171,33 @@ const AlertScreen = (props) =>{
                 }
             })
         })
-            const allUsers = collection(db, "users");
-            await getDocs(allUsers).then((res) => {
-                res.forEach((document) => {
-                    if(users.includes(document.data().email)){
-                        const usersRef = doc(db, "users", document.data().email);
-                        updateDoc(usersRef, {
-                            coordinates: document.data().coordinates,
-                            email: document.data().email,
-                            helpResponses: document.data().helpResponses+1,
-                            pictureUrl: document.data().pictureUrl,
-                            username: document.data().username,
-                            token: document.data().token,
-                            len:document.data().len,
-                            likes:document.data().likes,
-                            helpRadar:document.data().helpRadar,
-                            reportedBy:document.data().reportedBy,
-                            reported:document.data().reported
-                        }).then();
-                    }
-                })
+        users.forEach(user => {
+            sendNotification(user, "completeAlert", currentUser.username)
+        })
+        const allUsers = collection(db, "users");
+        await getDocs(allUsers).then((res) => {
+            res.forEach((document) => {
+                if(users.includes(document.data().email)){
+                    const usersRef = doc(db, "users", document.data().email);
+                    updateDoc(usersRef, {
+                        coordinates: document.data().coordinates,
+                        email: document.data().email,
+                        helpResponses: document.data().helpResponses+1,
+                        pictureUrl: document.data().pictureUrl,
+                        username: document.data().username,
+                        token: document.data().token,
+                        len:document.data().len,
+                        likes:document.data().likes,
+                        helpRadar:document.data().helpRadar,
+                        reportedBy:document.data().reportedBy,
+                        reported:document.data().reported
+                    }).then();
+                }
             })
+        })
 
         if(chat !== null && chat.length > 0){
-            navigation.navigate("WhoHelpedYou",{chat});
+            navigation.navigate("WhoHelpedYou",{chat, currentUser});
         }
 
 
@@ -221,6 +223,8 @@ const AlertScreen = (props) =>{
             backgroundColor:'black',
             flex: 1
         }}>
+             <StatusBar barStyle={"default"}></StatusBar>
+
             <View style={[styles.pullTab, {backgroundColor: tabColor}]}>
             </View>
             <TouchableOpacity

@@ -2,7 +2,10 @@ import React, { useEffect, useState, useRef } from "react";
 import {useNavigation, useRoute} from "@react-navigation/native";
 import { Image, StyleSheet, Text, TouchableOpacity, View, Dimensions } from "react-native";
 const screenWidth = Dimensions.get("screen").width;
+import { messagesWords } from "../lenguagesDicts/messagesWords";
 import {AntDesign, Entypo, Feather, Ionicons} from '@expo/vector-icons';
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
 import {
     useFonts,
     Spartan_500Medium,
@@ -30,6 +33,10 @@ import {getCurrentUser} from "../hooks/getCurrentUser";
 import firebase from "firebase/compat";
 
 const OtherProfile = () => {
+    const [len, setLen] = useState('EN');
+    AsyncStorage.getItem('len').then(res => {
+         setLen(res)
+    });
     const db = getFirestore();
     const navigation = useNavigation();
     const route = useRoute();
@@ -224,16 +231,16 @@ const OtherProfile = () => {
                                 fontFamily: 'Spartan_700Bold',
                                 marginTop:10,
                                 marginLeft:25
-                            }}>Reportar usuario:</Text>
+                            }}>{messagesWords[len].reportUserTitle}</Text>
                         </View>
                         <View style={{margin:10}}>
                             <View style={styles.modalBullet}>
                                 <View style={styles.bullet}/>
-                                <Text style={styles.modalText}>Al reportarlo ya no recibirás alertas ni ayudas de este usuario. </Text>
+                                <Text style={styles.modalText}>{messagesWords[len].bullet1} </Text>
                             </View>
                             <View style={styles.modalBullet}>
                                 <View style={styles.bullet}/>
-                                <Text style={styles.modalText}>Si un usuario es reportado 3 veces, su cuenta será eliminada</Text>
+                                <Text style={styles.modalText}>{messagesWords[len].bullet2}</Text>
                             </View>
                         </View>
                         <View style={{
@@ -245,7 +252,7 @@ const OtherProfile = () => {
                             <TouchableOpacity style={styles.reportButton}
                                 onPress={handleReport}>
                                 <Text style={styles.reportText}>
-                                    Reportar
+                                {messagesWords[len].reportButton}
                                 </Text>
                             </TouchableOpacity>
                         </View>
@@ -256,11 +263,11 @@ const OtherProfile = () => {
             </View>
             <View style ={styles.extraInfo}>
                 <View style = {styles.column}>
-                    <Text style={styles.extraInfoHeader}>Likes</Text>
+                    <Text style={styles.extraInfoHeader}>{messagesWords[len].likes}</Text>
                     <Text style={styles.extraInfoNum}>{route.params.user.likes}</Text>
                 </View>
                 <View style = {styles.column}>
-                    <Text style={styles.extraInfoHeader}>Help Responses</Text>
+                    <Text style={styles.extraInfoHeader}>{messagesWords[len].helpResponses}</Text>
                     <Text style={styles.extraInfoNum}>{route.params.user.helpResponses}</Text>
                 </View>
             </View>

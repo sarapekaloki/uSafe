@@ -11,7 +11,8 @@ import {
     TouchableOpacity,
     ScrollView,
     Pressable,
-    View
+    View,
+    StatusBar
 } from "react-native";
 import {
     useFonts,
@@ -74,6 +75,7 @@ const LoginScreen = () => {
                 style={styles.container}
                 behavior={Platform.OS ==="android"?"height":"padding"}
             >
+                <StatusBar barStyle={"dark-content"}></StatusBar>
 
                 <ScrollView style = {styles.scrollView} >
                 <View style= {styles.whiteBox}>

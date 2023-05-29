@@ -72,7 +72,6 @@ const MainForgotPassword = () => {
 
     return(
        <KeyboardAvoidingView style = {styles.container}>
-
             <ScrollView style = {styles.scrollView}>
                 <Image style ={styles.img} source={require('../../assets/img/forgotPassword.png')}></Image>
 
