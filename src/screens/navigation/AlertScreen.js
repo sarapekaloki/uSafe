@@ -16,6 +16,7 @@ import {
     useFonts,
     Roboto_700Bold
   } from '@expo-google-fonts/roboto';
+import {getPreciseDistance} from "geolib";
 
 const sleep = (milliseconds) => {
     var start = new Date().getTime();
@@ -37,9 +38,10 @@ const AlertScreen = (props) =>{
     const db = getFirestore();
     const [ gotInfo, set_gotInfo ] = useState(false);
     const [ mode , set_mode ] = useState(false);
-    const currentUser = props.currentUser;
+    const [currentUser, setCurrentUser] = useState(null);
     const [ helping, set_helping ] = useState(false);
-    const [allUsers, SetAllUsers] = useState([]);
+    const [allUsers, setAllUsers] = useState([]);
+    const [usersInRadar, setUsersInRadar] = useState([]);
     const tabColor = Platform.OS =='ios'? '#c9c9c9':'#a3a3a3';
     const navigation = useNavigation();
 
@@ -65,13 +67,34 @@ const AlertScreen = (props) =>{
                 });
                 set_gotInfo(true);
             }
-            fetchAllUsers(SetAllUsers, currentUser)
+            fetchAllUsers(setAllUsers);
+            getCurrentUser(setCurrentUser);
         }
     })
 
-    useEffect( () => {
-    }, [mode,helping,currentUser] )
+    useEffect(()=>{
+        if(currentUser){
+            const aux = [];
+            for(let i=0;i<allUsers.length;i++){
+                if(userIsInRadar(allUsers[i])){
+                    aux.push(allUsers[i]);
+                }
+            }
+            setUsersInRadar(aux);
+        }
+    },[allUsers,currentUser]);
 
+
+    useEffect(()=>{
+    },[usersInRadar])
+
+    const userIsInRadar = (otherUser)=>{
+        const distance = getPreciseDistance(
+            currentUser.coordinates,
+            otherUser.coordinates
+        );
+        return  distance < currentUser.helpRadar && distance < otherUser.helpRadar;
+    }
 
     async function sendAlarm() {
         if(!helping){
@@ -89,8 +112,9 @@ const AlertScreen = (props) =>{
             };
             await setDoc(alarmsRef, alarmData);
             await setDoc(chatRef, chatData);
-            console.log(allUsers);
-            allUsers.forEach(user => {
+        
+            usersInRadar.forEach(user => {
+                console.log(user.email)
                 if((user.email != currentUser.email) && user.token != ""){
                     if(user.token != currentUser.token){
                         sendPushNotification(user.token);

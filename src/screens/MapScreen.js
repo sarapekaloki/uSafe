@@ -106,7 +106,9 @@ export default function MapScreen(props){
     }
 
     const setUserVisibility = (user) => {
-        // return true
+        if(!userIsInRadar(user)){
+            return false;
+        }
         if(!askedForHelp){
             if(helpingUser){
                 return acceptedAlarm.alarmingUser === user.email ||
@@ -136,10 +138,11 @@ export default function MapScreen(props){
     }
 
     const userIsInRadar = (otherUser)=>{
-        return getPreciseDistance(
+        const distance = getPreciseDistance(
             props.currentUser.coordinates,
             otherUser.coordinates
-        ) < props.currentUser.helpRadar;
+        );
+        return  distance < props.currentUser.helpRadar && distance < otherUser.helpRadar;
     }
 
     const updateUserMarkers = ()=>{
@@ -186,7 +189,7 @@ export default function MapScreen(props){
                     onRegionChangeComplete={()=>setReCenterVisible(helpingUser)}
                     onPress={handleMapPress}
                     scrollEnabled={gotInfo}
-                    provider={PROVIDER_GOOGLE}
+                    // provider={PROVIDER_GOOGLE}
                 >
                     <Marker coordinate={props.currentUser ? props.currentUser.coordinates : userLocation}>
                         <View style={[styles.userLocation2, {borderColor:askedForHelp?'rgba(98, 0, 255, 0.3)':'rgba(0, 66, 255, 0.3)' }]}>
@@ -206,7 +209,7 @@ export default function MapScreen(props){
                     <MapModal
                         isVisible={isModalVisible}
                         user={focusedUser}
-                        handleModalRejection={handleRejectionModalVisibility}
+                        handleModalRejection={handleModalVisibility}
                         handleModalAcceptance={handleModalAcceptance}
                         loggedUser={props.currentUser}
                         len={len}
