@@ -119,7 +119,17 @@ const RegisterScreen = () => {
         }
     }
     async function registerForPushNotificationsAsync() {
-        let token;
+        let token = "";
+
+        if (Platform.OS === 'android') {
+            Notifications.setNotificationChannelAsync('default', {
+              name: 'default',
+              importance: Notifications.AndroidImportance.MAX,
+              vibrationPattern: [0, 250, 250, 250],
+              lightColor: '#FF231F7C',
+            });
+          }
+
         const { status: existingStatus } = await Notifications.getPermissionsAsync();
         let finalStatus = existingStatus;
         if (existingStatus !== 'granted') {
@@ -127,10 +137,10 @@ const RegisterScreen = () => {
             finalStatus = status;
         }
         if (finalStatus !== 'granted') {
-            alert('Failed to get push token for push notification!');
-            return;
+            token = ""
+        } else {
+            token = (await Notifications.getExpoPushTokenAsync()).data;
         }
-        token = (await Notifications.getExpoPushTokenAsync()).data;
         return token;
     }      
 

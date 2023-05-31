@@ -5,9 +5,14 @@ import {doc, getFirestore, onSnapshot, setDoc} from "firebase/firestore";
 import * as Haptics from 'expo-haptics';
 import {useNavigation} from "@react-navigation/native";
 import {auth} from "../../firebase";
+import { tabsWords } from "../lenguagesDicts/tabsWords";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 export const ChatMember = ({ user }) => {
-
+    const [len, setLen] = useState('EN');
+    AsyncStorage.getItem('len').then(res => {
+         setLen(res)
+    });
     const [color, setColor ] = useState('#FFDDFA');
     const db = getFirestore();
     const navigation = useNavigation();
@@ -47,7 +52,7 @@ export const ChatMember = ({ user }) => {
             <View style={{flexDirection:'row'}}>
                 <TouchableOpacity onPress={()=>{
                     if(user.email === auth.currentUser.email){
-                        navigation.navigate('Perfil');
+                        navigation.navigate(tabsWords[len].profile);
                     }
                     else{
                         navigation.navigate('OtherProfile',{user})

@@ -21,6 +21,7 @@ import {Like} from "../components/Like";
 import { messagesWords } from "../lenguagesDicts/messagesWords";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { sendNotification } from "../hooks/sendNotification";
+import { tabsWords } from "../lenguagesDicts/tabsWords";
 
 
 export default function WhoHelpedYou() {
@@ -79,7 +80,7 @@ export default function WhoHelpedYou() {
             modifyUser(user.likes +1, user);
             sendNotification(user.email, "like", route.params.currentUser.username)
         })
-        navigation.navigate('Mapa')
+        navigation.navigate(tabsWords[len].map)
     }
 
     useEffect(()=>{
@@ -123,7 +124,7 @@ export default function WhoHelpedYou() {
                     <Text style={styles.title}>{messagesWords[len].whoHelpedYou}</Text>
                 </View>
 
-                <TouchableOpacity onPress={() => navigation.navigate('Mapa')}>
+                <TouchableOpacity onPress={() => navigation.navigate(tabsWords[len].map)}>
                     <Text style={styles.skipButton}>{messagesWords[len].skip}</Text>
                 </TouchableOpacity>
             </View>

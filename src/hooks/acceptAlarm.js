@@ -8,6 +8,7 @@ export const acceptAlarm = async (focusedUser, currentUser, len) => {
     const chatRef = collection(db, "chat");
   
     async function sendAlarm(alarm) {
+        const docRef = doc(db,'alarms',focusedUser.email)
         await setDoc(docRef, alarm);
         if(focusedUser.token != ""){
             await sendPushNotification(); 
@@ -42,7 +43,7 @@ export const acceptAlarm = async (focusedUser, currentUser, len) => {
         })
     });
 
-    const sendPushNotification = async () => {
+    async function sendPushNotification() {
         const db = getFirestore();
         const docRef = doc(db, "users", auth.currentUser.email);
         const docSnap = await getDoc(docRef);

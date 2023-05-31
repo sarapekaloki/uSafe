@@ -1,28 +1,21 @@
 import React, { useState, useEffect } from "react";
 import {useNavigation, useRoute} from "@react-navigation/native";
-import {Feather, Ionicons} from '@expo/vector-icons';
-import { MaterialIcons } from '@expo/vector-icons';
-import { Entypo } from '@expo/vector-icons';
-import { FontAwesome5 } from '@expo/vector-icons';
-import { MaterialCommunityIcons } from '@expo/vector-icons';
+import {Ionicons} from '@expo/vector-icons';
 import {
-    Image,
     StyleSheet,
     Text,
     TouchableOpacity,
-    View, ViewComponent,
+    View,
     ScrollView
 } from "react-native";
 import { auth } from "../../firebase";
-import {getFirestore, doc, onSnapshot, query, collection, where} from 'firebase/firestore';
+import {getFirestore, onSnapshot, query, collection, where} from 'firebase/firestore';
 import {
     useFonts,
     OpenSans_400Regular,
     OpenSans_500Medium,
     OpenSans_600SemiBold
 } from '@expo-google-fonts/open-sans';
-import {OtherUserMarker} from "../components/OtherUserMarker";
-import {Like} from "../components/Like";
 import {ChatMember} from "../components/ChatMember";
 import {getCurrentUser} from "../hooks/getCurrentUser";
 

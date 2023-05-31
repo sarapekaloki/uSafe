@@ -31,6 +31,7 @@ import {
 import {auth, firebaseConfig} from "../../firebase";
 import {getCurrentUser} from "../hooks/getCurrentUser";
 import firebase from "firebase/compat";
+import { tabsWords } from "../lenguagesDicts/tabsWords";
 
 const OtherProfile = () => {
     const [len, setLen] = useState('EN');
@@ -114,11 +115,11 @@ const OtherProfile = () => {
                     if(reportedUser.reportedBy.length >=3){
                         const docRef = doc(db, "alarms", alarm.alarmingUser);
                         deleteDoc(docRef);
-                        navigation.navigate("Mapa");
+                        navigation.navigate(tabsWords[len].map);
                     }
                     else if(alarm.users.includes(auth.currentUser.email)){
                         modifyAlarm(alarm, alarm.alarmingUser, auth.currentUser.email);
-                        navigation.navigate("Mapa");
+                        navigation.navigate(tabsWords[len].map);
                     }
                     return;
                 }
@@ -161,11 +162,11 @@ const OtherProfile = () => {
                     if(reportedUser.reportedBy.length >=3){
                         const docRef = doc(db, "chat", chat.user);
                         deleteDoc(docRef);
-                        navigation.navigate("Mapa");
+                        navigation.navigate(tabsWords[len].map);
                     }
                     else if(chat.members.includes(auth.currentUser.email)){
                         modifyChat(chat, chat.user, auth.currentUser.email);
-                        navigation.navigate("Mapa");
+                        navigation.navigate(tabsWords[len].map);
                     }
                     return;
                 }

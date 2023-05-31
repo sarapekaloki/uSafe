@@ -67,7 +67,7 @@ export default function MapScreen(props){
 
     useEffect(() => {
         fetchAllAlarms(setAllAlarms,setAcceptedAlarm,setHelpingUser, setAskedForHelp, setCurrentUserAlarm);
-        fetchAllUsers(setAllUsers, props.currentUser);
+        fetchAllUsers(setAllUsers);
     },[]);
 
     useEffect(()=>{

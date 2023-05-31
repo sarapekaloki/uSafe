@@ -53,7 +53,7 @@ export const notificationsWords = {
                 "icon": "hands-helping",
                 "color": "#CD93FB",
                 "title": "La ayuda va en camino",
-                "description": " aceptó tu pedido de ayuda."
+                "description": " va a ayudarte."
             }
         }
     }

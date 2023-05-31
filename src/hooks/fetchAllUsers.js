@@ -7,10 +7,10 @@ import {auth} from "../../firebase";
 export const fetchAllUsers = (setAllUsers) => {
     firebase.initializeApp(firebaseConfig);
     const db = getFirestore();
-    const users = [];
 
     const q = query(collection(db, "users"), where("email", "!=", auth.currentUser.email));
     onSnapshot(q, (querySnapshot) => {
+        const users = [];
         querySnapshot.forEach((doc) => {
             users.push(doc.data());
         });
