@@ -109,6 +109,14 @@ export default function MapScreen(props){
         if(!userIsInRadar(user)){
             return false;
         }
+        if(props.currentUser.reported.includes(user.email) ||
+            props.currentUser.reportedBy.includes(user.email) ||
+            user.reported.includes(props.currentUser.email) ||
+            user.reportedBy.includes(props.currentUser.email) ||
+            props.currentUser.reportedBy.length >=3 ||
+            user.reportedBy.length >=3){
+            return false;
+        }
         if(!askedForHelp){
             if(helpingUser){
                 return acceptedAlarm.alarmingUser === user.email ||
